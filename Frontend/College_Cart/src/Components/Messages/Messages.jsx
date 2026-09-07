@@ -1,12 +1,80 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useState, useRef } from 'react';
 import Header from '../Header/Header';
 import "./messages.css";
 import axios from 'axios';
 import { UserDataContext } from '../Header/context';
 import { getToken } from '../../util/tokenService';
 import { io } from "socket.io-client";
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from '../ui/Skeleton';
 import { useNavigate } from 'react-router-dom';
+
+const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+const toThread = (rows, userId) =>
+  (rows ?? []).map((msg) => ({
+    message: msg.message,
+    sender: msg.senderId === userId ? 'self' : 'other',
+    timestamp: msg.createdAt,
+  }));
+
+/**
+ * Conversation list built in the browser, used only when the API does not yet
+ * expose GET /conversations.
+ *
+ * This is what the page used to do unconditionally, and it was the reason
+ * opening Messages took so long: a `for` loop that awaited three requests per
+ * room, one after another - 1 + 3N sequential round trips. The requests are the
+ * same here, but every room resolves concurrently and the three lookups inside
+ * a room are concurrent too, so the whole list costs about one round trip
+ * rather than dozens in series.
+ */
+const loadConversationsLegacy = async (backendUrl, userId, config) => {
+  const { data: rooms } = await axios.get(`${backendUrl}/joinRooms`, config);
+
+  const relevant = (rooms ?? []).filter(
+    (room) => room.users?.includes(userId) && room.users.length >= 3
+  );
+
+  const settled = await Promise.all(
+    relevant.map(async (room) => {
+      try {
+        const isInitiator = room.users[0] === userId;
+        const otherUserId = isInitiator ? room.users[1] : room.users[0];
+
+        const [productRes, messagesRes, userRes] = await Promise.all([
+          axios.get(`${backendUrl}/${room.users[2]}/product`, config),
+          axios.get(`${backendUrl}/message/${room._id}`, config),
+          axios.get(`${backendUrl}/user/${otherUserId}`, config),
+        ]);
+
+        const rows = messagesRes.data ?? [];
+        if (rows.length === 0) return null;
+
+        const last = rows[rows.length - 1];
+
+        return {
+          roomId: room._id,
+          product: productRes.data.product,
+          lastMessage: last.message,
+          otherUserId,
+          otherUserName: userRes.data.name || (isInitiator ? "Recipient" : "Sender"),
+          otherUserAvatar: userRes.data.profileImage || DEFAULT_AVATAR,
+          timestamp: last.createdAt ?? room.updatedAt ?? room.createdAt,
+          unread: 0,
+          // The history is already in hand on this path, so hand it to the
+          // cache and clicking the conversation costs nothing.
+          thread: toThread(rows, userId),
+        };
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  return settled
+    .filter(Boolean)
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+};
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -18,10 +86,20 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [threadLoading, setThreadLoading] = useState(false);
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [socketConnected, setSocketConnected] = useState(false);
   const userId = data?._id;
+
+  // Threads already fetched this visit, keyed by room. Re-opening a
+  // conversation used to refetch the entire history and leave the pane blank
+  // until it arrived; now it paints from here and revalidates behind that.
+  const threadCacheRef = useRef(new Map());
+  // Which room is on screen right now, read inside async callbacks. State
+  // would be stale there, and a slow response for a conversation the user has
+  // already navigated away from must not overwrite the visible thread.
+  const activeRoomRef = useRef(null);
 
   // Socket initialization - runs once
   useEffect(() => {
@@ -33,176 +111,159 @@ const Messages = () => {
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
     });
-    
+
     socketRef.current = socket;
 
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-      setSocketConnected(true);
-    });
+    socket.on("connect", () => setSocketConnected(true));
+    socket.on("connect_error", () => setSocketConnected(false));
+    socket.on("disconnect", () => setSocketConnected(false));
 
-    socket.on("connect_error", (err) => {
-      console.error("Socket connection error:", err);
-      setSocketConnected(false);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
-      setSocketConnected(false);
-    });
-
-    // Handle incoming messages - use functional update to avoid stale state
     socket.on("receive_message", (socketData) => {
-      console.log("Received message:", socketData);
-      
-      if (socketData.message && socketData.senderId !== userId) {
-        const formattedMessage = {
+      if (!socketData?.message) return;
+
+      const roomId = socketData.joinRoomId;
+
+      if (socketData.senderId !== userId) {
+        const incoming = {
           message: socketData.message.text,
           sender: 'other',
           timestamp: new Date().toISOString(),
         };
-        
-        // Use functional update to get latest state
-        setMessages((prevMessages) => [...prevMessages, formattedMessage]);
+
+        // Append to the cached thread for whichever room the message belongs
+        // to. This used to push every arrival into the open conversation
+        // regardless of its room, so a message from one chat appeared inside
+        // another.
+        const cached = threadCacheRef.current.get(roomId);
+        if (cached) threadCacheRef.current.set(roomId, [...cached, incoming]);
+
+        if (roomId && roomId === activeRoomRef.current) {
+          setMessages((prev) => [...prev, incoming]);
+        }
       }
 
-      // Update conversation list with latest message
-      setConversations((prevConversations) => {
-        const updatedConversations = [...prevConversations];
-        const convoIndex = updatedConversations.findIndex(
-          (conv) => conv.roomId === socketData.joinRoomId
-        );
-        
-        if (convoIndex !== -1) {
-          updatedConversations[convoIndex] = {
-            ...updatedConversations[convoIndex],
-            lastMessage: socketData.message.text,
-            timestamp: new Date().toISOString(),
-          };
-          // Sort by most recent
-          updatedConversations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        }
-        return updatedConversations;
+      setConversations((prev) => {
+        const index = prev.findIndex((conv) => conv.roomId === roomId);
+        if (index === -1) return prev;
+
+        const next = [...prev];
+        next[index] = {
+          ...next[index],
+          lastMessage: socketData.message.text,
+          timestamp: new Date().toISOString(),
+        };
+        next.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        return next;
       });
     });
 
     return () => {
       socket.disconnect();
       socketRef.current = null;
-      console.log("Socket disconnected on cleanup");
     };
   }, [userId, socket_url]);
 
   // Join room when conversation is selected
   useEffect(() => {
     if (socketRef.current && socketConnected && selectedConversation) {
-      console.log("Joining room:", selectedConversation.roomId);
       socketRef.current.emit("join_room", { joinRoomId: selectedConversation.roomId });
     }
   }, [selectedConversation, socketConnected]);
 
-  // Fetch all conversations
+  // Conversation list. One request against /conversations, which joins the
+  // rooms, the last message of each, the products and the other participants
+  // server-side; see Backend/Controllers/conversation.js.
   useEffect(() => {
-    const fetchConversations = async () => {
+    const token = getToken();
+    if (!userId || !token) {
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    let cancelled = false;
+
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    };
+
+    const seedCache = (list) => {
+      list.forEach((conv) => {
+        if (conv.thread) threadCacheRef.current.set(conv.roomId, conv.thread);
+      });
+    };
+
+    const load = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const token = getToken();
-        
-        if (!token || !userId) {
-          setLoading(false);
-          return;
-        }
-
-        const roomsResponse = await axios.get(`${backend_url}/joinRooms`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        const relevantRooms = roomsResponse.data.filter((room) => 
-          room.users && room.users.includes(userId)
-        );
-
-        const conversationsData = [];
-
-        for (const room of relevantRooms) {
-          try {
-            if (!room.users || room.users.length < 3) continue;
-            
-            const productId = room.users[2];
-            const productResponse = await axios.get(`${backend_url}/${productId}/product`, {
-              headers: { 'Authorization': `Bearer ${token}` },
-            });
-
-            const messagesResponse = await axios.get(`${backend_url}/message/${room._id}`, {
-              headers: { 'Authorization': `Bearer ${token}` },
-            });
-
-            if (messagesResponse.data.length === 0) continue;
-
-            const lastMessage = messagesResponse.data.length > 0
-              ? messagesResponse.data[messagesResponse.data.length - 1].message
-              : "No messages yet";
-
-            const isSender = room.users[0] === userId;
-            const otherUserId = isSender ? room.users[1] : room.users[0];
-
-            const userResponse = await axios.get(`${backend_url}/user/${otherUserId}`, {
-              headers: { 'Authorization': `Bearer ${token}` },
-            });
-
-            const otherUserName = userResponse.data.name || (isSender ? "Recipient" : "Sender");
-            const otherUserAvatar = userResponse.data.profileImage || "https://via.placeholder.com/40";
-
-            conversationsData.push({
-              roomId: room._id,
-              product: productResponse.data.product,
-              lastMessage,
-              otherUserId,
-              otherUserName,
-              otherUserAvatar,
-              timestamp: room.updatedAt || room.createdAt,
-              unread: 0,
-            });
-          } catch (error) {
-            console.error("Error fetching details for room:", room._id, error);
-          }
-        }
-
-        conversationsData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        setConversations(conversationsData);
-        setLoading(false);
+        const { data: payload } = await axios.get(`${backend_url}/conversations`, config);
+        if (cancelled) return;
+        setConversations(payload.conversations ?? []);
       } catch (error) {
-        console.error("Error fetching conversations:", error);
-        setLoading(false);
+        if (cancelled || axios.isCancel(error) || controller.signal.aborted) return;
+
+        // An API instance that has not picked up the new endpoint yet answers
+        // 404 (or 401 if the session is stale). Only the missing-endpoint case
+        // is worth rebuilding the list in the browser for.
+        if (error.response?.status === 404) {
+          try {
+            const legacy = await loadConversationsLegacy(backend_url, userId, config);
+            if (cancelled) return;
+            seedCache(legacy);
+            setConversations(legacy);
+          } catch (fallbackError) {
+            if (!cancelled) console.error("Error fetching conversations:", fallbackError);
+          }
+        } else {
+          console.error("Error fetching conversations:", error);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     };
 
-    if (userId) {
-      fetchConversations();
+    load();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [backend_url, userId]);
+
+  const selectConversation = useCallback(async (conversation) => {
+    setSelectedConversation(conversation);
+    activeRoomRef.current = conversation.roomId;
+
+    const cached = threadCacheRef.current.get(conversation.roomId);
+    setMessages(cached ?? []);
+    setThreadLoading(!cached);
+
+    try {
+      const token = getToken();
+      const { data: rows } = await axios.get(`${backend_url}/message/${conversation.roomId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const thread = toThread(rows, userId);
+      threadCacheRef.current.set(conversation.roomId, thread);
+
+      if (activeRoomRef.current === conversation.roomId) setMessages(thread);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      if (activeRoomRef.current === conversation.roomId && !cached) setMessages([]);
+    } finally {
+      if (activeRoomRef.current === conversation.roomId) setThreadLoading(false);
     }
   }, [backend_url, userId]);
 
-  // Select conversation and fetch messages
-  const selectConversation = async (conversation) => {
-    setSelectedConversation(conversation);
-    
-    try {
-      const token = getToken();
-      const messagesResponse = await axios.get(`${backend_url}/message/${conversation.roomId}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-  
-      const formattedMessages = messagesResponse.data.map((msg) => ({
-        message: msg.message,
-        sender: msg.senderId === userId ? 'self' : 'other',
-        timestamp: msg.createdAt,
-      }));
-      setMessages(formattedMessages);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-      setMessages([]);
-    }
-  };
-  
+  // Keep the cache in step with what is rendered, so optimistic sends and
+  // socket arrivals survive switching conversations and switching back.
+  useEffect(() => {
+    const roomId = selectedConversation?.roomId;
+    if (roomId && messages.length) threadCacheRef.current.set(roomId, messages);
+  }, [messages, selectedConversation]);
+
   const navigateToProduct = (productId) => {
     if (productId) {
       navigate(`/${productId}/product`);
@@ -220,7 +281,7 @@ const Messages = () => {
       sender: 'self',
       timestamp
     };
-    
+
     // Update UI immediately (optimistic update)
     setMessages((prev) => [...prev, newMessage]);
     setInputMessage("");
@@ -267,7 +328,8 @@ const Messages = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
+  // onKeyPress is deprecated and does not fire for every key in every browser.
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -312,10 +374,10 @@ const Messages = () => {
               <h2 className="conversations-title">Chat</h2>
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
                 <div key={i} className="conversation-item-skeleton">
-                  <Skeleton 
-                    variant="circular" 
-                    width={40} 
-                    height={40} 
+                  <Skeleton
+                    variant="circular"
+                    width={40}
+                    height={40}
                     sx={{ bgcolor: 'rgba(0, 0, 0, 0.08)' }}
                   />
                   <div className="conversation-details">
@@ -376,12 +438,22 @@ const Messages = () => {
                   key={conversation.roomId}
                   className={`conversation-item ${selectedConversation?.roomId === conversation.roomId ? 'active' : ''}`}
                   onClick={() => selectConversation(conversation)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      selectConversation(conversation);
+                    }
+                  }}
                 >
                   <div className="conversation-avatar">
                     <img
-                      src={conversation.product.image || "https://via.placeholder.com/40"}
+                      src={conversation.product?.image || DEFAULT_AVATAR}
                       alt="Product"
                       className="product-thumbnail"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <div className="conversation-details">
@@ -392,10 +464,10 @@ const Messages = () => {
                       </span>
                     </div>
                     <div className="conversation-preview">
-                      <p className="product-name">{conversation.product.name}</p>
+                      <p className="product-name">{conversation.product?.name}</p>
                       <p className="last-message">
-                        {conversation.lastMessage.substring(0, 30)}
-                        {conversation.lastMessage.length > 30 ? '...' : ''}
+                        {(conversation.lastMessage ?? '').substring(0, 30)}
+                        {(conversation.lastMessage ?? '').length > 30 ? '...' : ''}
                       </p>
                     </div>
                   </div>
@@ -403,7 +475,7 @@ const Messages = () => {
               ))
             )}
           </div>
-          
+
           <div className="message-area">
             {!selectedConversation ? (
               <div className="no-conversation-selected">
@@ -423,21 +495,44 @@ const Messages = () => {
                   </div>
                   <div className="message-header-details">
                     <h2>{selectedConversation.otherUserName}</h2>
-                    <p className="product-link" onClick={() => navigateToProduct(selectedConversation.product._id)}>
-                      Product: {selectedConversation.product.name}
+                    <p className="product-link" onClick={() => navigateToProduct(selectedConversation.product?._id)}>
+                      Product: {selectedConversation.product?.name}
                     </p>
                   </div>
                   <div className="product-price">
-                    <span>&#8377;{selectedConversation.product.newAmount || selectedConversation.product.price}</span>
+                    <span>&#8377;{selectedConversation.product?.newAmount || selectedConversation.product?.price}</span>
                   </div>
                 </div>
 
                 <div className="messages-display">
-                  {messages.length === 0 ? (
+                  {threadLoading && messages.length === 0 ? (
+                    // A thread being fetched for the first time. The pane used
+                    // to show the "no messages yet" empty state while the
+                    // request was still in flight.
+                    <div className="thread-loading" aria-live="polite">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className={`message-group ${i % 2 === 0 ? 'self' : 'other'}`}>
+                          <div className="message-content-wrapper">
+                            <div className={`message-bubble-skeleton ${i % 2 === 0 ? 'self' : 'other'}`}>
+                              <Skeleton
+                                variant="rectangular"
+                                width={i % 2 === 0 ? 180 : 140}
+                                height={30}
+                                sx={{
+                                  bgcolor: i % 2 === 0 ? 'rgba(26, 115, 232, 0.5)' : 'rgba(210, 215, 211, 1)',
+                                  borderRadius: '16px',
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : messages.length === 0 ? (
                     <div className="no-messages">
                       <div className="empty-chat-icon">📩</div>
                       <p>No messages yet</p>
-                      <p className="start-chat-prompt">Start the conversation about "{selectedConversation.product.name}"</p>
+                      <p className="start-chat-prompt">Start the conversation about "{selectedConversation.product?.name}"</p>
                     </div>
                   ) : (
                     <>
@@ -491,7 +586,7 @@ const Messages = () => {
                     placeholder="Type your message..."
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     className="message-input"
                   />
                   <button
