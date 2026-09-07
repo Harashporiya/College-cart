@@ -6,7 +6,7 @@ import ProductPriceDetails from './ProductPriceDetails';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from '../ui/Skeleton';
 import { getToken } from '../../util/tokenService';
 import RemoveCartItem from './RemoveCartItem';
 import { useDispatch } from 'react-redux';
@@ -41,7 +41,7 @@ const CartProduct = () => {
       setCartItems(items);
       dispatch(updateCart({ item: items }));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
