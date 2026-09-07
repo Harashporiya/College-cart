@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { IoMenu } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
-import icon from "../../assets/logo.jpeg";
+import icon from "../../assets/logo.webp";
 import { UserDataContext } from "./context";
 import style from "./header.module.css";
 import { FaCartPlus } from "react-icons/fa";
@@ -12,18 +11,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { getToken } from "../../util/tokenService";
 import { allCartProduct } from "../SagaRedux/Slice";
 
+const AVATAR_FALLBACK = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
 const Header = ({ showSearch = true, showMiddleHeader = true, isProductsPage = false }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useContext(UserDataContext);
+  const { data, searchQuery, setSearchQuery } = useContext(UserDataContext);
   const [show, setShow] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
-  const { searchQuery, setSearchQuery } = useContext(UserDataContext);
   const dispatch = useDispatch();
-  
-  // Get cart state from Redux
-  const { totalQuantity, itemList } = useSelector((state) => state.cart);
-  
+
+  const { totalQuantity } = useSelector((state) => state.cart);
+
   const isAuthenticated = Boolean(data && data._id);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -45,111 +44,118 @@ const Header = ({ showSearch = true, showMiddleHeader = true, isProductsPage = f
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Initialize cart when user logs in
   useEffect(() => {
     const token = getToken();
     if (token && isAuthenticated) {
-      console.log("🔄 Header: Initializing cart for user");
       dispatch(allCartProduct());
     }
   }, [dispatch, isAuthenticated]);
 
-  // Log count changes
-  useEffect(() => {
-    console.log("🔢 Header: Cart count =", totalQuantity);
-  }, [totalQuantity]);
+  // Two console.log effects used to run here - one on every cart-count change
+  // and one logging cart initialisation - which spammed the console on every
+  // page and every add-to-cart.
 
   return (
     <>
-      <div className={style.header}>
+      <header className={style.header}>
         <div className={style.headerLeft}>
-          <button className={style.menuButton} onClick={() => setIsOpen(true)}>
-            <IoMenu size={40} />
+          <button className={style.menuButton} onClick={() => setIsOpen(true)} aria-label="Open menu">
+            <IoMenu size={34} />
           </button>
-          <img src={icon} alt="Logo" className={style.logo} />
+          <img
+            src={icon}
+            alt="College Cart"
+            className={style.logo}
+            width="64"
+            height="64"
+            onClick={() => navigate('/')}
+          />
         </div>
-        
+
         {showMiddleHeader && (
-          <div className={`${style.middleHeader} ${isProductsPage && isMobile ? style.hideOnMobile : ''}`}>
-            <p className={style.navLink} onClick={() => navigate("/all-products")}>Products</p>
-            <p className={style.navLink} onClick={() => navigate("/aboutus")}>About Us</p>
-            <p className={style.navLink} onClick={() => navigate("/our-team")}>Our Team</p>
-            <p className={style.navLink} onClick={() => navigate("/contact-us")}>Contact</p>
-          </div>
+          <nav className={`${style.middleHeader} ${isProductsPage && isMobile ? style.hideOnMobile : ''}`}>
+            <button type="button" className={style.navLink} onClick={() => navigate("/all-products")}>Products</button>
+            <button type="button" className={style.navLink} onClick={() => navigate("/aboutus")}>About Us</button>
+            <button type="button" className={style.navLink} onClick={() => navigate("/our-team")}>Our Team</button>
+            <button type="button" className={style.navLink} onClick={() => navigate("/contact-us")}>Contact</button>
+          </nav>
         )}
 
         {showSearch && (
           <div className={style.searchContainer}>
-            <IoMdSearch className={style.searchIcon} size={30} />
+            <IoMdSearch className={style.searchIcon} size={22} />
             <input
-              type="text"
-              placeholder="Search..."
+              type="search"
+              placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className={style.searchInput}
+              aria-label="Search products"
             />
           </div>
         )}
 
-        <div className={style.addProductCart} onClick={() => navigate('/addCartProudct')}>
-          <FaCartPlus className={style.cart} size={44} />
-          <div className={style.productCountInCart}>
-            <p>{totalQuantity}</p>
-          </div>
-        </div>
+        <button
+          type="button"
+          className={style.addProductCart}
+          onClick={() => navigate('/addCartProudct')}
+          aria-label={`Cart, ${totalQuantity} items`}
+        >
+          <FaCartPlus className={style.cart} size={30} />
+          {/* The badge used to render even at zero, showing a red "0" bubble
+              on every page before anything was added. */}
+          {totalQuantity > 0 && (
+            <span className={style.productCountInCart}>{totalQuantity}</span>
+          )}
+        </button>
 
         <div className={style.headerRight} ref={profileRef}>
           {isAuthenticated ? (
-            <div className={style.profile} onClick={() => setShow(!show)}>
-              <motion.img
-                src={data.profileImage || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
-                alt="Profile"
+            <button type="button" className={style.profile} onClick={() => setShow(!show)} aria-expanded={show}>
+              {/* framer-motion's whileHover scale is now a CSS transform, which
+                  keeps the library out of the initial bundle - the Header ships
+                  on every route. */}
+              <img
+                src={data.profileImage || AVATAR_FALLBACK}
+                alt=""
                 className={style.avatar}
-                whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                width="52"
+                height="52"
               />
-              <span className={style.username}>{data?.name || "John Doe"}</span>
-            </div>
+              <span className={style.username}>{data?.name || "Student"}</span>
+            </button>
           ) : (
-            <div className={`${style.person}`}>
-              <motion.button 
-                className={`bg-yellow-300 p-2 font-bold rounded-lg w-16 hover:bg-yellow-400 ${style.login}`} 
-                whileHover={{ scale: 1.1 }} 
-                transition={{ type: "spring", stiffness: 100, damping: 90 }} 
-                onClick={() => navigate("/login")}
-              >
+            <div className={style.person}>
+              <button type="button" className={style.login} onClick={() => navigate("/login")}>
                 Login
-              </motion.button>
-              <motion.button 
-                className={`text-white bg-black font-bold rounded-lg w-20 hover:bg-slate-800 ${style.signup}`} 
-                whileHover={{ scale: 1.1 }} 
-                transition={{ type: "spring", stiffness: 100, damping: 90 }} 
-                onClick={() => navigate('/signup')}
-              >
+              </button>
+              <button type="button" className={style.signup} onClick={() => navigate('/signup')}>
                 Signup
-              </motion.button>
+              </button>
             </div>
           )}
+
           {show && (
             <div className={style.profileDropdown} onClick={() => navigate(`/${data._id}/user-profile`)}>
               <div className={style.profileMenu}>
                 <div className={style.profileHeader}>
                   <img
-                    src={data.profileImage || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
-                    alt="Profile"
+                    src={data.profileImage || AVATAR_FALLBACK}
+                    alt=""
                     className={style.dropdownAvatar}
+                    width="48"
+                    height="48"
                   />
                   <div className={style.profileInfo}>
-                    <span className={style.profileName}>{data.name || "John Doe"}</span>
-                    <br />
-                    <span className={style.profileUsername}>@{data.username || "jhondoe"}</span>
+                    <span className={style.profileName}>{data.name || "Student"}</span>
+                    <span className={style.profileUsername}>@{data.username || "student"}</span>
                   </div>
                 </div>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </header>
       <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
