@@ -4,7 +4,7 @@ import { useDispatch,  } from 'react-redux';
 import MessageHandler from '../Signup/MessageHandler';
 import { useNavigate } from 'react-router-dom';
 import { newPasswordSet } from '../SagaRedux/Slice';
-import { toast, ToastContainer } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Reset = () => {
    const [password, setNewPassword] = useState('');
@@ -25,7 +25,7 @@ const Reset = () => {
         navigate("/login")
        },2000)
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   };
 
@@ -75,7 +75,7 @@ const Reset = () => {
       </div>
       </div>
       </div>
-      <ToastContainer/>
+      <Toaster position="top-center" />
       <MessageHandler />
     </div>
   );
