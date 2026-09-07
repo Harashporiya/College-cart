@@ -1,192 +1,285 @@
+/* ==========================================================================
+   Product card (all-products grid)
+   ========================================================================== */
+
 .product-card {
-    width: 330px;
-    background: #fff;
-    border-radius: 8px;
-    padding: 15px;
-    transition: all 0.3s ease;
-    border: 1px solid #e0e0e0;
-    position: relative;
-    margin-left: 0px;
-    margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  /* Was a fixed `width: 330px` with `margin-right: 20px`, so the card could not
+     take part in a responsive grid and the trailing margin knocked the last
+     column out of alignment. The grid owns sizing and spacing now. */
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-sm);
+  /* Named properties rather than `transition: all 0.3s ease`. */
+  transition: transform var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
 }
 
-.product-card:hover {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-    border-color: #d5d9d9;
+/* :focus-within keeps the lift while a keyboard user is inside the card. */
+.product-card:hover,
+.product-card:focus-within {
+  transform: translateY(-5px);
+  box-shadow: var(--cc-shadow-md);
+  border-color: var(--cc-border-strong);
 }
 
 .product-image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    cursor: pointer;
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* A reserved square stops the grid reflowing as each photo decodes. */
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  margin-bottom: 12px;
+  overflow: hidden;
+  background: var(--cc-surface-2);
+  border-radius: var(--cc-radius);
+  cursor: pointer;
 }
 
 .product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform var(--cc-dur-slow) var(--cc-ease);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.06);
 }
 
 .discount-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #CC0C39;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 2px;
-    font-size: 12px;
-    font-weight: bold;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 9px;
+  background: var(--cc-danger);
+  color: #fff;
+  border-radius: var(--cc-radius-pill);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .product-content {
-    padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Lets the card body absorb the extra height so the button stays flush at
+     the bottom of every card in a row. */
+  flex: 1;
+  padding: 4px 0 12px;
 }
 
 .product-title {
-    color: #0F1111;
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 8px;
-    font-weight: 400;
-    height: 40px;
-    overflow: hidden;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--cc-text);
+  cursor: pointer;
+  /* Was a bare `height: 40px; overflow: hidden`, which sliced the third line of
+     a long title in half. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--cc-dur) var(--cc-ease);
+}
+
+.product-title:hover {
+  color: var(--cc-teal);
 }
 
 .rating-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .stars {
-    color: #FFA41C;
-    font-size: 14px;
-    letter-spacing: 1px;
+  color: #ffa41c;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
 }
 
 .rating-count {
-    color: #007185;
-    font-size: 12px;
+  font-size: 0.75rem;
+  color: var(--cc-teal);
 }
 
 .pricing-section {
-    margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
 }
 
 .price-container {
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
 }
 
 .rupee-symbol {
-    font-size: 12px;
-    position: relative;
-    top: 2px;
+  position: relative;
+  top: 3px;
+  font-size: 0.75rem;
 }
 
 .main-price {
-    font-size: 24px;
-    font-weight: 400;
-    color: #0F1111;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cc-text);
 }
 
 .original-price-container {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 4px;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.mrp {
-    color: #565959;
-    font-size: 12px;
+.mrp,
+.original-price {
+  font-size: 0.75rem;
+  color: var(--cc-text-muted);
 }
 
 .original-price {
-    color: #565959;
-    text-decoration: line-through;
-    font-size: 12px;
+  text-decoration: line-through;
 }
 
 .delivery-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .prime-icon {
-    color: #00A8E1;
-    font-weight: bold;
+  color: #00a8e1;
+  font-weight: bold;
 }
 
 .delivery-text {
-    color: #565959;
-    font-size: 12px;
+  font-size: 0.75rem;
+  color: var(--cc-text-muted);
 }
 
 .product-description {
-    color: #565959;
-    font-size: 12px;
-    line-height: 1.4;
-    margin-bottom: 12px;
-    height: 50px;
-    overflow: hidden;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--cc-text-muted);
+  /* Clamped instead of the old fixed `height: 50px`, which left a half-line of
+     clipped text at the bottom of the box. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .add-to-cart-button {
-    width: 100%;
-    padding: 8px 0;
-    background: #FFD814;
-    border: 1px solid #FCD200;
-    border-radius: 20px;
-    cursor: pointer;
-    color: #0F1111;
-    font-size: 13px;
-    box-shadow: 0 2px 5px rgba(213, 217, 217, .5);
-    transition: all 0.2s ease;
+  width: 100%;
+  margin-top: auto;
+  padding: 10px 0;
+  background: var(--cc-yellow);
+  border: 1px solid var(--cc-yellow-deep);
+  border-radius: var(--cc-radius-pill);
+  color: var(--cc-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
 }
 
-.add-to-cart-button:hover {
-    background: #F7CA00;
+.add-to-cart-button:hover:not(.disabled) {
+  background: var(--cc-yellow-dark);
+  box-shadow: 0 5px 14px rgba(252, 210, 0, 0.4);
+  transform: translateY(-1px);
 }
 
-@media screen and (max-width:480px) {
-
-    .product-cart-container,
-    .skeletonContainer {
-        margin-left: 140px;
-    }
+.add-to-cart-button:active:not(.disabled) {
+  transform: translateY(0);
+  transition-duration: var(--cc-dur-fast);
 }
 
 .stock-status {
-    font-size: 0.9rem;
-    margin-left: 8px;
+  margin-left: 8px;
+  font-size: 0.9rem;
 }
 
 .in-stock {
-    color: #ffffff;
+  color: var(--cc-success);
 }
 
 .out-of-stock {
-    color: #ff0000;
+  color: var(--cc-danger);
 }
 
-.add-to-cart-button.disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.add-to-cart-button.disabled,
+.add-to-cart-button:disabled {
+  background-color: #d9d9d9;
+  border-color: #cfcfcf;
+  color: #6b7280;
+  box-shadow: none;
 }
-.add-to-cart-button.disabled:hover {
-    background-color: #ccc;
+
+/* Two cards per row on a phone means roughly 150px each, so the type and
+   spacing below are sized for that rather than for a full-width card.
+   (The old rule here also pushed the grid over with `margin-left: 140px`,
+   which shoved the whole listing off the right edge of the screen.) */
+@media (max-width: 640px) {
+  .product-card {
+    padding: 8px;
+  }
+
+  .product-title {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .product-content {
+    padding: 4px 0 8px;
+    gap: 2px;
+  }
+
+  .main-price {
+    font-size: 1.05rem;
+  }
+
+  .rupee-symbol,
+  .mrp,
+  .original-price,
+  .rating-count {
+    font-size: 0.7rem;
+  }
+
+  .stars {
+    font-size: 0.7rem;
+  }
+
+  /* The blurb is the first thing to go at this width - the name, price and
+     the add-to-cart button are what the card is for. */
+  .product-description {
+    display: none;
+  }
+
+  .add-to-cart-button {
+    padding: 8px 0;
+    font-size: 0.75rem;
+  }
+
+  .discount-badge {
+    padding: 3px 6px;
+    font-size: 0.62rem;
+  }
 }
