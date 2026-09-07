@@ -1,23 +1,26 @@
+/* ==========================================================================
+   Site footer
+   ========================================================================== */
+
 .footer {
-  background-color: #232f3e;
+  padding: 3.5rem 2rem 1.5rem;
+  background-color: var(--cc-navy);
   color: #fff;
-  padding: 4rem 2rem 2rem;
-  font-family: 'Poppins', sans-serif;
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .footer-section h4 {
-  color: #fff;
-  font-size: 1.1rem;
-  margin-bottom: 1.2rem;
+  margin: 0 0 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
+  color: #fff;
 }
 
 .footer-section ul {
@@ -27,40 +30,61 @@
 }
 
 .footer-section ul li {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.55rem;
 }
 
-.footer-section ul li a {
-  color: #ddd;
-  text-decoration: none;
+/* The old file styled `.footer-section ul li a`, but the markup used <p>
+   elements - so none of that hover or transition styling ever applied. These
+   are real buttons now and the styling targets them directly. */
+.footerLinks {
+  padding: 2px 0;
+  background: none;
+  border: none;
   font-size: 0.9rem;
-  transition: color 0.3s ease;
+  color: #dcdfe3;
+  text-align: left;
+  transition: color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
 }
 
-.footer-section ul li a:hover {
-  color: #f39c12;
+.footerLinks:hover {
+  color: var(--cc-orange);
+  /* Nudge instead of an underline: it does not shift the line box, so
+     neighbouring links stay put. */
+  transform: translateX(3px);
 }
 
 .social-links {
   display: flex;
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .social-links a {
+  /* Anchors are inline by default, and `transform` has no effect on an inline
+     box - the old translateY(-3px) hover silently did nothing. */
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
   color: #fff;
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
 }
 
 .social-links a:hover {
-  color: #f39c12;
-  transform: translateY(-3px);
+  background: var(--cc-orange);
+  color: #fff;
+  transform: translateY(-4px);
 }
 
 .footer-bottom {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .footer-bottom-content {
@@ -70,43 +94,109 @@
 }
 
 .footer-bottom p {
-  color: #ddd;
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+  color: #b9c0c8;
 }
 
-.footerLinks:hover{
-  cursor: pointer;
-  color: yellow;
-  text-decoration: underline;
-}
-
-@media (max-width: 1367px) {
-  .footer{
-    width: 100%;
-  }
-}
+/* ----------------------------------------------------------- responsive -- */
 
 @media (max-width: 768px) {
-  .footer-content {
-    grid-template-columns: repeat(2, 1fr);
+  .footer {
+    padding: 2.5rem 1.25rem 1.25rem;
   }
-  
+
+  .footer-content {
+    /* minmax(0, 1fr) rather than a bare 1fr. `1fr` means
+       `minmax(auto, 1fr)`, so the five 40px social icons - an unbreakable
+       ~230px row of min-content - forced the second column wider than the
+       first and squeezed the link lists. Between 481px and 520px that came out
+       as a 155px column beside a 258px one. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+
   .footer-section {
     text-align: center;
   }
-  
+
+  .footerLinks {
+    text-align: center;
+    width: 100%;
+  }
+
   .social-links {
     justify-content: center;
+    /* Lets the icon row break instead of dictating the column width. */
+    flex-wrap: wrap;
   }
 }
 
 @media (max-width: 480px) {
-  .footer{
-    width: 63vh;
+  /* The old block here set `.footer { width: 63vh }` - viewport height used as
+     a width, which overflowed the screen - and
+     `grid-template-columns: 1/3`, which is not a valid value for that property
+     (that is grid-row/column shorthand syntax), so the declaration was dropped
+     and the columns never changed at all.
+   *
+   * It then stacked all four sections into a single column, which made the
+   * footer 801px tall on a 335px phone - taller than the viewport itself, so
+   * it took two full screens of scrolling to get past. Two columns fit the
+   * four sections into two rows, and the type and spacing below are scaled
+   * down to match, which brings it back to roughly a third of that. */
+  .footer {
+    padding: 1.75rem 1rem 1rem;
   }
+
   .footer-content {
-    grid-template-columns: 1/3;
-    grid-template-rows: 1/3;
+    /* Columns and icon wrapping are inherited from the 768px block above;
+       only the spacing tightens here. Row gap stays generous enough to
+       separate the two rows of sections, while the column gap only has to keep
+       two short link lists apart. */
+    gap: 1.4rem 0.75rem;
+  }
+
+  .footer-section h4 {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .footer-section ul li {
+    margin-bottom: 0.3rem;
+  }
+
+  .footerLinks {
+    padding: 1px 0;
+    font-size: 0.82rem;
+  }
+
+  /* No hover on touch, and the nudge would only fight the centred text. */
+  .footerLinks:hover {
+    transform: none;
+  }
+
+  .social-links {
+    gap: 0.6rem;
+  }
+
+  .social-links a {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+
+  .footer-bottom {
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    /* The chat launcher is fixed to the bottom-right of the viewport, which is
+       exactly where this centred text lands once the page is scrolled to the
+       end - it covered the tail of the credit line. The launcher is 48px tall
+       and sits 16px off the bottom, so the last line has to clear 64px. */
+    padding-bottom: 4.75rem;
+  }
+
+  .footer-bottom p {
+    margin: 0.25rem 0;
+    font-size: 0.78rem;
   }
 }
