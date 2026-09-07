@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { profileEditUser } from '../SagaRedux/Slice';
 import MessageHandler from '../Signup/MessageHandler';
 import Product from './Product';
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from '../ui/Skeleton';
 import Footer from "../Footer/Footer"
 import { X } from 'lucide-react';
 import axios from 'axios';
@@ -95,7 +95,7 @@ const Profile = () => {
             // console.log(response.data.order)
            // console.log(fileterUserSealId)
         } catch (error) {
-            console.log(error,"error");
+            console.error("Error:", error);
         }
        }
        fetchData()
@@ -129,12 +129,16 @@ const Profile = () => {
                             <p className={styles.accountCreate}>Account Create: { new Date(data.createdAt).toLocaleDateString() ||  <Skeleton variant="text" width={80} height={30} />}, {new Date(data.createdAt).toLocaleTimeString() ||  <Skeleton variant="text" width={80} height={30} />}</p>
                             <p className={styles.profileUpdate}>Profile Update: {new Date(data.updatedAt).toLocaleDateString() ||  <Skeleton variant="text" width={80} height={30} />}, {new Date(data.updatedAt).toLocaleTimeString() ||  <Skeleton variant="text" width={80} height={30} />}</p>
                         </div>
-                        <div className={styles.btnEditProfileContainer} onClick={() => setIsOpen(true)}>
-                            <motion.button whileHover={{ scale: 1.05 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                className={styles.btn}>
+                        {/* The click handler used to sit on this wrapper div
+                            rather than the button, so the whole row was a
+                            silent click target with no role and no keyboard
+                            affordance while the real button did nothing. The
+                            spring hover is a CSS transition now, matching the
+                            other buttons on the site. */}
+                        <div className={styles.btnEditProfileContainer}>
+                            <button type="button" className={styles.btn} onClick={() => setIsOpen(true)}>
                                 Edit Profile
-                            </motion.button>
+                            </button>
                         </div>
                         <div className={styles.dialog}>
                             <AnimatePresence>
