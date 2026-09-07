@@ -19,10 +19,12 @@ const ForgotPassword = () => {
   useEffect(() => {
     if (status === 'success' && message && message.includes('verified')) {
       // Only navigate if OTP verification was successful
+      // Was a 2000 ms wait. Shortened to just long enough for the success
+      // toast to register before the screen changes.
       const timer = setTimeout(() => {
         navigate("/newPassword");
-      }, 2000);
-      
+      }, 700);
+
       return () => clearTimeout(timer);
     }
     
@@ -71,8 +73,6 @@ const ForgotPassword = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='email'
-              style={{color:"white"}}
             />
             <span>Email</span>
             <i></i>
