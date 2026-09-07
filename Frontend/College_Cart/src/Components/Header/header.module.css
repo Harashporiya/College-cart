@@ -1,418 +1,516 @@
+/* ==========================================================================
+   Site header
+   Sits inside a .stickyHeader wrapper on most pages, so it stays put on scroll.
+   ========================================================================== */
+
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  height: var(--cc-header-h);
   padding: 0.5rem 1.5rem;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 90px; 
+  background-color: var(--cc-surface);
+  box-shadow: 0 1px 0 var(--cc-border), 0 2px 8px rgba(15, 17, 17, 0.05);
+  /* The login/signup buttons previously came from Tailwind classes written
+     inline in the JSX, so the header's appearance was split across two files.
+     It is all here now. */
 }
 
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  flex: none;
+  /* Reserves the drawer's width, with the logo pushed to the far end of it
+     (see .logo below), so the logo finishes exactly where the open sidebar
+     finishes instead of sitting tucked against the menu button. The drawer
+     starts at x=0 while this element starts after the header's own padding,
+     so that padding is subtracted. The phone breakpoint releases this - a
+     70vw reservation would strand the logo mid-screen. */
+  width: calc(var(--cc-drawer-w) - 1.5rem);
 }
 
 .menuButton {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   background: none;
   border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
+  border-radius: var(--cc-radius-sm);
   color: #333;
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
+}
+
+.menuButton:hover {
+  background-color: var(--cc-surface-3);
+  transform: scale(1.05);
 }
 
 .logo {
-  height: 80px;
-  width: 80px;
+  /* Was 80x80 inside a 90px header, leaving 5px of clearance top and bottom. */
+  width: 64px;
+  height: 64px;
+  /* Pushed to the right-hand end of .headerLeft, which is the drawer's width,
+     so the logo's trailing edge lines up with the sidebar's. */
+  margin-left: auto;
+  border-radius: var(--cc-radius-sm);
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform var(--cc-dur) var(--cc-ease);
 }
+
+.logo:hover {
+  transform: scale(1.04);
+}
+
+/* ------------------------------------------------------------------- nav -- */
+
 .middleHeader {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.75rem;
+  /* Absorbs spare width so the nav sits centrally between logo and actions. */
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
 }
 
 .navLink {
-  margin-left: 24px;
-  font-size: 1rem;
-  font-weight: 550;
-  color: #444;
-  cursor: pointer;
   position: relative;
   padding: 6px 0;
-  transition: color 0.25s ease;
+  background: none;
+  border: none;
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: #444;
+  white-space: nowrap;
+  transition: color var(--cc-dur) var(--cc-ease);
 }
 
+/* Underline that wipes in from the left on hover. */
 .navLink::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 2px;
   width: 0;
-  background-color: #4a90e2;
-  transition: width 0.3s ease;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--cc-blue);
+  transition: width var(--cc-dur-slow) var(--cc-ease);
 }
 
 .navLink:hover {
-  color: #4a90e2;
+  color: var(--cc-blue);
 }
 
 .navLink:hover::after {
   width: 100%;
 }
 
+/* ---------------------------------------------------------------- search -- */
 
 .searchContainer {
   display: flex;
   align-items: center;
-  background-color: #f5f5f5;
-  padding: 0rem 1rem;
-  border-radius: 8px;
-  width: 400px;
+  gap: 0.5rem;
+  flex: 0 1 400px;
+  height: 44px;
+  padding: 0 1rem;
+  background-color: #f2f3f5;
+  border: 1px solid transparent;
+  border-radius: var(--cc-radius);
+  transition: border-color var(--cc-dur) var(--cc-ease),
+              background-color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
+}
+
+/* Highlights the whole pill when the input inside it takes focus, rather than
+   leaving the field with no focus affordance at all. */
+.searchContainer:focus-within {
+  background-color: var(--cc-surface);
+  border-color: var(--cc-blue);
+  box-shadow: var(--cc-ring);
 }
 
 .searchIcon {
+  flex: none;
   color: #666;
-  margin-right: 0.5rem;
-  margin-top: 0.8rem;
-  cursor: pointer;
+  /* The old rule nudged this with `margin-top: 0.8rem` to fake alignment
+     against an input that had `margin-top: 10px`. Flex centring handles it. */
 }
 
 .searchInput {
-  border: none;
-  background: none;
-  outline: none;
   width: 100%;
-  font-size: 1rem;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
   color: #333;
-  margin-top: 10px;
 }
 
 .searchInput::placeholder {
   color: #999;
 }
 
+/* ------------------------------------------------------------------ cart -- */
+
+.addProductCart {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--cc-radius-sm);
+  color: #333;
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
+}
+
+.addProductCart:hover {
+  background-color: var(--cc-surface-3);
+  transform: translateY(-2px);
+}
+
+.productCountInCart {
+  position: absolute;
+  /* Anchored to the icon's corner. The old rule positioned it with
+     `bottom: 30px; right: -5px`, which drifted at every breakpoint and needed
+     re-tuning in each media query. */
+  top: 2px;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  background-color: #e00b0b;
+  border: 2px solid var(--cc-surface);
+  border-radius: var(--cc-radius-pill);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  animation: badgePop var(--cc-dur-slow) var(--cc-ease-spring) both;
+}
+
+/* Small pop when the count appears or changes, so adding to cart registers. */
+@keyframes badgePop {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ---------------------------------------------------------------- profile -- */
+
 .headerRight {
+  position: relative;
   display: flex;
   align-items: center;
-  position: relative;
+  flex: none;
 }
 
 .profile {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
+  gap: 0.6rem;
+  padding: 4px 8px 4px 4px;
+  background: none;
+  border: none;
+  border-radius: var(--cc-radius-pill);
+  transition: background-color var(--cc-dur) var(--cc-ease);
+}
+
+.profile:hover {
+  background-color: var(--cc-surface-3);
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
+  /* Was 70x70 in a 90px header. */
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
+  transition: transform var(--cc-dur) var(--cc-ease-spring);
+}
+
+.profile:hover .avatar {
+  transform: scale(1.08);
 }
 
 .username {
-  font-size: 1.3rem;
+  max-width: 160px;
+  font-size: 1rem;
+  /* Was `font-weight: 900` at 1.3rem, which dominated the header. */
+  font-weight: 600;
   color: #333;
-  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
+.person {
+  display: flex;
+  gap: 8px;
+}
+
+.login,
+.signup {
+  padding: 9px 16px;
+  border: none;
+  border-radius: var(--cc-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
+}
+
+.login {
+  background-color: var(--cc-yellow);
+  color: var(--cc-text);
+}
+
+.login:hover {
+  background-color: var(--cc-yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(252, 210, 0, 0.4);
+}
+
+.signup {
+  background-color: var(--cc-navy);
+  color: #fff;
+}
+
+.signup:hover {
+  background-color: var(--cc-navy-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(35, 47, 62, 0.3);
+}
+
+.login:active,
+.signup:active {
+  transform: translateY(0);
+  transition-duration: var(--cc-dur-fast);
+}
+
+/* --------------------------------------------------------------- dropdown -- */
 
 .profileDropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px);
   right: 0;
-  margin-top: 0.5rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 280px;
   z-index: 1000;
-  height: 90px;
+  width: 260px;
+  /* Was a fixed `height: 90px`, which clipped the second line of a long name. */
+  background-color: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius);
+  box-shadow: var(--cc-shadow-md);
   cursor: pointer;
+  transform-origin: top right;
+  animation: dropdownIn var(--cc-dur) var(--cc-ease-entrance) both;
+  transition: background-color var(--cc-dur) var(--cc-ease);
+}
+
+.profileDropdown:hover {
+  background-color: var(--cc-surface-2);
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .profileMenu {
-  padding: 1rem;
+  padding: 0.9rem;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  /* Was `justify-content: space-around`, which pushed the avatar and the text
+     apart with a gap that grew as the name got shorter. */
+  min-width: 0;
 }
 
 .dropdownAvatar {
   width: 48px;
   height: 48px;
+  flex: none;
   border-radius: 50%;
   object-fit: cover;
 }
 
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .profileName {
-  font-size: 20px;
-  font-weight: bold;
-  /* display: flex; */
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cc-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profileUsername {
-  font-size: 14px;
-  color: gray;
-}
-.profileHeader{
-  display: flex;
-  justify-content: space-around;
+  font-size: 0.8rem;
+  color: var(--cc-text-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .hideOnMobile {
   display: none !important;
 }
 
-.headerRight{
-  max-width: fit-content  ;
-  width: 100%;;
-}
+/* ----------------------------------------------------------- responsive -- */
 
-.person{
-  display: flex;
-  width: 100%;
-}
+/* The old file had three overlapping ranges (1201-1367, 480-1200, 100-470) that
+   re-declared the same dozen properties, and the phone block set
+   `.header { width: 63vh }` - viewport *height* as a width, which on a 390x844
+   device computes to 532px and pushed the header off the right of the screen.
+   Two clean breakpoints replace all of it. */
 
-.signup{
-  margin-left: 10px;
-}
-
-
-@media screen and (min-width:1201px) and (max-width: 1367px) {
-  .logo {
-    height: 60px;
-    width: 60px;
-  }
-
+@media (max-width: 1200px) {
   .header {
+    height: 78px;
     padding: 0.5rem 1rem;
-    height: 80px;
+    gap: 10px;
   }
 
-  .searchContainer {
-    width: 300px;
-    height: 45px;
+  /* Header padding drops to 1rem here, so the drawer-edge alignment has to
+     subtract that instead. */
+  .headerLeft {
+    width: calc(var(--cc-drawer-w) - 1rem);
   }
 
-  .searchInput {
-    font-size: 0.95rem;
-    margin-top: 8px;
-  }
-
-  .avatar {
-    width: 50px;
-    height: 50px;
-  }
-
-  .username {
-    font-size: 1.1rem;
-  }
-
-  .profileDropdown {
-    width: 240px;
-    height: 80px;
-  }
-
-  .dropdownAvatar {
-    width: 44px;
-    height: 44px;
-  }
-
-  .profileName {
-    font-size: 17px;
-  }
-
-  .profileUsername {
-    font-size: 13px;
-  }
-
-  .productCountInCart {
-    font-size: 14px;
-    width: 18px;
-    height: 18px;
-    bottom: 28px;
-  }
-}
-
-@media screen and (min-width:100px) and (max-width:470px) {
-  .logo{
-    display: none;
-  }
-
-  .header {
-    width: 63vh;
-    padding: 4px 8px;
+  .logo {
+    width: 52px;
+    height: 52px;
   }
 
   .middleHeader {
-    gap: 4%;
-    margin: 0;
-    padding: 0;
-    max-width: 275px;
-    width: 100%;
+    gap: 1.1rem;
   }
-  
+
   .navLink {
-    margin-left: 0px;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 6px 0;
+    font-size: 0.9rem;
   }
-  
-  
-  .menuButton {
-    width: 50px;
-  }
-  
+
   .searchContainer {
-    height: 50px;
-    width: 220px;
-    margin: 0px 8px 0px 8px;
-  }
-  
-  .profile{
-    margin: 4px;
-    padding: 0px;
-    gap: 0%;
-    height: 50px;
+    flex-basis: 260px;
+    height: 40px;
   }
 
   .avatar {
-    width: 40px;
-    height: 40px;
-    margin-right: 3px;
+    width: 42px;
+    height: 42px;
   }
-  .username{
+
+  .username {
     display: none;
-  }
-
-  .profileDropdown {
-    word-wrap: break-word;
-    width: 200px;
-    height: 70px;
-  }
-  
-  .profileMenu {
-    padding: 1rem;
-  }
-  
-  .dropdownAvatar {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .profileName {
-    font-size: 15px;
-    font-weight: bold;
-  }
-  
-  .profileUsername {
-    font-size: 14px;
-    color: gray;
-  }
-  .profileHeader{
-    display: flex;
-    justify-content: space-around;
-  }
-  .headerRight{
-    max-width: fit-content;
-    width: 100%;
-  }
-
-  .person{
-    padding: 0px;
-    margin: 0px;
-    gap: 5%;
-  }
-  .login{
-    font-size: 12px;
-    width: 70px;
-    margin: 0px;
-  }
-  .signup{
-    font-size: 12px;
-    width: 70px;
-    margin: 0px;
   }
 }
-@media screen and (min-width:480px) and (max-width:1200px) {
-  .logo{
-    display: none;
+
+@media (max-width: 640px) {
+  .header {
+    height: auto;
+    min-height: 64px;
+    padding: 8px 10px;
+    gap: 6px;
+    /* Lets the nav row wrap underneath rather than overflowing sideways. */
+    flex-wrap: wrap;
+  }
+
+  .headerLeft {
+    /* Back to hugging its contents: reserving 70vw here would strand the logo
+       in the middle of a phone screen. */
+    width: auto;
+  }
+
+  .logo {
+    width: 42px;
+    height: 42px;
+    /* Nudged in off the hamburger so it reads as part of the centre of the bar
+       rather than being crowded into the top-left corner. */
+    margin-left: 22px;
   }
 
   .menuButton {
-    width: 50px;
-  }
-  
-  .searchContainer {
-    height: 50px;
-    width: 220px;
-    margin: 0px 8px 0px 8px;
-  }
-  
-  .profile{
-    margin: 4px;
-    padding: 0px;
-    gap: 0%;
-    height: 50px;
-  }
-
-  .avatar {
     width: 40px;
     height: 40px;
-    margin-right: 3px;
   }
-  .username{
+
+  .middleHeader {
+    /* Full-width second row, scrollable if the four links do not fit. */
+    order: 3;
+    flex: 1 0 100%;
+    /* Deliberately flex-start rather than space-between: this is a scroll
+       container, and any other justification makes the leading overflow
+       unreachable once the links stop fitting. The links themselves absorb
+       the spare width instead - see .middleHeader .navLink below. */
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .middleHeader::-webkit-scrollbar {
     display: none;
   }
 
-  .profileDropdown {
-    word-wrap: break-word;
-    width: 200px;
-    height: 70px;
+  /* The four links used to sit at their content width, leaving 41px of dead
+     space after "Contact" on a 335px screen. Each one now takes an equal share
+     of whatever is left over, so the row is divided evenly across the full
+     width and the hover underline spans the whole tap target. `1 1 auto`
+     rather than `1` keeps the label from being squeezed narrower than its own
+     text when the row does overflow. */
+  .middleHeader .navLink {
+    flex: 1 1 auto;
+    text-align: center;
   }
-  
-  .profileMenu {
-    padding: 1rem;
+
+  .navLink {
+    font-size: 0.875rem;
   }
-  
-  .dropdownAvatar {
-    width: 40px;
+
+  .searchContainer {
+    order: 4;
+    flex: 1 0 100%;
     height: 40px;
   }
-  
-  .profileName {
-    font-size: 15px;
-    font-weight: bold;
-  }
-  
-  .profileUsername {
-    font-size: 14px;
-    color: gray;
-  }
-  .profileHeader{
-    display: flex;
-    justify-content: space-around;
-  }
-}
-.addProductCart {
-  position: relative;
-  cursor: pointer;
-}
 
-.productCountInCart {
-  position: absolute;
-  bottom: 30px;
-  right: -5px;
-  background-color: rgb(255, 0, 0);
-  color: rgb(255, 255, 255);
-  font-size: 16px;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+  .addProductCart {
+    width: 40px;
+    height: 40px;
+    /* Absorbs the row's spare width so the cart sits next to the avatar
+       instead of being stranded in the middle of the bar by space-between. */
+    margin-left: auto;
+  }
+
+  .login,
+  .signup {
+    padding: 7px 14px;
+    font-size: 0.78rem;
+  }
+
+  .profileDropdown {
+    width: 220px;
+  }
 }
