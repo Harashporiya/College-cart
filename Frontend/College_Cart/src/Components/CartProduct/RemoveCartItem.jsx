@@ -40,7 +40,7 @@ const RemoveCartItem = ({ isOpen, onClose, cartItemId, setCartItem }) => {
         setCartItem(items);
         dispatch(updateCart({ item: items }));
       } catch (error) {
-          console.log(error);
+          console.error(error);
       }
     };
     // console.log(cartItem.length)
@@ -51,7 +51,7 @@ const RemoveCartItem = ({ isOpen, onClose, cartItemId, setCartItem }) => {
             toast.success("Cart product delete Successfull")
             onClose()
         } catch (error) {
-            console.log("Error", error);
+            console.error("Error:", error);
             toast.error("cart product delete during error");
         }finally{
             await fetchData();
