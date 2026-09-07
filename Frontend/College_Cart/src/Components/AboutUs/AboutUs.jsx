@@ -1,17 +1,23 @@
-import React, { useContext,useEffect } from "react";
-import collegeCartInterface from '../../assets/collegeCartInterface.png';
+/* eslint-disable react/no-unknown-property -- `fetchpriority` on the hero
+   image below is deliberately lowercase. React 19 maps the camelCase
+   `fetchPriority`, but this project runs React 18.3, which does not
+   recognise that form and logs an unknown-prop warning at runtime; the
+   all-lowercase spelling is passed straight through to the DOM. The lint
+   rule assumes React 19. */
+import React, { useContext } from "react";
+import collegeCartInterface from '../../assets/collegeCartInterface.webp';
 import styles from "./aboutus.module.css";
 import Header from '../Header/Header';
 import Footer from "../Footer/Footer";
 import { useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../Header/context';
+import useScrollReveal from '../../util/useScrollReveal';
 
 const AboutUs = () => {
     const navigate = useNavigate()
     const {data } = useContext(UserDataContext);
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    // Scroll reset is handled globally by <ScrollToTop /> in App.jsx now.
+    const revealRef = useScrollReveal();
 
 
   const checkLogin=()=>{
@@ -25,9 +31,9 @@ const AboutUs = () => {
 
   return (
     <div className={styles.pageWrapper}>
-      <Header Header showSearch={false} showMiddleHeader={true} isProductsPage={false}/>
+      <Header showSearch={false} showMiddleHeader={true} isProductsPage={false}/>
       
-      <div className={styles.container}>
+      <div className={styles.container} ref={revealRef}>
         <div className={styles.hero}>
           <div className={styles.heroContent}>
             <h1 className={styles.title}>Our Mission</h1>
@@ -35,7 +41,18 @@ const AboutUs = () => {
               Empowering students through a smarter, safer campus marketplace that saves money and builds community.
             </p>
           </div>
-          <img src="https://images.pexels.com/photos/5428770/pexels-photo-5428770.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Students using College Cart" className={styles.heroImage} />
+          {/* Above the fold, so it is fetched at high priority rather than
+              being queued behind the six decorative feature icons below.
+              width/height reserve its box and stop the hero reflowing. */}
+          <img
+            src="https://images.pexels.com/photos/5428770/pexels-photo-5428770.jpeg?auto=compress&cs=tinysrgb&w=900"
+            alt="Students using College Cart"
+            className={styles.heroImage}
+            width="450"
+            height="350"
+            fetchpriority="high"
+            decoding="async"
+          />
         </div>
 
         <div className={styles.content}>
@@ -51,28 +68,28 @@ const AboutUs = () => {
               </p>
               
               <div className={styles.problemGrid}>
-                <div className={styles.problemCard}>
+                <div className={`${styles.problemCard} cc-reveal`}>
                   <h3 className={styles.problemTitle}>Textbook Troubles</h3>
                   <p className={styles.problemDescription}>
                     Students spend an average of Rs.10000 annually on textbooks, often forced to buy new when used copies aren't available locally.
                   </p>
                 </div>
                 
-                <div className={styles.problemCard}>
+                <div className={`${styles.problemCard} cc-reveal`}>
                   <h3 className={styles.problemTitle}>Essential Expenses</h3>
                   <p className={styles.problemDescription}>
                     Basic necessities like electronics become financial burdens when purchased new each semester.
                   </p>
                 </div>
                 
-                <div className={styles.problemCard}>
+                <div className={`${styles.problemCard} cc-reveal`}>
                   <h3 className={styles.problemTitle}>Wasteful Cycles</h3>
                   <p className={styles.problemDescription}>
                     Perfectly good items get discarded at semester's end when students can't find buyers, creating unnecessary waste.
                   </p>
                 </div>
                 
-                <div className={styles.problemCard}>
+                <div className={`${styles.problemCard} cc-reveal`}>
                   <h3 className={styles.problemTitle}>Safety Concerns</h3>
                   <p className={styles.problemDescription}>
                     General marketplaces expose students to risks when meeting strangers, with no campus-specific verification.
@@ -95,28 +112,28 @@ const AboutUs = () => {
                 </p>
                 
                 <div className={styles.solutionHighlights}>
-                  <div className={styles.highlightItem}>
+                  <div className={`${styles.highlightItem} cc-reveal`}>
                     <h3 className={styles.highlightTitle}>Campus-Exclusive Marketplace</h3>
                     <p>
                       Verified <strong>chitkarauniversity.edu</strong> email registration ensures all users are actual students at your institution, creating a trusted network.
                     </p>
                   </div>
                   
-                  <div className={styles.highlightItem}>
+                  <div className={`${styles.highlightItem} cc-reveal`}>
                     <h3 className={styles.highlightTitle}>Academic & Lifestyle Categories</h3>
                     <p>
                       Specialized sections for textbooks, dorm essentials, electronics, and more - all organized for student needs.
                     </p>
                   </div>
                   
-                  <div className={styles.highlightItem}>
+                  <div className={`${styles.highlightItem} cc-reveal`}>
                     <h3 className={styles.highlightTitle}>Smart Pricing Tools</h3>
                     <p>
                       Automated price suggestions based on condition and demand help students get fair value for their items.
                     </p>
                   </div>
                   
-                  <div className={styles.highlightItem}>
+                  <div className={`${styles.highlightItem} cc-reveal`}>
                     <h3 className={styles.highlightTitle}>Sustainable Savings</h3>
                     <p>
                       Our platform keeps money circulating within the student community while reducing campus waste.
@@ -126,7 +143,15 @@ const AboutUs = () => {
               </div>
               
               <div className={styles.solutionImage}>
-                <img src={collegeCartInterface} alt="College Cart platform interface" className={styles.featureImage} />
+                <img
+                  src={collegeCartInterface}
+                  alt="College Cart platform interface"
+                  className={styles.featureImage}
+                  width="1200"
+                  height="590"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             </div>
           </section>
@@ -138,9 +163,9 @@ const AboutUs = () => {
   </div>
   
   <div className={styles.featuresGrid}>
-    <div className={styles.featureCard}>
+    <div className={`${styles.featureCard} cc-reveal`}>
       <div className={styles.featureIcon}>
-        <img src="https://cdn-icons-png.flaticon.com/512/1570/1570887.png" alt="Verification icon" />
+        <img src="https://cdn-icons-png.flaticon.com/512/1570/1570887.png" alt="Verification icon" width="30" height="30" loading="lazy" decoding="async" />
       </div>
       <h3 className={styles.featureTitle}>Student Verification</h3>
       <p className={styles.featureDescription}>
@@ -148,9 +173,9 @@ const AboutUs = () => {
       </p>
     </div>
     
-    <div className={styles.featureCard}>
+    <div className={`${styles.featureCard} cc-reveal`}>
       <div className={styles.featureIcon}>
-        <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search icon" />
+        <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search icon" width="30" height="30" loading="lazy" decoding="async" />
       </div>
       <h3 className={styles.featureTitle}>Smart Search</h3>
       <p className={styles.featureDescription}>
@@ -158,9 +183,9 @@ const AboutUs = () => {
       </p>
     </div>
     
-    <div className={styles.featureCard}>
+    <div className={`${styles.featureCard} cc-reveal`}>
       <div className={styles.featureIcon}>
-        <img src="https://cdn-icons-png.flaticon.com/512/4401/4401647.png" alt="Chat icon" />
+        <img src="https://cdn-icons-png.flaticon.com/512/4401/4401647.png" alt="Chat icon" width="30" height="30" loading="lazy" decoding="async" />
       </div>
       <h3 className={styles.featureTitle}>Secure Messaging</h3>
       <p className={styles.featureDescription}>
@@ -168,9 +193,9 @@ const AboutUs = () => {
       </p>
     </div>
     
-    <div className={styles.featureCard}>
+    <div className={`${styles.featureCard} cc-reveal`}>
       <div className={styles.featureIcon}>
-        <img src="https://cdn-icons-png.flaticon.com/512/3344/3344372.png" alt="Variety icon" />
+        <img src="https://cdn-icons-png.flaticon.com/512/3344/3344372.png" alt="Variety icon" width="30" height="30" loading="lazy" decoding="async" />
       </div>
       <h3 className={styles.featureTitle}>Comprehensive Marketplace</h3>
       <p className={styles.featureDescription}>
@@ -178,9 +203,9 @@ const AboutUs = () => {
       </p>
     </div>
     
-    <div className={styles.featureCard}>
+    <div className={`${styles.featureCard} cc-reveal`}>
       <div className={styles.featureIcon}>
-        <img src="https://cdn-icons-png.flaticon.com/512/2745/2745886.png" alt="Categories icon" />
+        <img src="https://cdn-icons-png.flaticon.com/512/2745/2745886.png" alt="Categories icon" width="30" height="30" loading="lazy" decoding="async" />
       </div>
       <h3 className={styles.featureTitle}>Diverse Categories</h3>
       <p className={styles.featureDescription}>
@@ -188,9 +213,9 @@ const AboutUs = () => {
       </p>
     </div>
     
-    <div className={styles.featureCard}>
+    <div className={`${styles.featureCard} cc-reveal`}>
       <div className={styles.featureIcon}>
-        <img src="https://png.pngtree.com/png-vector/20241227/ourlarge/pngtree-eco-leaf-icon-representing-sustainability-and-environmental-awareness-png-image_14888668.png" alt="Eco icon" />
+        <img src="https://png.pngtree.com/png-vector/20241227/ourlarge/pngtree-eco-leaf-icon-representing-sustainability-and-environmental-awareness-png-image_14888668.png" alt="Eco icon" width="30" height="30" loading="lazy" decoding="async" />
         </div>
             <h3 className={styles.featureTitle}>Green Impact</h3>
             <p className={styles.featureDescription}>
@@ -208,31 +233,31 @@ const AboutUs = () => {
             
             <div className={styles.impactContent}>
               <div className={styles.impactStats}>
-                <div className={styles.statItem}>
+                <div className={`${styles.statItem} cc-reveal`}>
                   <h3 className={styles.statNumber}>70%</h3>
                   <p className={styles.statLabel}>Average savings on textbooks</p>
                 </div>
                 
-                <div className={styles.statItem}>
+                <div className={`${styles.statItem} cc-reveal`}>
                   <h3 className={styles.statNumber}>85%</h3>
                   <p className={styles.statLabel}>Reduction in move-out waste</p>
                 </div>
                 
-                <div className={styles.statItem}>
+                <div className={`${styles.statItem} cc-reveal`}>
                   <h3 className={styles.statNumber}>92%</h3>
                   <p className={styles.statLabel}>Users who feel safer than general marketplaces</p>
                 </div>
               </div>
               
               <div className={styles.impactTestimonials}>
-                <div className={styles.testimonialCard}>
+                <div className={`${styles.testimonialCard} cc-reveal`}>
                   <p className={styles.testimonialText}>
                     "I saved over Rs.1500 my first semester using College Cart for textbooks and a mini-fridge. The meet-up spots on campus made me feel completely safe."
                   </p>
                   <p className={styles.testimonialAuthor}>- Pranav Jaswal, CSE Student</p>
                 </div>
                 
-                <div className={styles.testimonialCard}>
+                <div className={`${styles.testimonialCard} cc-reveal`}>
                   <p className={styles.testimonialText}>
                     "As a student from eastern India, this platform helped me furnish my dorm affordably and make local friends through transactions."
                   </p>
