@@ -4,7 +4,7 @@ import { fetchProductDetails } from "../SagaRedux/Slice";
 import { useParams } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from '../ui/Skeleton';
 import './ProductDetails.css';
 import { addToCart } from '../Redux/Slice';
 import { cartAdd } from '../SagaRedux/Slice';
