@@ -3,14 +3,12 @@ import { Ellipsis } from 'lucide-react';
 import { motion } from 'framer-motion';
 import styles from './productCard.module.css';
 import DeleteProduct from './DeleteProduct';
-import UpdateProduct from './UpdateProduct';
 import ExchangeBookUpdate from './ExchangeUpdateBook';
 
-const ExchangeBookCard = ({ exchangeBooks }) => {
+const ExchangeBookCard = ({ exchangeBooks, onChanged }) => {
     const [openMenuId, setOpenMenuId] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [productToDeleteId, setProductToDeleteId] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [productToUpdate, setProductToUpdate] = useState(null);
 
@@ -30,7 +28,7 @@ const ExchangeBookCard = ({ exchangeBooks }) => {
             {exchangeBooks.map((book) => (
                 <div key={book._id} className={styles.productWrapper}>
                     <div className={styles.productImageContainer}>
-                        <div style={{ width: "300px", display: "flex", alignItems: 'center', justifyItems: "center" }}>
+                        <div className={styles.productMedia}>
                             <motion.img
                                 whileHover={{ scale: 0.9 }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 90 }}
@@ -48,11 +46,13 @@ const ExchangeBookCard = ({ exchangeBooks }) => {
                                 <button className={styles.menuItem}
                                 onClick={()=>{ 
                                     setProductToUpdate(book);
-                                    setIsUpdateModalOpen(true); }}>Update</button>
+                                    setIsUpdateModalOpen(true);
+                                    setOpenMenuId(null); }}>Update</button>
                                 <button className={styles.menuItemDeleteBtn}
                                 onClick={() => {
                                     setProductToDeleteId(book._id);
                                     setIsDeleteModalOpen(true);
+                                    setOpenMenuId(null);
                                   }}>Delete</button>
                             </div>
                         )}
@@ -99,11 +99,13 @@ const ExchangeBookCard = ({ exchangeBooks }) => {
         onClose={() => setIsDeleteModalOpen(false)}
         productId=""
         bookId={productToDeleteId}
+        onDeleted={onChanged}
       />
       <ExchangeBookUpdate 
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
         productData={productToUpdate}
+        onUpdated={onChanged}
         />
         </>
     );
