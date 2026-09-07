@@ -35,7 +35,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
-                console.log("Failed to load requests");
+                console.error("Failed to load requests");
             }
         };
         fetchAllRequests();
@@ -123,7 +123,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
            const res = await axios.delete(`${backend_url}/${requestId}/deleteOrder`);
         //    console.log(res.data)
         } catch (error) {
-           console.log("Error",error)
+           console.error("Error:", error)
         }
        }
 
