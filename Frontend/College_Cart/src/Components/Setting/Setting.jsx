@@ -24,7 +24,7 @@ const Setting = () => {
         console.log(filterLoginUser)
         setIsLoading(false);
       } catch (error) {
-        console.log("Failed to load requests");
+        console.error("Failed to load requests");
         setIsLoading(false);
       }
     };
@@ -50,7 +50,7 @@ const Setting = () => {
       const response = await axios.delete(`${backend_url}/${requestId}/deleteRequest`)
       toast.success("Request delete successful")
     } catch (error) {
-      console.log("Error",error)
+      console.error("Error:", error)
       toast.error("Request during error")
     }
   }
