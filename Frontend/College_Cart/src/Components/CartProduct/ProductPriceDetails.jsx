@@ -52,9 +52,10 @@ const ProductPriceDetails = ({ cartItem }) => {
         )}
       </div>
 
-      <button >
-        <Checkout cartItem={cartItem}/>
-      </button>
+      {/* Checkout renders its own <button>. Wrapping it in another one made
+          invalid nested-button markup (React logged a validateDOMNesting
+          error), and the outer element had no handler or styling of its own. */}
+      <Checkout cartItem={cartItem} />
     </div>
   );
 };
