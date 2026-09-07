@@ -1,390 +1,488 @@
+/* The cc-* entrance keyframes this file animates with are defined globally in
+   index.css, but CSS Modules rewrites animation names to hashed local ones, so
+   those references resolved to names that did not exist and never ran. Importing
+   the definitions makes them local to this module, matching the rewrite. */
+@import '../../styles/keyframes.css';
+
+/* ==========================================================================
+   About Us
+   ========================================================================== */
+
 .pageWrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    flex: 1;
-    font-family: 'Arial', sans-serif;
-    color: #333;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--cc-surface);
+}
+
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  color: #333;
+}
+
+/* ------------------------------------------------------------------ hero -- */
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 72px 0;
+  margin-bottom: 40px;
+}
+
+.heroContent {
+  max-width: 600px;
+}
+
+.title {
+  margin: 0 0 20px;
+  /* Fluid type replaces four fixed font-size overrides across the old media
+     queries - and covers the 471-499px and 769-799px widths that had no
+     breakpoint at all, so text stayed desktop-sized on small screens. */
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--cc-heading);
+  animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) both;
+}
+
+.missionStatement {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  line-height: 1.6;
+  color: #4a5568;
+  animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) 120ms both;
+}
+
+.heroImage {
+  width: 450px;
+  /* Sized by aspect ratio rather than a hard height, so the crop stays right
+     as the flex box narrows. */
+  aspect-ratio: 9 / 7;
+  height: auto;
+  flex: none;
+  object-fit: cover;
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-lg);
+  animation: cc-scale-in var(--cc-dur-slower) var(--cc-ease-entrance) 200ms both;
+}
+
+.content {
+  padding: 20px 0 60px;
+}
+
+/* --------------------------------------------------------------- section -- */
+
+.sectionHeader {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.sectionTitle {
+  margin: 48px 0 15px;
+  font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+  font-weight: 600;
+  color: var(--cc-heading);
+}
+
+.divider {
+  width: 80px;
+  height: 4px;
+  margin: 0 auto;
+  border-radius: 2px;
+  background-color: var(--cc-blue);
+}
+
+.text {
+  margin-bottom: 30px;
+  font-size: 1.075rem;
+  line-height: 1.8;
+  color: #4a5568;
+}
+
+/* ----------------------------------------------------------------- cards -- */
+
+.problemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 26px;
+  margin-top: 36px;
+}
+
+.problemCard {
+  padding: 28px;
+  background-color: var(--cc-surface-2);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+  transition: transform var(--cc-dur-slow) var(--cc-ease),
+              box-shadow var(--cc-dur-slow) var(--cc-ease),
+              border-color var(--cc-dur-slow) var(--cc-ease);
+}
+
+.problemCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--cc-shadow-md);
+  border-color: var(--cc-border-strong);
+}
+
+.problemTitle {
+  margin: 0 0 14px;
+  font-size: 1.25rem;
+  color: var(--cc-heading);
+}
+
+.problemDescription {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #4a5568;
+}
+
+/* -------------------------------------------------------------- solution -- */
+
+.solutionContent {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin-top: 36px;
+}
+
+.solutionText {
+  flex: 1;
+  min-width: 0;
+}
+
+.solutionHighlights {
+  margin-top: 26px;
+}
+
+.highlightItem {
+  margin-bottom: 22px;
+  padding-left: 16px;
+  /* A left rule ties each highlight to the group and gives the hover something
+     to respond to. */
+  border-left: 3px solid var(--cc-border);
+  transition: border-color var(--cc-dur) var(--cc-ease),
+              padding-left var(--cc-dur) var(--cc-ease);
+}
+
+.highlightItem:hover {
+  border-left-color: var(--cc-blue);
+  padding-left: 22px;
+}
+
+.highlightTitle {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  color: var(--cc-blue);
+}
+
+.highlightItem p {
+  margin: 0;
+  line-height: 1.65;
+  color: #4a5568;
+}
+
+.solutionImage {
+  flex: 1;
+  min-width: 0;
+}
+
+.featureImage {
+  width: 100%;
+  height: auto;
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-md);
+}
+
+/* -------------------------------------------------------------- features -- */
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 26px;
+  margin-top: 36px;
+}
+
+.featureCard {
+  padding: 28px;
+  background-color: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-sm);
+  transition: transform var(--cc-dur-slow) var(--cc-ease),
+              box-shadow var(--cc-dur-slow) var(--cc-ease);
+}
+
+.featureCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--cc-shadow-md);
+}
+
+.featureIcon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 18px;
+  background-color: #e8f4fc;
+  border-radius: 50%;
+  transition: transform var(--cc-dur-slow) var(--cc-ease-spring),
+              background-color var(--cc-dur-slow) var(--cc-ease);
+}
+
+.featureCard:hover .featureIcon {
+  transform: scale(1.08) rotate(-6deg);
+  background-color: #d4ebfa;
+}
+
+.featureIcon img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.featureTitle {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  color: var(--cc-heading);
+}
+
+.featureDescription {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #4a5568;
+}
+
+/* ---------------------------------------------------------------- impact -- */
+
+.impactContent {
+  display: flex;
+  gap: 48px;
+  margin-top: 36px;
+}
+
+.impactStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px;
+  flex: 1;
+  min-width: 0;
+}
+
+.statItem {
+  padding: 28px 20px;
+  text-align: center;
+  background-color: var(--cc-surface-2);
+  border-radius: var(--cc-radius-lg);
+  transition: transform var(--cc-dur-slow) var(--cc-ease),
+              background-color var(--cc-dur-slow) var(--cc-ease);
+}
+
+.statItem:hover {
+  transform: translateY(-4px);
+  background-color: #eef6fd;
+}
+
+.statNumber {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--cc-blue);
+}
+
+.statLabel {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.impactTestimonials {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+  min-width: 0;
+}
+
+.testimonialCard {
+  padding: 28px;
+  background-color: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-sm);
+  transition: transform var(--cc-dur-slow) var(--cc-ease),
+              box-shadow var(--cc-dur-slow) var(--cc-ease);
+}
+
+.testimonialCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--cc-shadow-md);
+}
+
+.testimonialText {
+  margin: 0 0 14px;
+  font-size: 1.075rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: #4a5568;
+}
+
+.testimonialAuthor {
+  margin: 0;
+  font-weight: 600;
+  color: var(--cc-heading);
+}
+
+/* ---------------------------------------------------------------- future -- */
+
+.roadmapList {
+  margin: 30px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roadmapItem {
+  position: relative;
+  margin-bottom: 14px;
+  padding-left: 30px;
+  font-size: 1.075rem;
+  line-height: 1.6;
+  color: #4a5568;
+}
+
+.roadmapItem::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--cc-blue);
+  transition: transform var(--cc-dur) var(--cc-ease);
+}
+
+.roadmapItem:hover::before {
+  transform: translateX(4px);
+}
+
+.ctaBox {
+  margin-top: 48px;
+  padding: 48px 32px;
+  text-align: center;
+  color: #fff;
+  border-radius: var(--cc-radius-xl);
+  background: linear-gradient(135deg, var(--cc-blue) 0%, #2c7fb8 100%);
+  box-shadow: var(--cc-shadow-md);
+}
+
+.ctaTitle {
+  margin: 0 0 14px;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+.ctaText {
+  margin: 0 0 26px;
+  font-size: 1.075rem;
+  opacity: 0.92;
+}
+
+.ctaButton {
+  padding: 13px 32px;
+  background-color: #fff;
+  color: var(--cc-blue);
+  border: none;
+  border-radius: var(--cc-radius-pill);
+  font-size: 1.075rem;
+  font-weight: 600;
+  transition: transform var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              background-color var(--cc-dur) var(--cc-ease);
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  /* Was `background-color: yellow` - the pure sRGB primary, which clashed with
+     the brand yellow used everywhere else. */
+  background-color: var(--cc-yellow);
+  color: var(--cc-text);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+.ctaButton:active {
+  transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------- responsive -- */
+
+/* The old file used three disjoint ranges - (800-1024), (500-768) and
+   (100-470) - leaving 471-499px and 769-799px with no rules at all, and its
+   phone block set `.container { width: 63vh }` and `.hero { width: 59vh }`,
+   using viewport *height* as a width. Continuous max-width breakpoints now. */
+
+@media (max-width: 1024px) {
   .hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 80px 0;
-    margin-bottom: 60px;
+    flex-direction: column;
+    text-align: center;
+    padding: 56px 0;
+    gap: 36px;
   }
-  
+
   .heroContent {
-    max-width: 600px;
+    max-width: 100%;
   }
-  
-  .title {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #2c3e50;
-    line-height: 1.2;
-  }
-  
-  .missionStatement {
-    font-size: 1.5rem;
-    line-height: 1.6;
-    color: #4a5568;
-  }
-  
+
   .heroImage {
-    width: 450px;
-    height: 350px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 520px;
   }
-  
-  .content {
+
+  .solutionContent,
+  .impactContent {
+    flex-direction: column;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .hero {
     padding: 40px 0;
   }
-  
+
   .sectionHeader {
-    margin-bottom: 50px;
-    text-align: center;
+    margin-bottom: 28px;
   }
-  
+
   .sectionTitle {
-    margin-top: 45px;
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 15px;
+    margin-top: 36px;
   }
-  
-  .divider {
-    width: 80px;
-    height: 4px;
-    background-color: #3498db;
-    margin: 0 auto;
-  }
-  
-  .text {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 30px;
-    color: #4a5568;
-  }
-  
-  .problemGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-  }
-  
-  .problemCard {
-    background-color: #f8f9fa;
-    padding: 30px;
-    border-radius: 8px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .problemCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  }
-  
-  .problemTitle {
-    font-size: 1.3rem;
-    color: #2c3e50;
-    margin-bottom: 15px;
-  }
-  
-  .problemDescription {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #4a5568;
-  }
-  
-  .solutionContent {
-    display: flex;
-    gap: 50px;
-    align-items: center;
-    margin-top: 40px;
-  }
-  
-  .solutionText {
-    flex: 1;
-  }
-  
-  .solutionHighlights {
-    margin-top: 30px;
-  }
-  
-  .highlightItem {
-    margin-bottom: 25px;
-  }
-  
-  .highlightTitle {
-    font-size: 1.2rem;
-    color: #3498db;
-    margin-bottom: 10px;
-  }
-  
-  .solutionImage {
-    flex: 1;
-  }
-  
-  .featureImage {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  }
-  
-  .featuresGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-  }
-  
-  .featureCard {
-    padding: 30px;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-  }
-  
-  .featureCard:hover {
-    transform: translateY(-5px);
-  }
-  
-  .featureIcon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    background-color: #e8f4fc;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .featureIcon img {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .featureTitle {
-    font-size: 1.2rem;
-    color: #2c3e50;
-    margin-bottom: 15px;
-  }
-  
-  .featureDescription {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #4a5568;
-  }
-  
-  .impactContent {
-    display: flex;
-    gap: 50px;
-    margin-top: 40px;
-  }
-  
-  .impactStats {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 30px;
-  }
-  
-  .statItem {
-    text-align: center;
-    padding: 30px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-  }
-  
-  .statNumber {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #3498db;
-    margin-bottom: 10px;
-  }
-  
-  .statLabel {
-    font-size: 1rem;
-    color: #4a5568;
-  }
-  
-  .impactTestimonials {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
-  
+
+  .problemCard,
+  .featureCard,
   .testimonialCard {
-    padding: 30px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    padding: 22px;
   }
-  
-  .testimonialText {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    font-style: italic;
-    color: #4a5568;
-    margin-bottom: 15px;
-  }
-  
-  .testimonialAuthor {
-    font-weight: 600;
-    color: #2c3e50;
-  }
-  
-  .roadmapList {
-    margin: 30px 0;
-    padding-left: 20px;
-  }
-  
-  .roadmapItem {
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #4a5568;
-    position: relative;
-    padding-left: 30px;
-  }
-  
-  .roadmapItem:before {
-    content: "→";
-    color: #3498db;
-    position: absolute;
-    left: 0;
-  }
-  
+
   .ctaBox {
-    text-align: center;
-    padding: 50px;
-    background-color: #3498db;
-    border-radius: 8px;
-    margin-top: 50px;
-    color: white;
+    padding: 36px 20px;
   }
-  
-  .ctaTitle {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-  
-  .ctaText {
-    font-size: 1.1rem;
-    margin-bottom: 25px;
-    opacity: 0.9;
-  }
-  
-  .ctaButton {
-    background-color: white;
-    color: #3498db;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  .ctaButton:hover {
-    transform: translateY(-3px);
-    background-color: yellow;
+}
+
+@media (max-width: 480px) {
+  .impactStats {
+    grid-template-columns: 1fr;
   }
 
-  @media screen and (min-width:800px) and (max-width: 1024px) {
-    .hero {
-      flex-direction: column;
-      text-align: center;
-    }
-    
-    .heroImage {
-      margin-top: 40px;
-      width: 100%;
-      max-width: 500px;
-    }
-    
-    .solutionContent {
-      flex-direction: column;
-    }
-    
-    .impactContent {
-      flex-direction: column;
-    }
-    
-    .impactStats {
-      grid-template-columns: repeat(3, 1fr);
-      margin-bottom: 40px;
-    }
+  .problemGrid,
+  .featuresGrid {
+    gap: 16px;
   }
-  
-  @media screen and (min-width:500px) and  (max-width: 768px) {
-    .hero {
-      padding: 60px 0;
-    }
-    
-    .title {
-      font-size: 2.5rem;
-    }
-    
-    .missionStatement {
-      font-size: 1.3rem;
-    }
-    
-    .sectionTitle {
-      font-size: 1.8rem;
-    }
-    
-    .impactStats {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (min-width: 100px) and (max-width: 470px) {
-    .container{
-      width: 63vh;
-    }
-    .hero {
-      width: 59vh;
-      padding: 60px 10px;
-      gap: 10%;
-    }
-    .title {
-      font-size: 2.5rem;
-    }
-    
-    .missionStatement {
-      font-size: 1.3rem;
-    }
-
-    .solutionContent{
-      flex-direction: column;
-    }
-    
-    .sectionTitle {
-      font-size: 1.8rem;
-    }
-    
-    .impactStats {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-
+}
