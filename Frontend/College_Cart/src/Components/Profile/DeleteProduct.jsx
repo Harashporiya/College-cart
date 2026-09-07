@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './deleteProduct.module.css';
 import { getToken } from '../../util/tokenService';
@@ -6,14 +6,18 @@ import axios from 'axios';
 const backend_url = import.meta.env.VITE_BACKEND_API_URL;
 import toast, { Toaster } from 'react-hot-toast';
 
-const DeleteProduct = ({ isOpen, onClose, productId, bookId }) => {
+const DeleteProduct = ({ isOpen, onClose, productId, bookId, onDeleted }) => {
   const dialogRef = useRef(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   useEffect(() => {
     const dialogElement = dialogRef.current;
+    // The ref is null on the very first commit and after unmount, and calling
+    // showModal on an already-open dialog throws.
+    if (!dialogElement) return;
     if (isOpen) {
-      dialogElement.showModal();
-    } else {
+      if (!dialogElement.open) dialogElement.showModal();
+    } else if (dialogElement.open) {
       dialogElement.close();
     }
   }, [isOpen]);
@@ -24,8 +28,11 @@ const DeleteProduct = ({ isOpen, onClose, productId, bookId }) => {
   };
   
   const handleDelete = async () => {
+    if (isDeleting) return;
+
     const token = getToken();
-    
+    setIsDeleting(true);
+
     try {
       if (productId) {
         await axios.delete(`${backend_url}/${productId}/product-delete`, {
@@ -46,10 +53,15 @@ const DeleteProduct = ({ isOpen, onClose, productId, bookId }) => {
       }
       
       toast.success("Product deleted successfully");
+      // The deleted card used to stay in the profile grid until the page was
+      // reloaded, because the list was only ever fetched on mount.
+      onDeleted?.(productId || bookId);
       onClose();
     } catch (error) {
       console.error('Error deleting item:', error);
       toast.error("Error occurred during deletion");
+    } finally {
+      setIsDeleting(false);
     }
   };
   
@@ -77,14 +89,17 @@ const DeleteProduct = ({ isOpen, onClose, productId, bookId }) => {
                 <button
                   className={styles.cancelButton}
                   onClick={handleClose}
+                  disabled={isDeleting}
                 >
                   Cancel
                 </button>
                 <button
                   className={styles.deleteButton}
                   onClick={handleDelete}
+                  disabled={isDeleting}
+                  aria-busy={isDeleting}
                 >
-                  Delete
+                  {isDeleting ? 'Deleting...' : 'Delete'}
                 </button>
               </div>
             </motion.div>
