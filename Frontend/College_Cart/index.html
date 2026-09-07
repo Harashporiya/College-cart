@@ -2,13 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./src/assets/svgLogo.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <title>College cart</title>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="icon" type="image/svg+xml" href="/src/assets/svgLogo.svg" />
+
+    <!-- initial-scale=1 was missing, which let mobile browsers pick their own
+         zoom level and made every breakpoint fire at the wrong width. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#232f3e" />
+    <meta
+      name="description"
+      content="College Cart is a campus-only marketplace where verified students buy, sell and exchange textbooks, electronics, clothing and daily essentials."
+    />
+
+    <title>College Cart - Buy, Sell & Exchange on Campus</title>
+
+    <!-- Warm the TLS connection to the API before React has even parsed, so the
+         first data fetch (and a login submitted seconds later) skips the DNS and
+         handshake round trips. -->
+    <link rel="preconnect" href="https://ip-project-c0sb.onrender.com" crossorigin />
+    <link rel="dns-prefetch" href="https://ip-project-c0sb.onrender.com" />
+
+    <!-- Remaining third-party image hosts used by About Us and avatar fallbacks. -->
+    <link rel="preconnect" href="https://cdn-icons-png.flaticon.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn-icons-png.flaticon.com" />
+    <link rel="dns-prefetch" href="https://images.pexels.com" />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+    <!-- Paint the page ground before any stylesheet arrives. Without this the
+         first frame is the browser's white default, which read as a flash on
+         the dark auth screens. -->
+    <style>
+      html { background-color: #f6f7f9; }
+      body { margin: 0; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Razorpay is only needed once a user reaches checkout. Loading it
+         synchronously in <head> blocked HTML parsing on a third-party request
+         for every visitor; `defer` still guarantees it is ready before
+         DOMContentLoaded, long before any checkout click. -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
