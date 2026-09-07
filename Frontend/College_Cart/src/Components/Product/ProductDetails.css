@@ -274,10 +274,12 @@
 
     .amazon-container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        align-items: center;
-        width: 50vh;
-        margin-left: 60px;
+        /* Was `width: 50vh` with `margin-left: 60px`, which sized the container
+           from the viewport height and then shoved it right off the screen. */
+        width: 100%;
+        margin-left: 0;
     }
 
     .buy-box-column {
@@ -318,7 +320,9 @@
     touch-action: manipulation;
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: background-color var(--cc-dur) var(--cc-ease),
+                border-color var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease);
     margin-top: 30px;
 }
 
