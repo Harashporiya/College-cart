@@ -1,218 +1,154 @@
 import React, { useContext, useEffect } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import styles from './sidebar.module.css';
-import icon from "../../assets/logo.jpeg";
+import icon from "../../assets/logo.webp";
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { logout } from '../SagaRedux/Slice';
 import { useDispatch } from 'react-redux';
 import { UserDataContext } from '../Header/context';
-import { motion } from "framer-motion"
-import { SquarePlus, LayoutDashboard, User, Settings,Mail, LogOut,LogIn,KeyRound, Barcode } from 'lucide-react';
-
+import { SquarePlus, LayoutDashboard, User, Settings, Mail, LogOut, KeyRound, Barcode } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const navigate = useNavigate()
-  const { data } = useContext(UserDataContext)
+  const navigate = useNavigate();
+  const { data, setData } = useContext(UserDataContext);
   const dispatch = useDispatch();
-  const email = data.email || "";
+  const email = data?.email || "";
   const [localPart, domainPart] = email.includes("@") ? email.split("@") : ["", ""];
 
   const isAuthenticated = Boolean(data && data._id);
 
   const handleLogout = () => {
     dispatch(logout());
-    toast.success("Logout success")
-      navigate("/login")
-  }
+    // The provider still held the old profile after logout, so the header kept
+    // showing the signed-in avatar until a full page reload.
+    setData('');
+    // Was `toast` from react-toastify, but no <ToastContainer /> is mounted
+    // anywhere in this tree - the confirmation simply never appeared. The rest
+    // of the app uses react-hot-toast, whose <Toaster /> the login screen
+    // renders via MessageHandler.
+    toast.success("Logged out successfully");
+    onClose?.();
+    navigate("/login");
+  };
 
   useEffect(() => {
-          if(isOpen){
-              document.body.style.overflow = 'hidden';
-          }else{
-              document.body.style.overflow = 'auto';
-          }
-          return () => {
-              document.body.style.overflow = 'auto';
-          };
+    if (!isOpen) return;
+    // Lock the page behind the drawer, and restore whatever overflow the page
+    // had rather than hard-coding 'auto' (which broke pages relying on the
+    // default `visible`).
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
   }, [isOpen]);
-  
-  const sidebarVaraints = {
-    open: { x: 0, opacity: 1, scale: 1 },
-    closed: { x: "-100%", opacity: 0, scale: 0.9 }
-  }
 
-  const backdropVaraints = {
-    open: { opacity: 0.6 },
-    closed: { opacity: 0 },
-  }
+  // Close on Escape - the drawer could previously only be dismissed by
+  // clicking the backdrop or the X.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') onClose?.();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
 
-  const containerVaraints = {
-    open: {
-      transition: {
-        staggerChildren: 0.2,
-        dealyChildren: 0.1,
-      }
-    },
-    closed: {
-      transition: {
-        staggerChildren: 0.2,
-        dealyChildren: 0,
-      }
-    }
-  }
+  const go = (path) => () => {
+    onClose?.();
+    navigate(path);
+  };
 
-  const itemsVaraints = {
-    open: { opacity: 1, y: 0, scale: 1 },
-    closed: { opacity: 0, y: -20, scale: 0.95 }
-  }
+  // Anything account-scoped used to interpolate `data._id` unconditionally,
+  // sending signed-out visitors to /undefined/user-profile.
+  const goAccount = (path) => () => {
+    onClose?.();
+    navigate(isAuthenticated ? path : '/login');
+  };
 
-  // useEffect(() => {
-  //   console.log("Auth Status:", isAuthenticated);
-  //   console.log("Current User Data:", data);
-  // }, [isAuthenticated, data]);
+  const items = [
+    { label: 'Dashboard', icon: <LayoutDashboard />, onClick: go('/dashboard') },
+    { label: 'Profile', icon: <User />, onClick: goAccount(`/${data?._id}/user-profile`) },
+    { label: 'Settings', icon: <Settings />, onClick: go('/setting') },
+    ...(isAuthenticated ? [{ label: 'Messages', icon: <Mail />, onClick: go('/messages') }] : []),
+    { label: 'Products', icon: <Barcode />, onClick: go('/all-products') },
+    { label: 'Exchange Books', icon: <Barcode />, onClick: go('/all-products-exchange-books') },
+    ...(isAuthenticated
+      ? [
+          { label: 'Add Products', icon: <SquarePlus />, onClick: goAccount(`/${data?._id}/add-products-user`) },
+          { label: 'Exchange Book Add', icon: <SquarePlus />, onClick: goAccount(`/${data?._id}/exchange-add-product-form`) },
+        ]
+      : []),
+    isAuthenticated
+      ? { label: 'Logout', icon: <LogOut />, onClick: handleLogout }
+      : { label: 'Signup / Signin', icon: <KeyRound />, onClick: go('/login') },
+  ];
 
   return (
     <>
-      {isOpen && <div className={styles.sidebarOverlay} onClick={onClose} />}
-      <motion.div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}
-        initial="closed"
-        animate={isOpen ? "open" : "closed"}
-        variants={sidebarVaraints}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      >
+      <div
+        className={`${styles.sidebarOverlay} ${isOpen ? styles.overlayVisible : ''}`}
+        onClick={onClose}
+        // Kept mounted so the backdrop can fade out. It was previously
+        // unmounted outright, which made it vanish instantly.
+        aria-hidden="true"
+      />
 
+      {/* The slide-in, the backdrop fade and the staggered menu items were all
+          framer-motion variants. They are CSS transitions now (see
+          sidebar.module.css): identical motion, and it keeps framer-motion out
+          of the initial bundle entirely, since the Sidebar ships with the
+          always-loaded Header. */}
+      <aside
+        className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}
+        aria-hidden={!isOpen}
+        // Removes the whole drawer from tab order while closed; the links were
+        // previously still focusable off-screen.
+        {...(!isOpen && { inert: '' })}
+      >
         <div className={styles.sidebarHeader}>
-          <img
-            src={icon}
-            alt="Logo"
-            className={styles.sidebarLogo}
-          />
-          <motion.button className={styles.closeButton} onClick={onClose}
-            initial="closed"
-            animate={isOpen ? "open" : "closed"}
-            variants={backdropVaraints}
-            transition={{ duration: 0.3 }}
-            whileHover={{ scale: 1.1 }}
-          >
+          <img src={icon} alt="College Cart" className={styles.sidebarLogo} width="56" height="56" />
+          <button className={styles.closeButton} onClick={onClose} aria-label="Close menu">
             <IoMdClose size={24} />
-          </motion.button>
+          </button>
         </div>
 
-        <motion.div className={styles.sidebarContent}
-          variants={containerVaraints}
-          initial="closed"
-          animate={isOpen ? "open" : "closed"}
-        >
-          <motion.div className={styles.menuItem} onClick={() => navigate("/dashboard")}
-            variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
-          >
-            <span className={styles.menuIcon}>  <LayoutDashboard color='black'/></span>
-            <span className={styles.menuTitle}>Dashboard</span>
-          </motion.div>
+        <nav className={styles.sidebarContent}>
+          {items.map((item) => (
+            <button type="button" key={item.label} className={styles.menuItem} onClick={item.onClick}>
+              <span className={styles.menuIcon}>{item.icon}</span>
+              <span className={styles.menuTitle}>{item.label}</span>
+            </button>
+          ))}
+        </nav>
 
-          <motion.div variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
-            className={styles.menuItem} onClick={() => navigate(`/${data._id}/user-profile`)}>
-            <span className={styles.menuIcon}> <User/></span>
-            <span className={styles.menuTitle}>Profile</span>
-          </motion.div>
-
-          <motion.div variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-          onClick={()=>navigate("/setting")}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
-            className={styles.menuItem}>
-            <span className={styles.menuIcon}>  <Settings /></span>
-            <span className={styles.menuTitle}>Settings</span>
-          </motion.div>
-
-         { isAuthenticated && 
-          <motion.div className={styles.menuItem} onClick={()=>navigate("/messages")}
-          variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300, damping: 15 }} >
-          <span className={styles.menuIcon}> <Mail /></span>
-          <span className={styles.menuTitle}>Messages</span>
-        </motion.div>}
-
-          <motion.div className={styles.menuItem}
-            variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }} onClick={()=>navigate("/all-products")}>
-            <span className={styles.menuIcon}> <Barcode /></span>
-            <span className={styles.menuTitle}>Products</span>
-          </motion.div>
-
-          <motion.div className={styles.menuItem}
-            variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }} onClick={()=>navigate("/all-products-exchange-books")}>
-            <span className={styles.menuIcon}> <Barcode /></span>
-            <span className={styles.menuTitle}>Exchange Books</span>
-          </motion.div>
-
-         {
-          isAuthenticated && 
-          <>
-          <motion.div className={styles.menuItem} onClick={()=>navigate(`/${data._id}/add-products-user`)}
-          variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-          <span className={styles.menuIcon}><SquarePlus /></span>
-          <span className={styles.menuTitle}>Add Products</span>
-        </motion.div>
-
-         <motion.div className={styles.menuItem} onClick={()=>navigate(`/${data._id}/exchange-add-product-form`)}
-         variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-         transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-         <span className={styles.menuIcon}><SquarePlus /></span>
-         <span className={styles.menuTitle}>Exchange Book Add</span>
-       </motion.div>
-          </>
-         }
-
-          {
-            isAuthenticated ?
-              (
-                <motion.div className={styles.menuItem} onClick={handleLogout}
-                  variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-                  <span className={styles.menuIcon}>  <LogOut /></span>
-                  <span className={styles.menuTitle}>Logout</span>
-                </motion.div>
-              ) : (
-                <motion.div className={styles.menuItem} onClick={() => navigate("/login")}
-                  variants={itemsVaraints} whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-                  <span className={styles.menuIcon}>    <KeyRound /></span>
-                  <span className={styles.menuTitle}>Signup / Signin</span>
-                </motion.div>
-              )
-          }
-        </motion.div>
-
-        {
-          isAuthenticated ?
-          (
-            <div className={styles.sidebarFooter}>
+        {isAuthenticated ? (
+          <div className={styles.sidebarFooter}>
             <div className={styles.profileContainer}>
-              <div>
-                <img className={styles.image} src={data.profileImage || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'} alt="Profile" />
-              </div>
-              <div>
-                <span className={styles.nameUser}>{data.name || 'Jhon Doe'}</span><br />
-                <span className={styles.emailUser}>{localPart || 'jhondow1215.be23'} <br />@{domainPart || 'chitkarauniversity.edu.in'}</span>
+              <img
+                className={styles.image}
+                src={data.profileImage || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
+                alt=""
+                width="44"
+                height="44"
+                loading="lazy"
+              />
+              <div className={styles.profileText}>
+                <span className={styles.nameUser}>{data.name || 'Student'}</span>
+                <span className={styles.emailUser}>{localPart}<br />@{domainPart}</span>
               </div>
             </div>
           </div>
-          ):(
-            // <>
-            <div className={`flex ${styles.sidebarFooter}`}>
-              <button className='bg-yellow-500 p-2 font-bold rounded-none hover:bg-yellow-600' onClick={()=>navigate("/login")}>Login</button>
-              <button className='text-white bg-black font-bold rounded-none hover:bg-slate-900' onClick={()=>navigate('/signup')}>Signup</button>
+        ) : (
+          <div className={styles.sidebarFooter}>
+            <div className={styles.authButtons}>
+              <button type="button" className={styles.loginBtn} onClick={go('/login')}>Login</button>
+              <button type="button" className={styles.signupBtn} onClick={go('/signup')}>Signup</button>
             </div>
-            // </>
-          )
-        }
-      </motion.div>
-
+          </div>
+        )}
+      </aside>
     </>
   );
 };
