@@ -1,9 +1,14 @@
 .container {
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  width: 500px;
+  /* Was a fixed `width: 500px` with `margin-left: 2.5rem`, which could not
+     shrink and so overflowed every viewport between 561px and ~740px. The
+     parent supplies the gap now, so the margin does not add width once this
+     wraps onto its own line. */
+  flex: 1 1 320px;
+  min-width: 0;
+  max-width: 500px;
   height: fit-content;
-  margin-left: 2.5rem;
   margin-top: 2.5rem;
   padding: 1.5rem;
 }
@@ -68,12 +73,12 @@
   background-color: #f97316;
 }
 
-@media screen and (orientation:portrait) and (max-width: 472px) {
+/* Dropped the `orientation: portrait` gate, which excluded landscape phones. */
+@media (max-width: 560px) {
 
   .container {
-    width: 100%;
-    margin: 0px;
+    max-width: none;
     margin-top: 20px;
-    ;
+    padding: 1.1rem;
   }
 }
