@@ -1,180 +1,280 @@
+/* ==========================================================================
+   Sidebar drawer
+
+   NOTE: this file previously ended with a bare `button { ... width: 300px; }`
+   rule. CSS Modules only scopes *class* selectors, so that element selector
+   leaked into the global stylesheet and gave every button in the entire app a
+   300px width, a white background and no border. All button styling here is
+   class-scoped.
+   ========================================================================== */
+
 .sidebarOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-    overflow: hidden;
-    touch-action: none;
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background-color: rgba(10, 12, 16, 0.55);
+  backdrop-filter: blur(2px);
+  /* Kept in the DOM and faded, so the backdrop eases out with the drawer
+     instead of disappearing in a single frame. */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--cc-dur-slow) var(--cc-ease),
+              visibility var(--cc-dur-slow) var(--cc-ease);
+  touch-action: none;
+}
+
+.overlayVisible {
+  opacity: 1;
+  visibility: visible;
 }
 
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: -300px;
-    width: 25vw;
-    height: 100vh;
-    min-width: 250px;
-    max-width: 300px;
-    height: 100vh;
-    background-color: white;
-    z-index: 999;
-    transition: left 0.3s ease-in-out;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  /* Was `min(320px, 84vw)`, which on a 335px phone is 281px - it left 54px of
+     the page showing and read as a full-screen takeover rather than a drawer.
+     The widest label ("Exchange Book Add") plus its icon needs about 200px, so
+     70vw still fits everything while leaving a usable slice of the page and a
+     clear area to tap to dismiss. The value lives in index.css because the
+     header aligns the logo to this same edge. */
+  width: var(--cc-drawer-w);
+  height: 100vh;
+  height: 100dvh;
+  background-color: var(--cc-surface);
+  box-shadow: 8px 0 32px rgba(15, 17, 17, 0.18);
+  /* Was `left: -300px` transitioning to `left: 0`, which re-ran layout on every
+     frame of the slide. A translate is composited, so the drawer glides at
+     display refresh rate. */
+  transform: translate3d(-100%, 0, 0);
+  visibility: hidden;
+  transition: transform var(--cc-dur-slow) var(--cc-ease-entrance),
+              visibility var(--cc-dur-slow) var(--cc-ease-entrance);
+  will-change: transform;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .sidebar.open {
-    left: 0;
+  transform: translate3d(0, 0, 0);
+  visibility: visible;
 }
 
 .sidebarHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  padding: 1rem;
+  border-bottom: 1px solid var(--cc-border);
 }
 
 .sidebarLogo {
-    height: 60px;
-    width: auto;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--cc-radius-sm);
+  object-fit: cover;
 }
 
 .closeButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: #333;
-    display: flex;
-    justify-content: right;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--cc-text);
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
+}
+
+.closeButton:hover {
+  background-color: var(--cc-surface-3);
+  transform: rotate(90deg);
 }
 
 .sidebarContent {
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.75rem;
 }
 
 .menuItem {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: none;
+  border: none;
+  border-radius: var(--cc-radius);
+  color: var(--cc-text);
+  text-align: left;
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease),
+              color var(--cc-dur) var(--cc-ease);
+
+  /* Closed state for the staggered entrance below. */
+  opacity: 0;
+  transform: translate3d(-14px, 0, 0);
 }
 
+/* Reproduces framer-motion's staggerChildren without the library: each item
+   fades in slightly after the one above it. The delay only applies while
+   opening - on close everything leaves together, which reads as more
+   responsive than a reverse cascade. */
+.sidebar.open .menuItem {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity var(--cc-dur-slow) var(--cc-ease-entrance),
+              transform var(--cc-dur-slow) var(--cc-ease-entrance),
+              background-color var(--cc-dur) var(--cc-ease);
+}
+
+.sidebar.open .menuItem:nth-child(1) { transition-delay: 60ms; }
+.sidebar.open .menuItem:nth-child(2) { transition-delay: 100ms; }
+.sidebar.open .menuItem:nth-child(3) { transition-delay: 140ms; }
+.sidebar.open .menuItem:nth-child(4) { transition-delay: 180ms; }
+.sidebar.open .menuItem:nth-child(5) { transition-delay: 220ms; }
+.sidebar.open .menuItem:nth-child(6) { transition-delay: 260ms; }
+.sidebar.open .menuItem:nth-child(7) { transition-delay: 300ms; }
+.sidebar.open .menuItem:nth-child(8) { transition-delay: 340ms; }
+.sidebar.open .menuItem:nth-child(n + 9) { transition-delay: 380ms; }
+
 .menuItem:hover {
-    background-color: #dbd6d6;
+  background-color: var(--cc-surface-3);
+  /* Replaces framer-motion's whileHover scale(1.05); a nudge inward reads
+     better than scaling text, which blurs it mid-transition. */
+  transform: translate3d(4px, 0, 0);
 }
 
 .menuIcon {
-    font-size: 1.2rem;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  color: var(--cc-text);
 }
 
 .menuTitle {
-    color: #000000;
-    font-size: 1.3rem;
-    font-weight: 300;
-}
-.image{
-    height: 70px;
-    width: 70px;
-    border-radius: 50%;
-}
-.profileContainer{
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    border-radius: 10px;
-    padding: 10px;
-}
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  font-size: 1.05rem;
+  font-weight: 500;
 }
 
 .sidebarFooter {
-    margin-top: auto;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    background-color: white;
-}
-.emailUser{
-    color: rgb(119, 119, 118);
-    font-size: 12px;
+  margin-top: auto;
+  flex: none;
+  padding: 0.9rem;
+  border-top: 1px solid var(--cc-border);
+  background-color: var(--cc-surface);
 }
 
-button {
-    background-color: #fff;
-    color: #000;
-    border: none;
-    padding: 8px;
-    width: 300px;
-    border-radius: 10px;
-    font-size: 16px;
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
 }
 
-@media screen and (min-width:1000px) and (max-width:1367px){
-    
-    .sidebar{
-        width: 40vw;
-        height: 100%;
-    }
-
-    body:has(.sidebar.open) {
-        overflow: hidden;
-        height: 100vh;
-        touch-action: none;
-    }
-    .sidebarLogo{
-        height: 50px;
-        width: 50px;
-    }
-    
-    .profileContainer{
-        padding:0px;
-    }
-   
+.image {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-@media screen and (min-width:100px) and (max-width:480px){
-    
-    .sidebar{
-        width: 40vw;
-        height: 100%;
-    }
+.profileText {
+  min-width: 0;
+}
 
-    body:has(.sidebar.open) {
-        overflow: hidden;
-        height: 100vh;
-        touch-action: none;
-    }
+.nameUser {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cc-text);
+  /* Long names used to push the email out past the drawer edge. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    .menuItem{
-        padding-left: 0px;
-    }
-    .sidebarLogo{
-        height: 50px;
-        width: 50px;
-    }
-    
-    .image{
-        height: 35px;
-        width:35px;
-    }
-    
-    .profileContainer{
-        padding:0px;
-    }
-    .emailUser{
-        font-size: 13px;
-        display: block;
-        width: 100%;
-        height: 100%;
-        word-wrap: break-word;
-    }
+.emailUser {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--cc-text-soft);
+  overflow-wrap: anywhere;
+}
+
+.authButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.loginBtn,
+.signupBtn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: var(--cc-radius-sm);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
+}
+
+.loginBtn {
+  background-color: var(--cc-yellow);
+  color: var(--cc-text);
+}
+
+.loginBtn:hover {
+  background-color: var(--cc-yellow-dark);
+}
+
+.signupBtn {
+  background-color: var(--cc-navy);
+  color: #fff;
+}
+
+.signupBtn:hover {
+  background-color: var(--cc-navy-dark);
+}
+
+.loginBtn:active,
+.signupBtn:active {
+  transform: translateY(1px);
+}
+
+/* The old breakpoints set `width: 40vw` on phones, which computed to roughly
+   156px on a 390px screen and was then silently overridden by min-width:250px -
+   so the two rules fought and the drawer width was effectively arbitrary.
+   `min(320px, 84vw)` on the base rule handles every size on its own. */
+
+@media (max-width: 480px) {
+  .sidebarLogo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .menuTitle {
+    font-size: 1rem;
+  }
+
+  .menuItem {
+    padding: 0.65rem 0.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar.open .menuItem {
+    transition-delay: 0ms !important;
+  }
 }
