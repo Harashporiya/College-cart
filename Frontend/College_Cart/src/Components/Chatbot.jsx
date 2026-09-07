@@ -293,34 +293,32 @@ const Chatbot = () => {
 
   return (
     <>
+      {/* Tailwind is mobile-first, so the bare values below are the phone size
+          and `sm:` restores the original 64px circle from 640px up. At w-16 the
+          launcher covered a noticeable slice of a 335px screen. */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6  group bg-black rounded-[50px] w-20 h-20"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 grid place-items-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-black text-white shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl active:scale-95"
           aria-label="Open chat"
         >
-          <div className="relative">
-            <div className="w-16 h-16   flex items-center justify-center transform transition-all duration-300">
-              <MessageSquare className="w-12 h-8 text-white" strokeWidth={2}  />
-            </div>
-            {/* <div className="absolute inset-0 rounded-full bg-gray-900 opacity-20 animate-ping"></div> */}
-          </div>
+          <MessageSquare className="w-5 h-5 sm:w-7 sm:h-7" strokeWidth={2} />
         </button>
       )}
 
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[420px] h-[650px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-slideUp">
-          <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white p-5 flex justify-between items-center flex-shrink-0">
-            <div className="flex items-center gap-3">
+        <div className="fixed z-50 inset-x-3 bottom-3 h-[min(520px,calc(100dvh-6rem))] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[420px] sm:h-[min(650px,calc(100dvh-3rem))] bg-white rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-slideUp">
+          <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white p-3.5 sm:p-5 flex justify-between items-center flex-shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <div className="relative">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-900 font-bold text-lg flex-shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center text-gray-900 font-bold text-sm sm:text-lg flex-shrink-0">
                   CC
                 </div>
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-gray-900"></span>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 rounded-full border-2 border-gray-900"></span>
               </div>
               <div>
-                <h3 className="font-semibold text-base">College Cart Agent</h3>
-                <p className="text-xs text-gray-300">Online • AI Assistant</p>
+                <h3 className="font-semibold text-sm sm:text-base">College Cart Agent</h3>
+                <p className="text-[10px] sm:text-xs text-gray-300">Online • AI Assistant</p>
               </div>
             </div>
             <div className="flex gap-2 flex-shrink-0">
@@ -341,7 +339,7 @@ const Chatbot = () => {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white p-3 sm:p-4 space-y-3 sm:space-y-4">
             {messages.map((message, index) => (
               <div key={index}>
                 {message.type === 'product_card' ? (
