@@ -6,11 +6,15 @@ import styles from './updateProduct.module.css';
 
 const backend_url = import.meta.env.VITE_BACKEND_API_URL;
 
-const ExchangeBookUpdate = ({ isOpen, onClose, productData }) => {
-  if (!isOpen) return null;
-
+const ExchangeBookUpdate = ({ isOpen, onClose, productData, onUpdated }) => {
+  // The `if (!isOpen) return null` guard used to sit here, above the hooks
+  // below. That changed the hook count from zero to four the moment the
+  // modal opened, which is exactly the case React rejects with "Rendered
+  // more hooks than during the previous render". The guard now runs after
+  // every hook has been called, just before the markup is returned.
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -53,7 +57,10 @@ const ExchangeBookUpdate = ({ isOpen, onClose, productData }) => {
 
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
+    if (isSaving) return;
+
     const token = getToken();
+    setIsSaving(true);
 
     try {
       const formDataToSend = new FormData();
@@ -73,19 +80,27 @@ const ExchangeBookUpdate = ({ isOpen, onClose, productData }) => {
         formDataToSend,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            // The browser sets Content-Type with the multipart boundary; a
+            // hardcoded value leaves the boundary off.
             'Authorization': `Bearer ${token}`
           }
         }
       );
 
       toast.success(response.data.message);
+      // Lets the profile grid pick up the edit without a page reload.
+      onUpdated?.(response.data.updateBook);
+      setSelectedImage(null);
       onClose();
     } catch (error) {
       console.error('Error updating product:', error);
       toast.error(error.response?.data?.message || "Error during product update");
+    } finally {
+      setIsSaving(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
@@ -203,14 +218,17 @@ const ExchangeBookUpdate = ({ isOpen, onClose, productData }) => {
               type="button"
               onClick={onClose}
               className={styles.cancelButton}
+              disabled={isSaving}
             >
               Cancel
             </button>
             <button
               type="submit"
               className={styles.updateButton}
+              disabled={isSaving}
+              aria-busy={isSaving}
             >
-              Update
+              {isSaving ? 'Saving...' : 'Update'}
             </button>
           </div>
         </form>
