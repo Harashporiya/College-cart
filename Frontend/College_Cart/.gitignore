@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .env
+
+# Pristine pre-optimisation copies kept by scripts/optimize-images.mjs.
+# ~8.7 MB of full-resolution source images; the optimised results in
+# src/assets are what the app actually ships, so this stays local.
+src/assets/.originals/
