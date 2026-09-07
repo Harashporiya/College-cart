@@ -149,19 +149,23 @@ exports.getAllProduct = async (req, res) => {
 exports.getAllProfileProductUserCreate = async (req,res)=>{
     const {id} = req.params
     try {
-        if(!id || !req.user._id.toString()){
+        // The mismatch case used to fall through the `if` below without sending
+        // anything at all, so the request hung until the client gave up rather
+        // than failing fast.
+        if(!id || id !== req.user._id.toString()){
             return res.status(403).json({ success: false, message: "Unauthorized access" });
-        }        
-        // console.log(req.user._id)
-        const products = await ProductAdd.find().populate('userId','name');
-        // console.log(id)
-        if(id === req.user._id.toString()){
-            const findProductUserIdById = products.filter(user=>
-                user.userId._id.toString() === req.user._id.toString()
-            )
-         return res.status(200).json({success: true, count: findProductUserIdById.length, products:findProductUserIdById });
         }
-       
+
+        // Was `ProductAdd.find()` - every product in the database, each one
+        // hydrated into a Mongoose document and populated - followed by a JS
+        // filter down to this user's own items. Now an indexed query for
+        // exactly those items.
+        const products = await ProductAdd.find({ userId: req.user._id })
+            .populate('userId','name')
+            .sort({ createdAt: -1 })
+            .lean();
+
+        return res.status(200).json({success: true, count: products.length, products });
     } catch (error) {
         console.error("Get all products error:", error);
         return res.status(500).json({success:false, message: "Error during product fetch",error:error.message });
@@ -293,89 +297,90 @@ async function handleProductDeletion(product) {
 
 exports.updateProduct = async (req, res) => {
     const {id} = req.params;
-    // console.log(req.body, id)
-    const { cloudinaryPublicId,name, brand, category,quantity, selectHostel, hostleName, roomNumber, dayScholarContectNumber, prevAmount, newAmount, description } = req.body;
+    const {
+        name, brand, category, quantity, selectHostel, hostleName, roomNumber,
+        dayScholarContectNumber, prevAmount, newAmount, description
+    } = req.body;
+
     try {
-        const product = await ProductAdd.findById({
-            _id:id
-        });
+        const product = await ProductAdd.findById(id);
         if (!product) {
             return res.status(404).json({success:false, message: "Product not found" });
         }
 
-        if (Number(req.body.quantity) === 0) {
+        // There was no ownership check here, and the update payload wrote
+        // `userId: req.user._id` unconditionally - so any signed-in user could
+        // edit any listing in the marketplace and become its owner in the
+        // process. The owner is now verified and never reassigned.
+        if (String(product.userId) !== String(req.user._id)) {
+            return res.status(403).json({ success: false, message: "You can only update your own products" });
+        }
+
+        if (Number(quantity) === 0) {
             await handleProductDeletion(product);
             return res.status(200).json({
                 success: true,
+                deleted: true,
                 message: "Product deleted successfully because quantity reached zero"
             });
         }
 
-        if(req.file){
-          const cloudinaryResult = await uploadToCloudinary(req.file);
-          if(!cloudinaryResult){
-            return res.status(400).json({ message: "Image upload failed" });
-          }
+        const set = { name, brand, category, quantity, selectHostel, description, prevAmount, newAmount };
+        const unset = {};
 
-          if(product.cloudinaryPublicId){
-            await deleteFromCloudinary(product.cloudinaryPublicId)
-          }
-          req.body.image = cloudinaryResult.url;
-          req.body.cloudinaryPublicId = cloudinaryResult.public_id
+        // The two student types own different contact fields. The previous
+        // version built a separate update object per branch and simply left the
+        // other branch's fields in place, so a listing switched from Hostler to
+        // Day_Scholar kept its old hostel and room number on the document.
+        if (selectHostel === "Hostler") {
+            set.hostleName = hostleName;
+            set.roomNumber = roomNumber;
+            unset.dayScholarContectNumber = "";
+        } else if (selectHostel === "Day_Scholar") {
+            set.dayScholarContectNumber = dayScholarContectNumber;
+            unset.hostleName = "";
+            unset.roomNumber = "";
+        } else {
+            // Neither branch matched, which used to mean the handler returned
+            // nothing at all: the client waited on a response that was never
+            // sent instead of being told what was wrong.
+            return res.status(400).json({
+                success: false,
+                message: "Student type must be either Hostler or Day_Scholar"
+            });
         }
 
-        // const updateProduct = await ProductAdd.findByIdAndUpdate(
-        //     {_id:id},
-        //     req.body,
-        //     {new: true, runValidators: true}
-        // ).populate("userId","name");
+        if (req.file) {
+            const cloudinaryResult = await uploadToCloudinary(req.file);
+            if (!cloudinaryResult) {
+                return res.status(400).json({ success:false, message: "Image upload failed" });
+            }
 
-        if(selectHostel === "Hostler"){
-            const updateProduct = await ProductAdd.findByIdAndUpdate( {_id:id},{
-                cloudinaryPublicId,
-                name,
-                brand,
-                category,
-                quantity,
-                selectHostel,
-                hostleName,
-                roomNumber,
-                // image:cloudinaryResult.url,
-                // cloudinaryPublicId: cloudinaryResult.public_id,
-                description,
-                prevAmount,
-                newAmount,
-                userId:req.user._id,
-                
-            },{new: true, runValidators: true}).populate("userId","name");
-           await syncProductToPinecone(updateProduct);
+            // The new URL goes into the update payload. It used to be assigned
+            // onto `req.body` *after* req.body had already been destructured
+            // into consts, and `image` was not among the fields written to the
+            // document anyway - so a replacement image was uploaded, the old
+            // asset was deleted from Cloudinary, and the product kept pointing
+            // at the file that had just been removed. Updating a product with a
+            // new photo left it with a broken image.
+            set.image = cloudinaryResult.url;
+            set.cloudinaryPublicId = cloudinaryResult.public_id;
 
-            return res.status(200).json({success:true, message: "Product update successfull", updateProduct })
+            if (product.cloudinaryPublicId) {
+                await deleteFromCloudinary(product.cloudinaryPublicId);
+            }
         }
 
-        if(selectHostel === "Day_Scholar"){
-            const updateProduct = await ProductAdd.findByIdAndUpdate( {_id:id},{
-                cloudinaryPublicId,
-                name,
-                brand,
-                category,
-                quantity,
-                selectHostel,
-                dayScholarContectNumber,
-                // image:cloudinaryResult.url,
-                // cloudinaryPublicId: cloudinaryResult.public_id,
-                description,
-                prevAmount,
-                newAmount,
-                userId:req.user._id,
-                
-            },{new: true, runValidators: true}).populate("userId","name");
-           await syncProductToPinecone(updateProduct);
+        const payload = Object.keys(unset).length ? { $set: set, $unset: unset } : { $set: set };
 
-            return res.status(200).json({success:true, message: "Product update successfull", updateProduct })
-        }
+        const updateProduct = await ProductAdd.findByIdAndUpdate(id, payload, {
+            new: true,
+            runValidators: true
+        }).populate("userId","name");
 
-        // return res.status(200).json({success:true, message: "Product update successfull", updateProduct })
+        await syncProductToPinecone(updateProduct);
+
+        return res.status(200).json({success:true, message: "Product update successfull", updateProduct })
     } catch (error) {
         console.error("Update product error:", error);
         return res.status(500).json({success:false, message: "Error during update",error:error.message })
