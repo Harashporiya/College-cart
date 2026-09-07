@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './contactus.module.css';
 import { FaUser, FaEnvelope, FaCommentDots, FaPaperPlane } from 'react-icons/fa';
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const generateCaptcha = () => {
   const num1 = Math.floor(Math.random() * 10);
@@ -154,6 +155,10 @@ function ContactUs() {
           </form>
         </div>
       </div>
+      {/* Every other informational page (About Us, Our Team, FAQ) renders the
+          footer; this one was the only one without it, so the site navigation
+          simply disappeared at the bottom of the contact page. */}
+      <Footer />
     </>
   );
 }
