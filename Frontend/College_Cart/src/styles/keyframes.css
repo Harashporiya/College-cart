@@ -1,0 +1,38 @@
+/* Shared entrance keyframes for CSS Module stylesheets.
+ *
+ * index.css already defines these globally, but CSS Modules rewrites every
+ * `animation-name` it finds in a *.module.css file to a locally-scoped,
+ * hashed name - whether or not a matching @keyframes is declared in that file.
+ * So `animation: cc-fade-in ...` inside a module compiled to
+ * `animation: _cc-fade-in_10qv6_1 ...`, a name that exists nowhere, and the
+ * animation silently never ran. Thirteen declarations across seven modules
+ * were dead this way.
+ *
+ * `:global(cc-fade-in)` in the shorthand is rejected by the postcss plugin
+ * Vite uses, so instead each module @imports this file. Vite inlines it, the
+ * keyframes become local to that module, and the scoped reference resolves to
+ * the scoped definition.
+ *
+ * Keep these in step with the copies in index.css, which serve plain (non-
+ * module) stylesheets and the global .cc-animate-* helpers.
+ */
+
+@keyframes cc-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cc-fade-in-up {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cc-fade-in-down {
+  from { opacity: 0; transform: translate3d(0, -24px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cc-scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
