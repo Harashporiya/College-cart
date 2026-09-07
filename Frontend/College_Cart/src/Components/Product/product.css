@@ -1,16 +1,68 @@
-.productContainer{
-    display: flex;
-    justify-content: center;
-}
-.productNotFoundText{
-    color: gray;
-    font-size: 30px;
-    margin-top: 300px;
-}
+/* ==========================================================================
+   All-products page shell
+   ========================================================================== */
 
-.stickyHeader{
+.stickyHeader {
   position: sticky;
   top: 0;
-  width: 100%;
   z-index: 1000;
+  width: 100%;
+}
+
+.productPage {
+  min-height: 100vh;
+  max-width: var(--cc-content-max);
+  margin: 0 auto;
+  padding: 28px 20px 56px;
+}
+
+/* Replaces an inline `display:flex; flex-wrap:wrap; gap:40px;
+   justify-content:center` on the container, which centred the last row and
+   left ragged gaps whenever the item count was not a multiple of the column
+   count. A grid keeps every card on the same column rails. */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.productEmpty {
+  max-width: 520px;
+  margin: 72px auto;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--cc-text-soft);
+  animation: cc-fade-in var(--cc-dur-slow) var(--cc-ease) both;
+}
+
+.productNotFoundText {
+  margin-top: 120px;
+  font-size: 1.6rem;
+  color: var(--cc-text-soft);
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .productPage {
+    padding: 18px 12px 40px;
+  }
+
+  .productGrid {
+    /* `auto-fill, minmax(160px, 1fr)` cannot fit two tracks on a 335px phone:
+       2 x 160 + 14 gap = 334px against 311px of available width, so it
+       silently collapsed to a single 311px-wide, 525px-tall card per row. Two
+       explicit columns always fit, and the 0 floor stops a long product name
+       from widening a track. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Very narrow phones: one column is genuinely better than two 130px cards. */
+@media (max-width: 330px) {
+  .productGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
