@@ -86,6 +86,10 @@ const productAddFormSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
+// The profile page lists 'my products'. That was done by loading every product
+// in the database and filtering in JS; it is now a query on this field.
+productAddFormSchema.index({ userId: 1, createdAt: -1 });
+
 productAddFormSchema.pre('save', function(next){
     if(this.quantity === 0){
         this.remove();
