@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useState } from 'react';
 import './Faq.css';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -39,9 +39,10 @@ const faqData = [
 const Faq = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  useState(()=>{
-    window.scrollTo(0,0);
-  },[])
+  // This was written as `useState(() => { window.scrollTo(0,0) }, [])` - a
+  // useEffect body passed to useState, so it ran as a side effect during
+  // render rather than after commit. Scroll reset is handled globally by
+  // <ScrollToTop /> in App.jsx.
 
   const toggleFAQ = (index) => {
     setActiveIndex(prevIndex => (prevIndex === index ? null : index));
@@ -56,13 +57,28 @@ const Faq = () => {
       {faqData.map((faq, index) => (
         <div
           className={`faq-item ${activeIndex === index ? 'active' : ''}`}
-          key={index}
+          key={faq.question}
         >
-          <div className="question" onClick={() => toggleFAQ(index)}>
+          {/* A real button, so the accordion is reachable by keyboard and
+              announces its own state. It was a plain div with an onClick. */}
+          <button
+            type="button"
+            className="question"
+            onClick={() => toggleFAQ(index)}
+            aria-expanded={activeIndex === index}
+            aria-controls={`faq-answer-${index}`}
+          >
             {faq.question}
-            <span className="icon">{activeIndex === index ? '▲' : '▼'}</span>
+            {/* One static caret rotated by CSS rather than swapping the ▲/▼
+                glyph, which could not animate. */}
+            <span className="icon" aria-hidden="true">▼</span>
+          </button>
+          {/* Kept mounted and collapsed to zero height so opening and closing
+              can transition. Previously it was unmounted outright, so the
+              panel appeared and vanished in a single frame. */}
+          <div className="answer-wrap" id={`faq-answer-${index}`} role="region">
+            <div className="answer">{faq.answer}</div>
           </div>
-          {activeIndex === index && <div className="answer">{faq.answer}</div>}
         </div>
       ))}
     </div>
