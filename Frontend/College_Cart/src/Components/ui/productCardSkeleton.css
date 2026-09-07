@@ -1,0 +1,54 @@
+/* Placeholder product card. Mirrors the real card's padding, radius and
+   border so the grid does not shift when the data arrives. */
+
+.pcs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 15px;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+}
+
+.pcs__media {
+  width: 100%;
+  border-radius: var(--cc-radius-sm);
+}
+
+.pcs__title {
+  width: 80%;
+  height: 20px;
+}
+
+.pcs__meta {
+  display: flex;
+  gap: 8px;
+}
+
+.pcs__chip {
+  width: 100px;
+  height: 18px;
+}
+
+.pcs__chip--sm {
+  width: 40px;
+}
+
+.pcs__price {
+  width: 90px;
+  height: 30px;
+}
+
+.pcs__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pcs__button {
+  height: 40px;
+  margin-top: 4px;
+  border-radius: var(--cc-radius-pill);
+}
