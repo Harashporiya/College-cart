@@ -1,0 +1,79 @@
+/* ==========================================================================
+   "Explore" pill
+   Recreates the wipe-in fill and rotating arrow that the original Tailwind
+   utility string described but never applied (it used `class`, which React
+   ignores, so this button rendered with no styling at all).
+   ========================================================================== */
+
+.explore-btn {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  overflow: hidden;
+  background: var(--cc-surface-2);
+  border: 2px solid var(--cc-border);
+  border-radius: var(--cc-radius-pill);
+  color: var(--cc-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: border-color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
+}
+
+/* The fill sweeps in from the left. It sits behind the label on its own layer,
+   so only this element is repainted during the transition. */
+.explore-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--cc-yellow);
+  transform: translateX(-100%);
+  transition: transform var(--cc-dur-slow) var(--cc-ease);
+}
+
+.explore-btn:hover {
+  border-color: var(--cc-yellow-deep);
+  box-shadow: 0 4px 14px rgba(252, 210, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+.explore-btn:hover::before {
+  transform: translateX(0);
+}
+
+.explore-btn:active {
+  transform: translateY(0);
+  transition-duration: var(--cc-dur-fast);
+}
+
+.explore-btn__label {
+  position: relative;
+}
+
+.explore-btn__arrow {
+  width: 22px;
+  height: 22px;
+  padding: 5px;
+  flex: none;
+  border: 1px solid #4b5563;
+  border-radius: 50%;
+  fill: #1f2937;
+  /* Starts at 45deg and straightens to 90deg on hover, as in the original. */
+  transform: rotate(45deg);
+  transition: transform var(--cc-dur-slow) var(--cc-ease),
+              background-color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
+}
+
+.explore-btn:hover .explore-btn__arrow {
+  transform: rotate(90deg);
+  background-color: var(--cc-surface);
+  border-color: transparent;
+}
