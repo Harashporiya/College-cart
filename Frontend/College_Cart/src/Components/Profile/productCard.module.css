@@ -1,335 +1,402 @@
-.productWrapper{
-   display: flex;
-    background-color: white;
-    margin: 30px;
-    border-radius: 20px;
-    max-width: 1000px;
-    position: relative; 
-}
-.productImageProfile{
-    height: 230px;
-    width: 300px;
-    border-radius: 20px;
-    padding: 10px;
-    margin-top: 30px;
-}
-.hrline{
-    width: 1px;
-    height: 230px;
-    background-color: rgb(230, 230, 230);
-    margin: 20px;
-}
-.nameContainer{
-  display: flex;
-}
-.allProductContainer{
-  /* margin-top: 0px; */
-  padding: 20px;
-}
-span{
- font-weight: 550;
- font-size: 20px;
-}
-.item{
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-.saleBadge{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgb(211, 211, 211);
-  color: rgb(0, 0, 0);
-  padding: 5px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.popupMenu {
-  position: absolute;
-  top: 40px;
-  right: 10px;
-  background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  min-width: 100px;
-  z-index: 10;
-}
-.menuItem {
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
+/* The cc-* entrance keyframes this file animates with are defined globally in
+   index.css, but CSS Modules rewrites animation names to hashed local ones, so
+   those references resolved to names that did not exist and never ran. Importing
+   the definitions makes them local to this module, matching the rewrite. */
+@import '../../styles/keyframes.css';
+
+/* Cards for the listings a user owns, on their profile page.
+ *
+ * This file previously declared its whole ruleset twice - .productWrapper,
+ * .productImageProfile, .hrline, .allProductContainer, .item, .saleBadge,
+ * .popupMenu and .skeletonWrapper each appeared in two blocks, the second
+ * silently overriding the first - and twelve of the class names the JSX asks
+ * for (.productName, .productBrand, .productCategory, .productSelectHostel,
+ * .productHostleName, .productRoomNumber, .productPrevAmount,
+ * .productNewAmount, .productDescription, .productOwner, .productAddedOn,
+ * .productImageContainer) were never defined at all, so every line of detail
+ * on every card rendered with no class and no styling.
+ *
+ * It also carried a bare `span { font-weight: 550; font-size: 20px }`, plus
+ * three more copies inside media queries. CSS Modules only scopes *class*
+ * selectors, so that leaked into the global stylesheet and resized every
+ * <span> in the application - the header, the cart, the product grid - as soon
+ * as the profile chunk loaded. The label styling now lives on .item, which is
+ * the class the markup actually puts on those spans.
+ */
+
+.productContainer {
+  /* Was `margin-left: 360px`, a hardcoded offset for a sidebar this page does
+     not render, which pushed the whole grid 392px off the left edge. */
   width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 1rem;
 }
-.menuItem:hover {
-  background-color: rgb(230, 230, 230);
-}
-.menuItemDeleteBtn{
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
+
+.productContainerBookExchange {
   width: 100%;
-  background-color: red;
-  color: white;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 1rem;
 }
-.menuItemDeleteBtn:hover{
-  background-color: rgb(234, 8, 8);
-}
-.skeletonWrapper {
+
+.productWrapper {
   display: flex;
-  background-color: white;
-  margin: 30px;
-  border-radius: 20px;
+  align-items: stretch;
+  gap: 4px;
+  background-color: var(--cc-surface);
+  margin: 24px auto;
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
   max-width: 1000px;
   position: relative;
+  box-shadow: var(--cc-shadow-sm);
+  overflow: visible;
+  transition: transform var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
+}
+
+.productWrapper:hover {
+  transform: translate3d(0, -3px, 0);
+  box-shadow: var(--cc-shadow-md);
+  border-color: var(--cc-border-strong);
+}
+
+/* Media column. Deliberately *not* a positioning context: the overflow button
+   and its menu live inside this element in the markup but should hang off the
+   card's own top-right corner, which is .productWrapper. */
+.productImageContainer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* Wrapper around the photo, replacing an inline width:300px in the JSX. */
+.productMedia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  max-width: 100%;
+}
+
+.productImageProfile {
+  height: 230px;
+  width: 300px;
+  object-fit: contain;
+  border-radius: var(--cc-radius);
+  background-color: var(--cc-surface-2);
+  /* Reserves the box before the photo arrives, so the row does not jump. */
+  aspect-ratio: 300 / 230;
+}
+
+.hrline {
+  width: 1px;
+  align-self: stretch;
+  background-color: var(--cc-border);
+  margin: 20px 0;
+  flex: 0 0 1px;
+}
+
+.allProductContainer {
+  padding: 20px 24px;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* The label half of every "Label: value" line. */
+.item {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cc-text-muted);
+}
+
+.allProductContainer p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--cc-text);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The listing's name is the heading of the card, not another label:value row.
+   It used to render at the same weight and size as everything else - and its
+   label was larger than the name itself, because of the leaked span rule. */
+.productName {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--cc-heading);
+  margin-bottom: 2px;
+}
+
+.productName .item {
+  display: none;
+}
+
+.productBrand,
+.productCategory,
+.productSelectHostel,
+.productHostleName,
+.productRoomNumber,
+.productOwner {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--cc-text-soft);
+}
+
+.productPrevAmount,
+.productNewAmount {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.productPrevAmount {
+  color: var(--cc-text-muted);
+}
+
+.productNewAmount {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cc-success);
+}
+
+.productDescription {
+  margin-top: 6px;
+  color: var(--cc-text-soft);
+  line-height: 1.55;
+  /* Descriptions are user-entered and unbounded; three lines keeps every card
+     the same height instead of letting one long entry stretch the row. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.productAddedOn {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--cc-text-muted);
+}
+
+.saleBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--cc-surface-2);
+  color: var(--cc-text);
+  padding: 5px 10px;
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-pill);
+  cursor: pointer;
+  z-index: 5;
+  transition: background-color var(--cc-dur-fast) var(--cc-ease),
+              transform var(--cc-dur-fast) var(--cc-ease);
+}
+
+.saleBadge:hover {
+  background-color: var(--cc-surface-3);
+  transform: scale(1.05);
+}
+
+.saleBadge:active {
+  transform: scale(0.96);
+}
+
+.popupMenu {
+  position: absolute;
+  top: 48px;
+  right: 12px;
+  background-color: var(--cc-surface);
+  box-shadow: var(--cc-shadow-lg);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 132px;
+  z-index: 10;
+  animation: cc-scale-in var(--cc-dur-fast) var(--cc-ease-entrance) both;
+  transform-origin: top right;
+}
+
+.menuItem,
+.menuItemDeleteBtn {
+  padding: 9px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 100%;
+  color: var(--cc-text);
+  transition: background-color var(--cc-dur-fast) var(--cc-ease);
+}
+
+.menuItem:hover,
+.menuItem:focus-visible {
+  background-color: var(--cc-surface-2);
+}
+
+.menuItemDeleteBtn {
+  background-color: var(--cc-danger);
+  color: #fff;
+  font-weight: 600;
+}
+
+.menuItemDeleteBtn:hover,
+.menuItemDeleteBtn:focus-visible {
+  filter: brightness(0.92);
+}
+
+/* Loading placeholders, laid out to the same geometry as a real card so the
+   grid does not shift when the data lands. */
+.skeletonWrapper {
+  display: flex;
+  background-color: var(--cc-surface);
+  margin: 24px auto;
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+  max-width: 1000px;
+  position: relative;
+  box-shadow: var(--cc-shadow-sm);
 }
 
 .skeletonImageContainer {
   height: 230px;
-  width: 380px;
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-left: 20px;
+  width: 300px;
+  border-radius: var(--cc-radius);
+  margin: 16px;
+  flex: 0 0 auto;
 }
 
 .skeletonDetailsContainer {
-  padding: 20px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
+  min-width: 0;
 }
 
 .skeletonActionsContainer {
   display: flex;
   gap: 10px;
-  padding: 10px;
-}
-.skeletonWrapper .MuiSkeleton-root {
-  background-color: rgba(0, 0, 0, 0.11);
-  border-radius: 4px;
+  padding: 16px;
 }
 
-.skeletonDetailsContainer .MuiSkeleton-text {
-  transform: none;
-}
-.productContainer {
-  margin-left: 360px;
-  padding: 1rem;
-}
-.productContainerBookExchange {
-  margin-left: 0px;
-  padding: 1rem;
-}
-.productWrapper {
-  display: flex;
-  background-color: white;
-  margin: 30px;
-  border-radius: 20px;
-  max-width: 1000px;
-  position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* .productImageProfile {
-  height: 230px;
-  width: 300px;
-  border-radius: 20px;
-  padding: 10px;
-  margin-top: 30px;
-  object-fit: cover;
-} */
-
-.hrline {
-  width: 1px;
-  height: 230px;
-  background-color: rgb(230, 230, 230);
-  margin: 20px;
-}
-
-.allProductContainer {
-  padding: 20px;
-  flex: 1;
-}
-
-span {
-  font-weight: 550;
-  font-size: 20px;
-}
-
-.item {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-.saleBadge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgb(211, 211, 211);
-  color: rgb(0, 0, 0);
-  padding: 5px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  z-index: 5;
-}
-
-.popupMenu {
-  position: absolute;
-  top: 40px;
-  right: 10px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  min-width: 100px;
-  z-index: 10;
-}
-.skeletonWrapper {
-  display: flex;
-  background-color: white;
-  margin: 30px;
-  border-radius: 20px;
-  max-width: 1000px;
-  position: relative;
-}
-@media screen and (max-width: 1367px) {
-  .productContainer {
-      margin-left: 0;
-      padding: 1rem;
-  }
-
-  .productWrapper {
-      margin: 20px auto;
-      width: 90%;
-  }
-}
 @media screen and (max-width: 900px) {
-  .productWrapper {
-      flex-direction: column;
-      align-items: center;
-      margin: 20px auto;
-      width: 95%;
+  .productWrapper,
+  .skeletonWrapper {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 20px auto;
+    width: 100%;
+  }
+
+  .productImageContainer {
+    padding: 12px 12px 0;
+  }
+
+  .productMedia {
+    width: 100%;
   }
 
   .productImageProfile {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      margin: 15px 0;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 320px;
   }
 
   .hrline {
-      width: 90%;
-      height: 1px;
-      margin: 10px auto;
+    width: auto;
+    height: 1px;
+    flex: 0 0 1px;
+    margin: 12px 20px 0;
   }
 
   .allProductContainer {
-      width: 100%;
-      padding: 15px;
-  }
-
-  span {
-      font-size: 18px;
-  }
-
-  .skeletonWrapper {
-      flex-direction: column;
-      width: 95%;
-      margin: 20px auto;
+    width: 100%;
+    padding: 16px 20px 20px;
   }
 
   .skeletonImageContainer {
-      width: 100%;
-      height: 200px;
-      margin: 10px 0;
+    width: auto;
+    height: 200px;
+    margin: 12px;
   }
 }
+
 @media screen and (max-width: 600px) {
-  .productContainer {
-      padding: 0.5rem;
+  .productContainer,
+  .productContainerBookExchange {
+    padding: 0.5rem;
   }
 
-  .productWrapper {
-      margin: 15px auto;
-      width: 100%;
-      border-radius: 15px;
+  .productWrapper,
+  .skeletonWrapper {
+    margin: 14px auto;
+    border-radius: var(--cc-radius);
   }
 
-  .productImageProfile {
-      max-width: 100%;
-      padding: 8px;
-      margin-top: 15px;
+  /* Hover lift is meaningless on touch and leaves the card stuck raised
+     after a tap. */
+  .productWrapper:hover {
+    transform: none;
+    box-shadow: var(--cc-shadow-sm);
   }
 
-  span {
-      font-size: 16px;
-  }
-
-  .allProductContainer {
-      padding: 10px;
-  }
-
-  .saleBadge {
-      padding: 3px 8px;
-      font-size: 14px;
-  }
-
-  .popupMenu {
-      min-width: 90px;
-  }
-
-  .menuItem, 
-  .menuItemDeleteBtn {
-      padding: 6px 10px;
-      font-size: 14px;
-  }
-
-  .skeletonDetailsContainer {
-      padding: 10px;
-      gap: 8px;
-  }
-  
-}
-@media screen and (max-width: 400px) {
-  .productWrapper {
-      margin: 10px auto;
-  }
-
-  .productImageProfile {
-      height: 180px;
-  }
-
-  span {
-      font-size: 14px;
+  .productName {
+    font-size: 1.2rem;
   }
 
   .allProductContainer p {
-      margin: 5px 0;
-      font-size: 14px;
+    font-size: 0.9rem;
   }
 
-  .skeletonWrapper {
-      margin: 10px auto;
+  .saleBadge {
+    padding: 4px 9px;
   }
 
-  .skeletonImageContainer {
-      height: 150px;
-      width: 200px;
+  .popupMenu {
+    min-width: 120px;
+  }
+
+  .skeletonDetailsContainer {
+    padding: 14px;
+    gap: 8px;
   }
 }
+
 @media print {
-  .productContainer {
-      margin: 0;
+  .productContainer,
+  .productContainerBookExchange {
+    margin: 0;
+  }
+
+  .productWrapper {
+    box-shadow: none;
+    break-inside: avoid;
   }
 
   .saleBadge,
   .popupMenu {
-      display: none;
+    display: none;
   }
 }
