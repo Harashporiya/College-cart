@@ -14,11 +14,15 @@ const PRODUCT_CATEGORIES = [
   "Grocery"
 ];
 
-const UpdateProduct = ({ isOpen, onClose, productData }) => {
-  if (!isOpen) return null;
-
+const UpdateProduct = ({ isOpen, onClose, productData, onUpdated }) => {
+  // The `if (!isOpen) return null` guard used to sit here, above the hooks
+  // below. That changed the hook count from zero to four the moment the
+  // modal opened, which is exactly the case React rejects with "Rendered
+  // more hooks than during the previous render". The guard now runs after
+  // every hook has been called, just before the markup is returned.
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
           if(isOpen){
@@ -82,7 +86,10 @@ const UpdateProduct = ({ isOpen, onClose, productData }) => {
 
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
+    if (isSaving) return;
+
     const token = getToken();
+    setIsSaving(true);
 
     try {
       const formDataToSend = new FormData();
@@ -99,18 +106,28 @@ const UpdateProduct = ({ isOpen, onClose, productData }) => {
 
       const response = await axios.put(`${backend_url}/${productData._id}/product-update`, formDataToSend, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          // Deliberately not setting Content-Type: the browser has to add the
+          // multipart boundary itself, and a hardcoded header omits it.
           'Authorization': `Bearer ${token}`
         }
       });
 
       toast.success(response.data.message);
+      // Hand the saved document back so the profile grid can show the new
+      // values without the user reloading the page. Setting quantity to zero
+      // deletes the listing, in which case there is nothing to merge.
+      onUpdated?.(response.data.deleted ? null : response.data.updateProduct);
+      setSelectedImage(null);
       onClose();
     } catch (error) {
       console.error('Error updating product:', error);
       toast.error(error.response?.data?.message || "Error during product update");
+    } finally {
+      setIsSaving(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
@@ -294,14 +311,17 @@ const UpdateProduct = ({ isOpen, onClose, productData }) => {
               type="button"
               onClick={onClose}
               className={styles.cancelButton}
+              disabled={isSaving}
             >
               Cancel
             </button>
             <button
               type="submit"
               className={styles.updateButton}
+              disabled={isSaving}
+              aria-busy={isSaving}
             >
-              Update
+              {isSaving ? 'Saving...' : 'Update'}
             </button>
           </div>
         </form>
