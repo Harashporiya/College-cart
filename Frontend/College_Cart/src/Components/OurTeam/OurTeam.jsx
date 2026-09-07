@@ -1,12 +1,12 @@
-import {useEffect,useContext,React} from "react";
-import jatinImg from '../../assets/jatin.jpg';
-import harashImg from '../../assets/harash.jpeg';
-import hardikImg from '../../assets/hardik.jpeg';
-import jyotiImg from '../../assets/jyoti.png'
+import React from "react";
+import jatinImg from '../../assets/jatin.webp';
+import harashImg from '../../assets/harash.webp';
+import hardikImg from '../../assets/hardik.webp';
+import jyotiImg from '../../assets/jyoti.webp'
 import styles from "./OurTeam.module.css";
 import Header from '../Header/Header';
 import Footer from "../Footer/Footer";
-import { UserDataContext } from '../Header/context';
+import useScrollReveal from '../../util/useScrollReveal';
 const teamMembers = [
   {
     name: "Harash Poriya",
@@ -58,13 +58,12 @@ const teamMembers = [
 ];
 
 const OurTeam = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // Scroll reset is handled globally by <ScrollToTop /> in App.jsx now.
+  const revealRef = useScrollReveal({ stagger: 90 });
 
   return (
     <div className={styles.container}>
-      <Header Header showSearch={false} showMiddleHeader={true} isProductsPage={false}/>
+      <Header showSearch={false} showMiddleHeader={true} isProductsPage={false}/>
       <div className={styles.header}>
         <h1 className={styles.title}>Our Team</h1>
         <p className={styles.description}>
@@ -81,14 +80,18 @@ const OurTeam = () => {
 
       <div className={styles.teamSection}>
         <h2 className={styles.subheading}>Meet the Team</h2>
-        <div className={styles.teamGrid}>
-          {teamMembers.map((member, index) => (
-            <div key={index} className={styles.card}>
+        <div className={styles.teamGrid} ref={revealRef}>
+          {teamMembers.map((member) => (
+            <div key={member.name} className={`${styles.card} cc-reveal`}>
               <div className={styles.memberImageContainer}>
-                <img 
-                  src={member.image} 
-                  alt={member.name} 
+                <img
+                  src={member.image}
+                  alt={member.name}
                   className={styles.memberImage}
+                  width="160"
+                  height="160"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className={styles.cardContent}>
@@ -96,13 +99,22 @@ const OurTeam = () => {
                 <p className={styles.memberRole}>{member.role}</p>
                 <p className={styles.memberBio}>{member.bio}</p>
                 
+                {/* The inner wrapper is required, not decorative: the
+                    expand/collapse animates `grid-template-rows: 0fr -> 1fr`,
+                    which only sizes the first row. With the heading and the
+                    list as two separate children the list landed in an
+                    implicit auto-sized row and kept reserving its full height
+                    while invisible, leaving a block of blank space in every
+                    card. One child means one row to collapse. */}
                 <div className={styles.tasksContainer}>
-                  <h4 className={styles.tasksTitle}>Key Contributions:</h4>
-                  <ul className={styles.tasksList}>
-                    {member.tasks.map((task, taskIndex) => (
-                      <li key={taskIndex} className={styles.taskItem}>{task}</li>
-                    ))}
-                  </ul>
+                  <div>
+                    <h4 className={styles.tasksTitle}>Key Contributions:</h4>
+                    <ul className={styles.tasksList}>
+                      {member.tasks.map((task) => (
+                        <li key={task} className={styles.taskItem}>{task}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
