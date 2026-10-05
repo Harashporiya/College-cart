@@ -122,7 +122,7 @@
   .formContainer {
     background:
       linear-gradient(165deg, rgba(124, 92, 255, 0.11) 0%, transparent 44%),
-      var(--cc-panel);
+      var(--cc-panel-strong);
     border: 1px solid var(--cc-border-strong);
     border-radius: var(--cc-radius-xl);
     padding: 40px;
@@ -177,7 +177,7 @@
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--cc-text-soft);
+    color: var(--cc-text-muted);
   }
 
   .formGroup input,
@@ -186,9 +186,9 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: var(--cc-radius);
-    border: 1px solid var(--cc-border);
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--cc-text);
+    border: 1px solid var(--cc-border-strong);
+    background-color: var(--cc-field);
+    color: var(--cc-text-strong);
     font-size: 15px;
     outline: none;
     transition: background-color var(--cc-dur) var(--cc-ease),
@@ -199,14 +199,14 @@
   .formGroup input:hover,
   .formGroup select:hover,
   .formGroup textarea:hover {
-    background-color: rgba(255, 255, 255, 0.07);
-    border-color: var(--cc-border-strong);
+    background-color: var(--cc-field-hover);
+    border-color: var(--cc-border-glow);
   }
 
   .formGroup input:focus,
   .formGroup select:focus,
   .formGroup textarea:focus {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--cc-field-focus);
     border-color: var(--cc-border-glow);
     box-shadow: var(--cc-ring);
   }
@@ -438,4 +438,14 @@
     .fileText {
       font-size: 0.8rem;
     }
+  }
+  .formGroup input::placeholder,
+  .formGroup textarea::placeholder {
+    color: var(--cc-text-soft);
+    opacity: 1;
+  }
+
+  .formGroup select option {
+    background-color: #1b1b32;
+    color: var(--cc-text-strong);
   }
