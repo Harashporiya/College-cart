@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 :root {
+  --cc-font-sans: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system,
+    'Helvetica Neue', Arial, sans-serif;
+  --cc-font-display: 'Sora', 'Plus Jakarta Sans', 'Segoe UI', system-ui,
+    -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --cc-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+
+  --cc-tracking-display: -0.032em;
+  --cc-tracking-heading: -0.02em;
+  --cc-tracking-tight: -0.011em;
+  --cc-tracking-wide: 0.06em;
+
   --cc-violet: #7c5cff;
   --cc-violet-light: #a78bfa;
   --cc-violet-deep: #5b3df5;
@@ -137,8 +149,14 @@ body {
   min-height: 100vh;
   background-color: var(--cc-bg);
   color: var(--cc-text);
-  font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.55;
+  font-family: var(--cc-font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: var(--cc-tracking-tight);
+  font-optical-sizing: auto;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -176,9 +194,59 @@ body::after {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  line-height: 1.2;
+  font-family: var(--cc-font-display);
+  font-weight: 700;
+  line-height: 1.15;
   text-wrap: balance;
   color: var(--cc-heading);
+  letter-spacing: var(--cc-tracking-heading);
+}
+
+h1 {
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: var(--cc-tracking-display);
+}
+
+h2 {
+  line-height: 1.12;
+  letter-spacing: -0.026em;
+}
+
+h5, h6 {
+  font-family: var(--cc-font-sans);
+  font-weight: 600;
+  letter-spacing: var(--cc-tracking-tight);
+}
+
+.cc-display {
+  font-family: var(--cc-font-display);
+  font-weight: 800;
+  letter-spacing: var(--cc-tracking-display);
+  line-height: 1.08;
+}
+
+.cc-eyebrow {
+  font-family: var(--cc-font-sans);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: var(--cc-tracking-wide);
+  text-transform: uppercase;
+  color: var(--cc-text-faint);
+}
+
+.cc-numeric,
+.main-price,
+.product-price,
+.cat-card__price,
+.listing-card__price,
+.listing-card__was,
+.buy-box-price,
+.pcs__price,
+.original-price,
+.rupee-symbol {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
 }
 
 p {

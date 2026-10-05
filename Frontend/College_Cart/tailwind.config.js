@@ -2,6 +2,11 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--cc-font-sans)'],
+        display: ['var(--cc-font-display)'],
+        mono: ['var(--cc-font-mono)'],
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
