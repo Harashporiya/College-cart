@@ -25,8 +25,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(75% 75% at 50% 45%, rgba(6, 6, 13, 0.38) 0%, transparent 75%),
-    linear-gradient(180deg, transparent 55%, rgba(8, 8, 15, 0.55) 100%);
+    radial-gradient(75% 75% at 50% 45%, rgba(21, 21, 42, 0.2) 0%, transparent 75%),
+    linear-gradient(180deg, transparent 55%, rgba(21, 21, 42, 0.42) 100%);
 }
 
 .header::before {

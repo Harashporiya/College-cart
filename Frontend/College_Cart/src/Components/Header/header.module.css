@@ -7,7 +7,7 @@
   gap: 16px;
   height: var(--cc-header-h);
   padding: 0.5rem 1.5rem;
-  background-color: rgba(12, 12, 23, 0.72);
+  background-color: rgba(26, 26, 48, 0.72);
   backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
   -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
   box-shadow: 0 1px 0 var(--cc-border), 0 8px 32px rgba(0, 0, 0, 0.45);
@@ -224,7 +224,7 @@
   height: 19px;
   padding: 0 4px;
   background: var(--cc-grad-danger);
-  border: 2px solid rgba(12, 12, 23, 0.9);
+  border: 2px solid rgba(26, 26, 48, 0.9);
   border-radius: var(--cc-radius-pill);
   color: #fff;
   font-size: 0.7rem;

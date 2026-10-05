@@ -29,8 +29,8 @@
   --cc-yellow: #ffc73a;
   --cc-yellow-deep: #ffb020;
   --cc-yellow-dark: #ff9f1c;
-  --cc-navy: #12121f;
-  --cc-navy-dark: #0a0a12;
+  --cc-navy: #262645;
+  --cc-navy-dark: #15152a;
   --cc-orange: #ff9f1c;
   --cc-orange-dark: #f97316;
   --cc-blue: #7c5cff;
@@ -46,22 +46,22 @@
   --cc-grad-shift: linear-gradient(120deg, #7c5cff, #22d3ee, #f472b6, #7c5cff);
   --cc-grad-rim: linear-gradient(145deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.02) 42%, rgba(255, 255, 255, 0) 70%);
 
-  --cc-bg: #08080f;
-  --cc-bg-2: #0c0c17;
-  --cc-bg-3: #12121f;
-  --cc-surface: rgba(22, 22, 38, 0.72);
-  --cc-surface-2: rgba(30, 30, 50, 0.62);
-  --cc-surface-3: rgba(40, 40, 66, 0.55);
-  --cc-surface-solid: #14141f;
-  --cc-surface-raised: rgba(28, 28, 47, 0.88);
-  --cc-panel: rgba(19, 19, 32, 0.94);
-  --cc-glass: rgba(255, 255, 255, 0.045);
-  --cc-glass-strong: rgba(255, 255, 255, 0.08);
-  --cc-glass-hover: rgba(255, 255, 255, 0.1);
+  --cc-bg: #15152a;
+  --cc-bg-2: #1c1c36;
+  --cc-bg-3: #262645;
+  --cc-surface: rgba(44, 44, 76, 0.66);
+  --cc-surface-2: rgba(54, 54, 90, 0.58);
+  --cc-surface-3: rgba(66, 66, 108, 0.52);
+  --cc-surface-solid: #262645;
+  --cc-surface-raised: rgba(50, 50, 84, 0.86);
+  --cc-panel: rgba(36, 36, 64, 0.93);
+  --cc-glass: rgba(255, 255, 255, 0.07);
+  --cc-glass-strong: rgba(255, 255, 255, 0.11);
+  --cc-glass-hover: rgba(255, 255, 255, 0.14);
   --cc-blur: 20px;
   --cc-blur-lg: 32px;
-  --cc-dark-surface: rgba(30, 30, 50, 0.62);
-  --cc-dark-bg: #0c0c17;
+  --cc-dark-surface: rgba(54, 54, 90, 0.58);
+  --cc-dark-bg: #1c1c36;
 
   --cc-text: #eceaf6;
   --cc-text-strong: #ffffff;
@@ -71,8 +71,8 @@
   --cc-heading: #f7f6fd;
   --cc-text-on-light: #14141f;
 
-  --cc-border: rgba(255, 255, 255, 0.09);
-  --cc-border-strong: rgba(255, 255, 255, 0.16);
+  --cc-border: rgba(255, 255, 255, 0.13);
+  --cc-border-strong: rgba(255, 255, 255, 0.22);
   --cc-border-glow: rgba(124, 92, 255, 0.45);
 
   --cc-danger: #fb7185;

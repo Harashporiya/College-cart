@@ -21,7 +21,7 @@
   overflow: hidden;
   text-align: center;
   color: var(--cc-text-strong);
-  background-color: #06060d;
+  background-color: #15152a;
   isolation: isolate;
 }
 
@@ -33,22 +33,22 @@
   bottom: 0;
   height: 38%;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 15, 0.72) 58%, var(--cc-bg) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(21, 21, 42, 0.62) 58%, var(--cc-bg) 100%);
 }
 
 .hero-media {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-color: #06060d;
+  background-color: #15152a;
   background-image:
-    linear-gradient(135deg, rgba(124, 92, 255, 0.4) 0%, rgba(8, 8, 15, 0.2) 45%, rgba(34, 211, 238, 0.3) 100%),
-    linear-gradient(rgba(6, 6, 13, 0.6), rgba(6, 6, 13, 0.72)),
+    linear-gradient(135deg, rgba(124, 92, 255, 0.22) 0%, rgba(21, 21, 42, 0.06) 45%, rgba(34, 211, 238, 0.16) 100%),
+    linear-gradient(rgba(21, 21, 42, 0.2), rgba(21, 21, 42, 0.38)),
     image-set(
       url('../../assets/chitkara1.webp') type('image/webp'),
       url('../../assets/chitkara1.jpg') type('image/jpeg')
     ),
-    linear-gradient(135deg, #1a1140, #06060d);
+    linear-gradient(135deg, #1a1140, #15152a);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -93,8 +93,13 @@
   height: 90%;
   transform: translateX(-50%);
   pointer-events: none;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(124, 92, 255, 0.35) 0%, transparent 70%);
-  filter: blur(10px);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(21, 21, 42, 0.58) 0%,
+    rgba(124, 92, 255, 0.32) 46%,
+    transparent 72%
+  );
+  filter: blur(14px);
 }
 
 .hero p {
@@ -251,14 +256,14 @@
   background-color: var(--cc-surface-3);
   background-size: cover;
   background-position: center;
-  filter: saturate(0.72) brightness(0.8);
+  filter: saturate(0.98) brightness(0.98);
   transition: transform var(--cc-dur-slower) var(--cc-ease),
               filter var(--cc-dur-slower) var(--cc-ease);
 }
 
 .card:hover .card-image {
   transform: scale(1.07);
-  filter: saturate(1.1) brightness(1);
+  filter: saturate(1.14) brightness(1.08);
 }
 
 .card-body {
@@ -369,7 +374,7 @@
     order: 1;
     aspect-ratio: 16 / 9;
     border-radius: var(--cc-radius);
-    filter: saturate(0.95) brightness(0.95);
+    filter: saturate(1) brightness(1);
   }
 
   .card:hover .card-image {

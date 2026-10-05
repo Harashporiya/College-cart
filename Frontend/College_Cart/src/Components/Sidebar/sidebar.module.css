@@ -28,7 +28,7 @@
   width: var(--cc-drawer-w);
   height: 100vh;
   height: 100dvh;
-  background-color: rgba(11, 11, 21, 0.82);
+  background-color: rgba(25, 25, 46, 0.82);
   backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
   -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
   border-right: 1px solid var(--cc-border-strong);
