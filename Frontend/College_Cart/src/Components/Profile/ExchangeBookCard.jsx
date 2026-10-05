@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Ellipsis } from 'lucide-react';
 import { motion } from 'framer-motion';
 import styles from './productCard.module.css';
 import DeleteProduct from './DeleteProduct';
 import ExchangeBookUpdate from './ExchangeUpdateBook';
+import usePagination from '../../util/usePagination';
+import Pagination from '../ui/Pagination';
+
+const PAGE_SIZE = 5;
 
 const ExchangeBookCard = ({ exchangeBooks, onChanged }) => {
     const [openMenuId, setOpenMenuId] = useState(null);
@@ -11,6 +15,10 @@ const ExchangeBookCard = ({ exchangeBooks, onChanged }) => {
     const [productToDeleteId, setProductToDeleteId] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [productToUpdate, setProductToUpdate] = useState(null);
+
+    const listRef = useRef(null);
+    const { page, setPage, totalPages, pageItems, total, rangeStart, rangeEnd } =
+        usePagination(exchangeBooks, PAGE_SIZE);
 
     const toggleMenu = (bookId) => {
         setOpenMenuId(openMenuId === bookId ? null : bookId);
@@ -23,8 +31,8 @@ const ExchangeBookCard = ({ exchangeBooks, onChanged }) => {
 
     return (
         <>
-        <div className={styles.productContainerBookExchange}>
-            {exchangeBooks.map((book) => (
+        <div className={`${styles.productContainerBookExchange} cc-page-anchor`} ref={listRef}>
+            {pageItems.map((book) => (
                 <div key={book._id} className={styles.productWrapper}>
                     <div className={styles.productImageContainer}>
                         <div className={styles.productMedia}>
@@ -92,6 +100,17 @@ const ExchangeBookCard = ({ exchangeBooks, onChanged }) => {
                     </div>
                 </div>
             ))}
+            <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+                total={total}
+                rangeStart={rangeStart}
+                rangeEnd={rangeEnd}
+                label={total === 1 ? 'book' : 'books'}
+                scrollTargetRef={listRef}
+                variant="compact"
+            />
         </div>
         <DeleteProduct
         isOpen={isDeleteModalOpen}

@@ -11,8 +11,11 @@ import { addToCart } from '../Redux/Slice';
 import { cartAdd } from '../SagaRedux/Slice';
 import store from '../SagaRedux/Store';
 import useScrollReveal from '../../util/useScrollReveal';
+import usePagination from '../../util/usePagination';
+import Pagination from '../ui/Pagination';
 
 const SKELETON_COUNT = 8;
+const PAGE_SIZE = 12;
 
 const Product = () => {
   const { searchQuery, products, productsLoading } = useContext(UserDataContext);
@@ -32,6 +35,9 @@ const Product = () => {
         product.category?.toLowerCase().includes(query)
     );
   }, [products, searchQuery]);
+
+  const { page, setPage, totalPages, pageItems, total, rangeStart, rangeEnd } =
+    usePagination(filteredProducts, PAGE_SIZE, searchQuery.trim().toLowerCase());
 
   const handleAddToCart = (product1) => {
     dispatch(addToCart(product1));
@@ -68,12 +74,12 @@ const Product = () => {
       </div>
 
       <main className="productPage">
-        <div className="productGrid" ref={revealRef}>
+        <div className="productGrid cc-page-anchor" ref={revealRef}>
           {productsLoading
             ? Array.from({ length: SKELETON_COUNT }, (_, index) => (
                 <ProductCardSkeleton key={index} />
               ))
-            : filteredProducts.map((product) => (
+            : pageItems.map((product) => (
                 <ProductCard
                   key={product._id}
                   product={product}
@@ -81,6 +87,19 @@ const Product = () => {
                 />
               ))}
         </div>
+
+        {!productsLoading && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            total={total}
+            rangeStart={rangeStart}
+            rangeEnd={rangeEnd}
+            label={total === 1 ? 'product' : 'products'}
+            scrollTargetRef={revealRef}
+          />
+        )}
 
         {!productsLoading && filteredProducts.length === 0 && (
           <p className="productEmpty">

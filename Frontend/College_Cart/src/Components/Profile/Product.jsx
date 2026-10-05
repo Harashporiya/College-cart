@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { UserDataContext } from '../Header/context';
 import styles from './productCard.module.css';
@@ -9,8 +9,11 @@ import Skeleton from '../ui/Skeleton';
 import { getToken } from '../../util/tokenService';
 import UpdateProduct from './UpdateProduct';
 import ExchangeBookCard from './ExchangeBookCard';
+import usePagination from '../../util/usePagination';
+import Pagination from '../ui/Pagination';
 
 const backend_url = import.meta.env.VITE_BACKEND_API_URL;
+const PAGE_SIZE = 5;
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -76,6 +79,10 @@ const Product = () => {
    fetchDataExchangeBook()
   },[fetchDataExchangeBook])
 
+  const listRef = useRef(null);
+  const { page, setPage, totalPages, pageItems, total, rangeStart, rangeEnd } =
+    usePagination(products, PAGE_SIZE);
+
   const refreshProfileProducts = useCallback(() => Promise.all([
     fetchProductData({ silent: true }),
     fetchDataExchangeBook(),
@@ -83,7 +90,7 @@ const Product = () => {
 
   return (
     <>
-      <div className={styles.productContainer}>
+      <div className={`${styles.productContainer} cc-page-anchor`} ref={listRef}>
         {isLoading
           ? Array(products.length || 10).fill().map((_, index) => (
               <div key={index} className={styles.skeletonWrapper}>
@@ -110,7 +117,7 @@ const Product = () => {
                 </div>
               </div>
             ))
-          : products.map((product) => (
+          : pageItems.map((product) => (
               <div key={product._id} className={styles.productWrapper}>
                 <div className={styles.productImageContainer}>
                   <div className={styles.productMedia}>
@@ -192,6 +199,20 @@ const Product = () => {
                 </div>
               </div>
             ))}
+        {!isLoading && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            total={total}
+            rangeStart={rangeStart}
+            rangeEnd={rangeEnd}
+            label={total === 1 ? 'listing' : 'listings'}
+            scrollTargetRef={listRef}
+            variant="compact"
+          />
+        )}
+
            {exchangeBooks.length > 0 && (
           <div>
             <p className='text-2xl pl-10 font-bold'>Exchange Book Products</p>

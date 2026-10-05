@@ -5,9 +5,12 @@ import Footer from '../../Footer/Footer';
 import { UserDataContext } from '../../Header/context';
 import { getToken } from '../../../util/tokenService';
 import useScrollReveal from '../../../util/useScrollReveal';
+import usePagination from '../../../util/usePagination';
+import Pagination from '../../ui/Pagination';
 import './categoryListing.css';
 
 const SKELETON_COUNT = 8;
+const PAGE_SIZE = 12;
 
 const money = (value) => (typeof value === 'number' ? value.toLocaleString('en-IN') : value);
 
@@ -32,6 +35,9 @@ const CategoryListing = ({ title, category }) => {
     [products, category]
   );
 
+  const { page, setPage, totalPages, pageItems, total, rangeStart, rangeEnd } =
+    usePagination(items, PAGE_SIZE, category);
+
   const handleNavigate = (item) => {
     const token = getToken();
     navigate(token && data && data._id ? `/${item._id}/product` : '/login');
@@ -51,11 +57,11 @@ const CategoryListing = ({ title, category }) => {
           )}
         </header>
 
-        <div className="listing-grid" ref={revealRef}>
+        <div className="listing-grid cc-page-anchor" ref={revealRef}>
           {productsLoading ? (
             Array.from({ length: SKELETON_COUNT }, (_, i) => <CardSkeleton key={i} />)
           ) : (
-            items.map((item) => {
+            pageItems.map((item) => {
               const hasDiscount = item.prevAmount && item.prevAmount > item.newAmount;
               return (
                 <article
@@ -110,6 +116,19 @@ const CategoryListing = ({ title, category }) => {
             })
           )}
         </div>
+
+        {!productsLoading && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            total={total}
+            rangeStart={rangeStart}
+            rangeEnd={rangeEnd}
+            label={total === 1 ? 'item' : 'items'}
+            scrollTargetRef={revealRef}
+          />
+        )}
 
         {!productsLoading && items.length === 0 && (
           <p className="listing-empty">

@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertCircle, CheckCircle, Clock, XCircle } from 'lucide-react';
 import styles from "./profile.module.css";
 import axios from 'axios';
 import toast, { Toaster } from "react-hot-toast";
+import usePagination from '../../util/usePagination';
+import Pagination from '../ui/Pagination';
+
+const PAGE_SIZE = 4;
 
 const RequestModal = ({ isOpen, onClose, orderData }) => {
     const backend_url = import.meta.env.VITE_BACKEND_API_URL;
@@ -37,6 +41,10 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
         };
         fetchAllRequests();
     },[])
+
+    const listRef = useRef(null);
+    const { page, setPage, totalPages, pageItems, total, rangeStart, rangeEnd } =
+        usePagination(orderData, PAGE_SIZE);
 
     const openConfirmationModal = (request, type) => {
         setSelectedRequest(request);
@@ -252,13 +260,13 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-400"></div>
                                 </div>
                             ) : (
-                                <div className="space-y-4">
+                                <div className="space-y-4" ref={listRef}>
                                     {
                                         orderData.length === 0 && (
                                             <p className='font-bold text-2xl text-center text-zinc-500'>Order Not Found</p>
                                         )
                                     }
-                                    {orderData.map((request) => (
+                                    {pageItems.map((request) => (
                                         <div key={request._id} className="border border-white/10 rounded-xl p-4 bg-white/[0.04] text-zinc-300 transition-colors duration-200 hover:bg-white/[0.07] hover:border-violet-400/30">
                                             <div className="flex justify-between mb-2">
                                                 <h3 className="font-semibold text-zinc-100">
@@ -301,6 +309,18 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                                             )}
                                         </div>
                                     ))}
+
+                                    <Pagination
+                                        page={page}
+                                        totalPages={totalPages}
+                                        onPageChange={setPage}
+                                        total={total}
+                                        rangeStart={rangeStart}
+                                        rangeEnd={rangeEnd}
+                                        label={total === 1 ? 'request' : 'requests'}
+                                        scrollTargetRef={listRef}
+                                        variant="compact"
+                                    />
                                 </div>
                             )}
                         </motion.div>

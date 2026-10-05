@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { UserDataContext } from '../Header/context';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -7,8 +7,12 @@ import ProductCardSkeleton from '../ui/ProductCardSkeleton';
 import { HomeIcon, Hotel, Phone } from 'lucide-react';
 import ExchangeModal from './ExchangeModal';
 import axios from 'axios';
+import usePagination from '../../util/usePagination';
+import Pagination from '../ui/Pagination';
 
 const ProductSkeleton = () => <ProductCardSkeleton mediaHeight={400} lines={4} />;
+
+const PAGE_SIZE = 12;
 
 const ExchangeBookAllProduct = () => {
   const { exchangeProduct, searchQuery, data } = useContext(UserDataContext);
@@ -30,6 +34,10 @@ const ExchangeBookAllProduct = () => {
       setLoading(false)
     }
   }, [searchQuery, exchangeProduct, data])
+
+  const gridRef = useRef(null);
+  const { page, setPage, totalPages, pageItems, total, rangeStart, rangeEnd } =
+    usePagination(filterData, PAGE_SIZE, searchQuery);
 
   const handleExchangeClick = (book) => {
     setSelectedBook(book);
@@ -71,11 +79,14 @@ const ExchangeBookAllProduct = () => {
       <div className="min-h-screen">
         <div className={styles.stickyHeader}><Header /></div>
         <div className="container mx-auto px-3 py-5 sm:px-4 sm:py-8">
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div
+            ref={gridRef}
+            className="cc-page-anchor grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
+          >
             {loading ? (
               Array.from(new Array(8)).map((_, index) => <ProductSkeleton key={index} />)
             ) : filterData.length > 0 ? (
-              filterData.map((item) => (
+              pageItems.map((item) => (
                 <div
                   key={item._id}
                   className="bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:border-violet-400/40 hover:shadow-[0_14px_48px_rgba(124,92,255,0.3)]"
@@ -132,6 +143,19 @@ const ExchangeBookAllProduct = () => {
               <p className='text-2xl text-zinc-500 font-bold'>Product Not Found</p>
             )}
           </div>
+
+          {!loading && (
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              total={total}
+              rangeStart={rangeStart}
+              rangeEnd={rangeEnd}
+              label={total === 1 ? 'book' : 'books'}
+              scrollTargetRef={gridRef}
+            />
+          )}
         </div>
       </div>
       <Footer />
