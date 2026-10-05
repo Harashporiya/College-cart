@@ -1,3 +1,5 @@
+@import '../../styles/keyframes.css';
+
 .dialogContainer {
     border: none;
     padding: 0;
@@ -9,27 +11,35 @@
 }
 
 .dialogContainer::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(4, 4, 10, 0.62);
+    backdrop-filter: blur(6px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
 }
 
 .openDialog {
-    background-color: white;
-    padding: 24px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: var(--cc-surface-raised);
+    backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+    padding: 28px 24px;
+    border: 1px solid var(--cc-border-strong);
+    border-radius: var(--cc-radius-lg);
+    box-shadow: var(--cc-shadow-xl), var(--cc-inset-rim);
     text-align: center;
+    animation: cc-fade-in-3d var(--cc-dur-slow) var(--cc-ease-entrance) both;
 }
 
 .deleteText {
-    color: #333;
+    color: var(--cc-text-strong);
     font-size: 20px;
-    margin-bottom: 16px;
-    font-weight: bold;
+    margin-bottom: 12px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .deleteConfirmation {
-    color: #666;
+    color: var(--cc-text-muted);
     margin-bottom: 24px;
+    line-height: 1.6;
 }
 
 .buttonContainer {
@@ -40,27 +50,43 @@
 
 .cancelButton,
 .deleteButton {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
+    padding: 11px 22px;
+    border: 1px solid transparent;
+    border-radius: var(--cc-radius-pill);
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--cc-dur) var(--cc-ease),
+                border-color var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease),
+                filter var(--cc-dur) var(--cc-ease),
+                transform var(--cc-dur-fast) var(--cc-ease-out-back);
 }
 
 .cancelButton {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--cc-glass);
+    border-color: var(--cc-border-strong);
+    color: var(--cc-text);
 }
 
 .cancelButton:hover {
-    background-color: #e0e0e0;
+    background-color: var(--cc-glass-hover);
+    border-color: var(--cc-border-glow);
+    transform: translateY(-2px);
 }
 
 .deleteButton {
-    background-color: #009dff;
-    color: white;
+    background: var(--cc-grad-danger);
+    color: #fff;
+    box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
 }
 
 .deleteButton:hover {
-    background-color: #0084ff;
+    filter: brightness(1.08);
+    box-shadow: var(--cc-glow-danger);
+    transform: translateY(-2px);
+}
+
+.cancelButton:active,
+.deleteButton:active {
+    transform: translateY(1px) scale(0.98);
 }

@@ -18,21 +18,31 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
   align-items: start;
+  perspective: var(--cc-perspective);
+  perspective-origin: 50% 35%;
 }
 
 .productEmpty {
   max-width: 520px;
   margin: 72px auto;
+  padding: 44px 30px;
   text-align: center;
   font-size: 1.1rem;
   line-height: 1.6;
   color: var(--cc-text-soft);
+  background-color: var(--cc-surface);
+  backdrop-filter: blur(var(--cc-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--cc-blur)) saturate(150%);
+  border: 1px dashed var(--cc-border-strong);
+  border-radius: var(--cc-radius-xl);
+  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
   animation: cc-fade-in var(--cc-dur-slow) var(--cc-ease) both;
 }
 
 .productNotFoundText {
   margin-top: 120px;
   font-size: 1.6rem;
+  font-weight: 700;
   color: var(--cc-text-soft);
   text-align: center;
 }

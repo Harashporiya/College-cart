@@ -6,13 +6,16 @@
   width: 100%;
   padding: 15px;
   background: var(--cc-surface);
+  backdrop-filter: blur(var(--cc-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--cc-blur)) saturate(150%);
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
 }
 
 .pcs__media {
   width: 100%;
-  border-radius: var(--cc-radius-sm);
+  border-radius: var(--cc-radius);
 }
 
 .pcs__title {

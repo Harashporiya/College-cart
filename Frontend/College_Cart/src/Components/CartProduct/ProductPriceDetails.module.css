@@ -1,6 +1,10 @@
 .container {
-  background-color: white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: var(--cc-surface);
+  backdrop-filter: blur(var(--cc-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--cc-blur)) saturate(160%);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-lg), var(--cc-inset-rim);
   flex: 1 1 320px;
   min-width: 0;
   max-width: 500px;
@@ -10,15 +14,20 @@
 }
 
 .title {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #1f2937;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cc-text-soft);
   margin-bottom: 1rem;
 }
 
 .divider {
-  font-size: 1.125rem;
+  height: 1px;
+  font-size: 0;
+  line-height: 0;
   margin-bottom: 1rem;
+  background: linear-gradient(90deg, rgba(124, 92, 255, 0.5), rgba(34, 211, 238, 0.35), transparent);
 }
 
 .details {
@@ -27,6 +36,7 @@
 
 .textSmall {
   font-size: 0.875rem;
+  color: var(--cc-text-muted);
 }
 
 .flex {
@@ -35,38 +45,59 @@
 }
 
 .discountText {
-  color: #16a34a;
+  color: var(--cc-success);
+  font-weight: 600;
 }
 
 .borderTop {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--cc-border);
   padding-top: 0.75rem;
   margin-top: 0.75rem;
 }
 
 .textMedium {
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--cc-text-strong);
 }
 
 .saveText {
-  color: #16a34a;
-  font-size: 0.875rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 3px 10px;
+  border-radius: var(--cc-radius-pill);
+  background-color: var(--cc-success-wash);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: var(--cc-success);
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .button {
   width: 100%;
-  background-color: #ea580c;
-  color: white;
-  padding: 0.75rem;
-  border-radius: 0.375rem;
+  background: var(--cc-grad-cta);
+  border: 1px solid transparent;
+  color: #1a1206;
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: var(--cc-radius-pill);
   margin-top: 1.5rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
+  transition: filter var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur-fast) var(--cc-ease-out-back);
 }
 
 .button:hover {
-  background-color: #f97316;
+  filter: brightness(1.08);
+  box-shadow: var(--cc-glow-amber);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 @media (max-width: 560px) {

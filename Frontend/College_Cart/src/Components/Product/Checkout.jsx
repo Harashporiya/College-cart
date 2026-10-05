@@ -90,7 +90,7 @@ const Checkout = ({ product }) => {
     
     return (
         <div className="checkout-container">
-            <Toaster position="top-center" reverseOrder={false} />
+            <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: 'cc-toast' }} />
             <button
                 className="pay-button"
                 onClick={handlePayment}

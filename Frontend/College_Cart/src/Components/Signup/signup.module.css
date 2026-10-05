@@ -7,8 +7,10 @@
   place-items: center;
   padding: 24px 16px;
   background:
-    radial-gradient(1000px 620px at 88% -10%, rgba(252, 210, 0, 0.14), transparent 60%),
-    var(--cc-dark-bg);
+    radial-gradient(900px 620px at 90% -8%, rgba(124, 92, 255, 0.3), transparent 62%),
+    radial-gradient(760px 540px at 8% 6%, rgba(34, 211, 238, 0.2), transparent 60%),
+    radial-gradient(820px 600px at 30% 104%, rgba(244, 114, 182, 0.18), transparent 62%),
+    var(--cc-bg);
 }
 
 .container {
@@ -18,9 +20,9 @@
   max-width: 1200px;
   min-height: 700px;
   max-height: calc(100dvh - 48px);
-  border-radius: var(--cc-radius-lg);
+  border-radius: var(--cc-radius-xl);
   overflow: hidden;
-  box-shadow: var(--cc-shadow-lg);
+  box-shadow: var(--cc-shadow-xl), 0 0 80px rgba(124, 92, 255, 0.28);
   animation: cardIn var(--cc-dur-slower) var(--cc-ease-entrance) both;
 }
 
@@ -35,10 +37,12 @@
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    var(--cc-yellow-deep) 70deg,
-    #fff3b0 110deg,
-    var(--cc-yellow-deep) 150deg,
-    transparent 220deg,
+    var(--cc-violet) 50deg,
+    var(--cc-aqua) 95deg,
+    #ffffff 120deg,
+    var(--cc-magenta) 150deg,
+    var(--cc-violet) 190deg,
+    transparent 250deg,
     transparent 360deg
   );
   animation: sweep 9s linear infinite;
@@ -51,8 +55,8 @@
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.985); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  from { opacity: 0; transform: perspective(1400px) translate3d(0, 26px, -90px) rotateX(7deg); }
+  to   { opacity: 1; transform: none; }
 }
 
 .leftContainer,
@@ -85,24 +89,30 @@
   flex-direction: column;
   padding: 44px 44px;
   overflow-y: auto;
-  background: var(--cc-dark-surface);
-  border-radius: calc(var(--cc-radius-lg) - 5px) 0 0 calc(var(--cc-radius-lg) - 5px);
+  background:
+    linear-gradient(165deg, rgba(124, 92, 255, 0.1) 0%, transparent 42%),
+    #10101c;
+  border-radius: calc(var(--cc-radius-xl) - 5px) 0 0 calc(var(--cc-radius-xl) - 5px);
 }
 
 .signupText {
   margin: 0 0 6px;
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
   text-align: center;
-  color: var(--cc-yellow-deep);
+  background: var(--cc-grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .textInformation {
   margin: 0;
   font-size: 1rem;
   text-align: center;
-  color: #a9a9ad;
+  color: var(--cc-text-soft);
 }
 
 .inputBox {
@@ -119,10 +129,16 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--cc-dark-bg);
-  font-weight: 700;
+  color: var(--cc-text-strong);
+  font-weight: 600;
   font-size: 1rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
+}
+
+.inputBox input:focus {
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .inputBox span {
@@ -132,7 +148,7 @@
   pointer-events: none;
   font-size: 1rem;
   letter-spacing: 0.04em;
-  color: #8f8f8f;
+  color: var(--cc-text-faint);
   transition: transform var(--cc-dur) var(--cc-ease),
               font-size var(--cc-dur) var(--cc-ease),
               color var(--cc-dur) var(--cc-ease);
@@ -142,7 +158,10 @@
 .inputBox input:focus ~ span {
   transform: translateY(-32px);
   font-size: 0.75rem;
-  color: var(--cc-yellow-deep);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cc-violet-light);
 }
 
 .inputBox i {
@@ -152,24 +171,28 @@
   z-index: 9;
   width: 100%;
   height: 2px;
-  background: var(--cc-yellow-deep);
-  border-radius: 4px;
+  background: var(--cc-grad-primary);
+  border-radius: var(--cc-radius-sm);
   pointer-events: none;
-  transition: height var(--cc-dur) var(--cc-ease);
+  transition: height var(--cc-dur) var(--cc-ease),
+              opacity var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .inputBox input:valid ~ i,
 .inputBox input:focus ~ i {
   height: 44px;
+  opacity: 0.22;
+  box-shadow: 0 0 0 1px rgba(124, 92, 255, 0.45);
 }
 
 .inputBox input:-webkit-autofill,
 .inputBox input:-webkit-autofill:hover,
 .inputBox input:-webkit-autofill:focus,
 .inputBox input:-webkit-autofill:active {
-  -webkit-text-fill-color: #000 !important;
-  caret-color: var(--cc-dark-bg) !important;
-  box-shadow: 0 0 0 1000px var(--cc-yellow-deep) inset !important;
+  -webkit-text-fill-color: var(--cc-text-strong) !important;
+  caret-color: var(--cc-text-strong) !important;
+  box-shadow: 0 0 0 1000px #191928 inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
 
@@ -178,48 +201,72 @@
 }
 
 .btnContainer button {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   width: 250px;
   height: 50px;
-  border: none;
-  border-radius: var(--cc-radius-sm);
-  background: var(--cc-yellow-deep);
-  color: var(--cc-text);
-  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-grad-primary);
+  color: #fff;
+  font-weight: 700;
   font-size: 1rem;
-  box-shadow: 0 6px 18px rgba(252, 210, 0, 0.22);
-  transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease),
+  letter-spacing: 0.01em;
+  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
+  transition: filter var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur-fast) var(--cc-ease-out-back),
               box-shadow var(--cc-dur) var(--cc-ease);
 }
 
+.btnContainer button::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: 0;
+  width: 40%;
+  height: 220%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translate3d(-200%, 0, 0) rotate(18deg);
+  opacity: 0;
+}
+
+.btnContainer button:hover:not(:disabled)::after {
+  opacity: 1;
+  animation: cc-sweep 850ms var(--cc-ease) forwards;
+}
+
 .btnContainer button:hover:not(:disabled) {
-  background: #ffe14d;
+  filter: brightness(1.1);
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(252, 210, 0, 0.32);
+  box-shadow: var(--cc-glow-strong);
 }
 
 .btnContainer button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(252, 210, 0, 0.24);
+  transform: translateY(1px) scale(0.98);
+  box-shadow: var(--cc-shadow-sm);
 }
 
 .btnContainer button:disabled {
-  opacity: 0.72;
+  opacity: 0.5;
+  filter: saturate(0.4);
   box-shadow: none;
 }
 
 .errorMessage {
   margin: 16px 0 0;
-  padding: 10px 14px;
+  padding: 11px 14px;
   border-radius: var(--cc-radius-sm);
-  border-left: 3px solid #ff6b6b;
-  background: rgba(255, 107, 107, 0.12);
-  color: #ffb3b3;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  border-left: 3px solid var(--cc-danger);
+  background: var(--cc-danger-wash);
+  color: var(--cc-danger);
   font-size: 0.9rem;
+  font-weight: 500;
   animation: cc-fade-in-down var(--cc-dur) var(--cc-ease-entrance) both;
 }
 
@@ -233,11 +280,12 @@
 .alreadyAccount {
   margin: 0;
   font-size: 1rem;
-  color: #a9a9ad;
+  color: var(--cc-text-soft);
 }
 
 .alreadySignin {
-  color: var(--cc-yellow-deep);
+  font-weight: 600;
+  color: var(--cc-violet-light);
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
@@ -245,7 +293,7 @@
 }
 
 .alreadySignin:hover {
-  color: #ffe14d;
+  color: var(--cc-aqua);
 }
 
 .verificationOverlay {
@@ -255,8 +303,9 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  background-color: rgba(10, 12, 16, 0.72);
-  backdrop-filter: blur(4px);
+  background-color: rgba(4, 4, 10, 0.72);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
 }
 
@@ -265,30 +314,40 @@
   width: 100%;
   max-width: 520px;
   padding: 36px 32px 30px;
-  background: #101215;
-  border: 1px solid #2b2f36;
-  border-radius: var(--cc-radius-lg);
-  box-shadow: var(--cc-shadow-lg);
+  background:
+    linear-gradient(165deg, rgba(124, 92, 255, 0.12) 0%, transparent 45%),
+    var(--cc-surface-raised);
+  backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  border: 1px solid var(--cc-border-strong);
+  border-radius: var(--cc-radius-xl);
+  box-shadow: var(--cc-shadow-xl), var(--cc-inset-rim), 0 0 60px rgba(124, 92, 255, 0.25);
   animation: dialogIn var(--cc-dur-slow) var(--cc-ease-spring) both;
 }
 
 @keyframes dialogIn {
-  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.96); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  from { opacity: 0; transform: perspective(1000px) translate3d(0, 22px, -70px) rotateX(8deg); }
+  to   { opacity: 1; transform: perspective(1000px) translate3d(0, 0, 0) rotateX(0deg); }
 }
 
 .verificationTitle {
   margin: 0 0 10px;
-  font-size: 1.5rem;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   text-align: center;
-  color: #fff;
+  background: var(--cc-grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .verificationMessage {
   margin: 0;
   font-size: 0.95rem;
   text-align: center;
-  color: #928f8f;
+  color: var(--cc-text-muted);
   overflow-wrap: anywhere;
 }
 
@@ -306,10 +365,16 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--cc-dark-bg);
+  color: var(--cc-text-strong);
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.18em;
+}
+
+.otpinputBox input:focus {
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .otpspan {
@@ -318,7 +383,7 @@
   padding: 12px;
   pointer-events: none;
   font-size: 1rem;
-  color: #8f8f8f;
+  color: var(--cc-text-faint);
   letter-spacing: 0.04em;
   transition: transform var(--cc-dur) var(--cc-ease),
               font-size var(--cc-dur) var(--cc-ease),
@@ -329,7 +394,10 @@
 .otpinputBox input:focus ~ .otpspan {
   transform: translateY(-34px);
   font-size: 0.75rem;
-  color: var(--cc-yellow-deep);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cc-violet-light);
 }
 
 .otpi {
@@ -339,24 +407,28 @@
   z-index: 9;
   width: 100%;
   height: 2px;
-  background: var(--cc-yellow-deep);
-  border-radius: 4px;
+  background: var(--cc-grad-primary);
+  border-radius: var(--cc-radius-sm);
   pointer-events: none;
-  transition: height var(--cc-dur) var(--cc-ease);
+  transition: height var(--cc-dur) var(--cc-ease),
+              opacity var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .otpinputBox input:valid ~ .otpi,
 .otpinputBox input:focus ~ .otpi {
   height: 44px;
+  opacity: 0.22;
+  box-shadow: 0 0 0 1px rgba(124, 92, 255, 0.45);
 }
 
 .otpinputBox input:-webkit-autofill,
 .otpinputBox input:-webkit-autofill:hover,
 .otpinputBox input:-webkit-autofill:focus,
 .otpinputBox input:-webkit-autofill:active {
-  -webkit-text-fill-color: #000 !important;
-  caret-color: var(--cc-dark-bg) !important;
-  box-shadow: 0 0 0 1000px var(--cc-yellow-deep) inset !important;
+  -webkit-text-fill-color: var(--cc-text-strong) !important;
+  caret-color: var(--cc-text-strong) !important;
+  box-shadow: 0 0 0 1000px #191928 inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
 
@@ -372,34 +444,39 @@
   gap: 10px;
   width: 100%;
   height: 48px;
-  border: none;
-  border-radius: var(--cc-radius-sm);
-  background: var(--cc-yellow-deep);
-  color: var(--cc-text);
-  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: var(--cc-radius-pill);
+  background: var(--cc-grad-primary);
+  color: #fff;
+  font-weight: 700;
   font-size: 1rem;
-  transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease);
+  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
+  transition: filter var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur-fast) var(--cc-ease-out-back);
 }
 
 .createAccountContainer button:hover:not(:disabled) {
-  background: #ffe14d;
+  filter: brightness(1.1);
   transform: translateY(-2px);
+  box-shadow: var(--cc-glow-strong);
 }
 
 .createAccountContainer button:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(1px) scale(0.98);
 }
 
 .createAccountContainer button:disabled {
-  opacity: 0.72;
+  opacity: 0.5;
+  filter: saturate(0.4);
+  box-shadow: none;
 }
 
 .resendText {
   margin-top: 22px;
   font-size: 0.875rem;
   text-align: center;
-  color: #928f8f;
+  color: var(--cc-text-soft);
 }
 
 .resendButton {
@@ -408,21 +485,21 @@
   background: none;
   border: none;
   font-size: 0.875rem;
-  color: #b9b9b9;
+  color: var(--cc-text-muted);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color var(--cc-dur) var(--cc-ease);
 }
 
 .resendButton:hover {
-  color: var(--cc-yellow-deep);
+  color: var(--cc-aqua);
 }
 
 .timerText {
   margin-top: 14px;
   font-size: 0.875rem;
   text-align: center;
-  color: #928f8f;
+  color: var(--cc-text-soft);
 }
 
 .closeButton {
@@ -434,20 +511,22 @@
   width: 34px;
   height: 34px;
   padding: 0;
-  background: none;
-  border: none;
+  background: var(--cc-glass);
+  border: 1px solid var(--cc-border);
   border-radius: 50%;
-  color: #fff;
+  color: var(--cc-text-muted);
   font-size: 22px;
   line-height: 1;
   transition: background-color var(--cc-dur) var(--cc-ease),
               color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease);
+              box-shadow var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur-slow) var(--cc-ease-spring);
 }
 
 .closeButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--cc-danger-wash);
+  color: var(--cc-danger);
+  box-shadow: var(--cc-glow-danger);
   transform: rotate(90deg);
 }
 
@@ -456,29 +535,32 @@
   align-items: flex-end;
   flex: 1 1 38%;
   padding: 5px 5px 5px 0;
-  background-color: #1b2733;
+  background-color: #0a0a14;
   background-image:
-    linear-gradient(180deg, rgba(27, 39, 51, 0.1) 0%, rgba(27, 39, 51, 0.8) 100%),
+    linear-gradient(205deg, rgba(244, 114, 182, 0.28) 0%, transparent 48%, rgba(124, 92, 255, 0.32) 100%),
+    linear-gradient(180deg, rgba(8, 8, 16, 0.22) 0%, rgba(8, 8, 16, 0.9) 100%),
     image-set(
       url('../../assets/Signup.webp') type('image/webp'),
       url('../../assets/Signup.jpg') type('image/jpeg')
     ),
-    linear-gradient(135deg, #2a2418 0%, #1b2733 55%, #24425c 100%);
+    linear-gradient(135deg, #2a1140 0%, #0a0a14 55%, #102030 100%);
   background-size: cover;
   background-position: center;
   background-clip: content-box;
-  border-radius: 0 var(--cc-radius-lg) var(--cc-radius-lg) 0;
+  border-radius: 0 var(--cc-radius-xl) var(--cc-radius-xl) 0;
   overflow: hidden;
 }
 
 .panelTagline {
   margin: 0;
   padding: 28px 26px;
-  font-size: 1.35rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
   color: #fff;
   text-align: left;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
   animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) 220ms both;
 }
 
@@ -511,7 +593,7 @@
     position: relative;
     inset: auto;
     min-height: 680px;
-    border-radius: calc(var(--cc-radius-lg) - 5px);
+    border-radius: calc(var(--cc-radius-xl) - 5px);
   }
 
   .rightContainer {
@@ -558,6 +640,6 @@
 @media (prefers-reduced-motion: reduce) {
   .container::before {
     animation: none;
-    background: var(--cc-yellow-deep);
+    background: var(--cc-grad-primary);
   }
 }

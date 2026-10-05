@@ -1,275 +1,9 @@
-.profilePageContainer{
-    min-height: 100vh;
-    padding: 2rem;
-    background-color: #f5f5f5;
-}
-.profilePage {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-start;
-}
-
-.profileCard {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 40rem;
-    padding: 2rem;
-    margin-top: 20px;
-}
-
-.profileHeader {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.profileImageContainer {
-    flex-shrink: 0;
-    position: relative;
-    cursor: pointer;
-}
-
-.profileImage {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.profileImage:hover {
-    transform: scale(1.05);
-}
-
-.profileInfo {
-    flex-grow: 1;
-}
-
-.profileName {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #333;
-    margin: 0 0 0.5rem 0;
-}
-
-.profileUsername {
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0;
-}
-.profileEmail{
-    color: #666;
-    margin: 0.5rem 0 0 0;
-    word-break: break-all;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-width: 100%;
-    font-size: 16px;
-    line-height: 1.4;
-}
-.accountCreate{
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0.5rem 0 0 0;
-}
-.profileUpdate{
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0.5rem 0 0 0;
-}
-.accountCreateContainer{
-    display: flex;
-    justify-content: space-between;
-}
-.btnEditProfileContainer{
-    margin-top: 15px;
-}
-.btn{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 132px;
-    padding: 9px 18px;
-    background-color: var(--cc-navy);
-    color: #fff;
-    border: none;
-    border-radius: var(--cc-radius-sm);
-    font-size: 0.9rem;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background-color var(--cc-dur) var(--cc-ease),
-                transform var(--cc-dur) var(--cc-ease),
-                box-shadow var(--cc-dur) var(--cc-ease);
-}
-
-.btn:hover {
-    background-color: var(--cc-navy-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 14px rgba(35, 47, 62, 0.3);
-}
-
-.btn:active {
-    transform: translateY(0);
-    transition-duration: var(--cc-dur-fast);
-}
-
-
-.dialogContainer {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-}
-
-.dialogPage {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    padding: 32px;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 550px;
-    max-height: calc(100dvh - 32px);
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    text-align: center;
-}
-
-.textDialogText {
-    color: #fff;
-    font-size: 28px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    margin: 10px;
-}
-
-.fileUploadContainer{
-    margin:30px 2px;
-}
-.fileUpload {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    font-size: 16px;
-    padding: 8px;
-    border: 2px solid #fff;
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    cursor: pointer;
-    transition: background-color var(--cc-dur) var(--cc-ease),
-                border-color var(--cc-dur) var(--cc-ease);
-    outline: none;
-}
-
-.fileUpload:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-.fileUpload::-webkit-file-upload-button {
-    background-color: #000;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color var(--cc-dur) var(--cc-ease);
-}
-
-.fileUpload::-webkit-file-upload-button:hover {
-    background-color: #333;
-}
-
-.usernameContainer{
-    margin:20px 2px;
-}
-.changeUsername {
-    background: transparent;
-    width: 100%;
-    height: 40px;
-    border: none;
-    border-bottom: 2px solid #fff;
-    outline: none;
-    color: #fff !important;
-    font-size: 18px;
-    text-align: center;
-    transition: border-color var(--cc-dur) var(--cc-ease);
-}
-
-.changeUsername:focus {
-    border-bottom: 2px solid #ddd;
-}
-
-.updatebtnProfile{
-    margin:30px 2px 10px 2px;
-}
-
-
-.updateButton {
-    background: linear-gradient(135deg, #000, #333);
-    color: white;
-    width: 100%;
-    height: 50px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background var(--cc-dur) var(--cc-ease),
-                transform var(--cc-dur) var(--cc-ease),
-                box-shadow var(--cc-dur) var(--cc-ease);
-    border: none;
-}
-
-.updateButton:hover {
-    background: linear-gradient(135deg, #333, #666);
-    transform: scale(1.05);
-}
-
-.updateButton:active {
-    transform: scale(0.98);
-}
-
-.totalDetailsForBuyAndSelling{
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 40rem;
-    padding: 2rem;
-    margin-top: 20px;
-    height: 310px;
-    text-align: center;
-}
-.totalDetailsForBuyAndSelling p {
-    font-size: 20px;
-    color: #000000;
-    margin: 10px 0;
-    font-weight: 600;
-
-}
-.totalDetailsForBuyAndSelling span {
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    font-size: 18px;
-}
+@import '../../styles/keyframes.css';
 
 .profilePageContainer {
     min-height: 100vh;
     padding: 2rem;
-    background-color: #f5f5f5;
+    background-color: transparent;
 }
 
 .profilePage {
@@ -280,17 +14,51 @@
     flex-wrap: wrap;
 }
 
-.profileCard {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.profileCard,
+.totalDetailsForBuyAndSelling {
+    position: relative;
     width: 100%;
     max-width: 40rem;
     padding: 2rem;
     margin-top: 20px;
+    background: var(--cc-panel);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-xl);
+    box-shadow: var(--cc-shadow-lg), var(--cc-inset-rim);
+    transition: box-shadow var(--cc-dur-slow) var(--cc-ease),
+                border-color var(--cc-dur-slow) var(--cc-ease);
+    animation: cc-fade-in var(--cc-dur-slower) var(--cc-ease-entrance) both;
+}
+
+.profileCard::before,
+.totalDetailsForBuyAndSelling::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(155deg, rgba(124, 92, 255, 0.16), transparent 48%);
+    opacity: 0;
+    transition: opacity var(--cc-dur-slow) var(--cc-ease);
+}
+
+.profileCard:hover::before,
+.totalDetailsForBuyAndSelling:hover::before {
+    opacity: 1;
+}
+
+.profileCard:hover,
+.totalDetailsForBuyAndSelling:hover {
+    box-shadow: var(--cc-shadow-xl), var(--cc-glow);
+    border-color: var(--cc-border-glow);
+}
+
+.totalDetailsForBuyAndSelling {
+    text-align: center;
 }
 
 .profileHeader {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -299,6 +67,8 @@
 
 .profileImageContainer {
     flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
 }
 
 .profileImage {
@@ -306,27 +76,265 @@
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    border: 4px solid transparent;
+    background:
+        linear-gradient(var(--cc-bg-2), var(--cc-bg-2)) padding-box,
+        var(--cc-grad-primary) border-box;
+    box-shadow: var(--cc-shadow-md);
+    transition: transform var(--cc-dur-slow) var(--cc-ease-out-back),
+                box-shadow var(--cc-dur-slow) var(--cc-ease);
+}
+
+.profileImage:hover {
+    transform: scale(1.06) translateZ(24px);
+    box-shadow: 0 0 36px rgba(124, 92, 255, 0.55);
 }
 
 .profileInfo {
+    position: relative;
     flex-grow: 1;
     overflow: hidden;
 }
 
-.totalDetailsForBuyAndSelling {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 40rem;
-    padding: 2rem;
-    margin-top: 20px;
-    text-align: center;
+.profileName {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.5rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, #cdc6ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
+.profileUsername {
+    font-size: 1.1rem;
+    color: var(--cc-aqua);
+    font-weight: 600;
+    margin: 0;
+}
+
+.profileEmail {
+    color: var(--cc-text-muted);
+    margin: 0.5rem 0 0 0;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.accountCreate,
+.profileUpdate {
+    font-size: 1.1rem;
+    color: var(--cc-text-soft);
+    margin: 0.5rem 0 0 0;
+}
+
+.accountCreateContainer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btnEditProfileContainer {
+    margin-top: 15px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 132px;
+    padding: 10px 20px;
+    background: var(--cc-grad-primary);
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: var(--cc-radius-pill);
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
+    transition: filter var(--cc-dur) var(--cc-ease),
+                transform var(--cc-dur-fast) var(--cc-ease-out-back),
+                box-shadow var(--cc-dur) var(--cc-ease);
+}
+
+.btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: var(--cc-glow-strong);
+}
+
+.btn:active {
+    transform: translateY(1px) scale(0.98);
+    transition-duration: var(--cc-dur-fast);
+}
+
+.totalDetailsForBuyAndSelling p {
+    position: relative;
+    font-size: 20px;
+    color: var(--cc-text-muted);
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.totalDetailsForBuyAndSelling span {
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    background: var(--cc-grad-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.dialogContainer {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 4, 10, 0.68);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
+}
+
+.dialogPage {
+    background:
+        linear-gradient(165deg, rgba(124, 92, 255, 0.14) 0%, transparent 45%),
+        var(--cc-surface-raised);
+    backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+    padding: 32px;
+    border-radius: var(--cc-radius-xl);
+    width: 100%;
+    max-width: 550px;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    box-shadow: var(--cc-shadow-xl), var(--cc-inset-rim), 0 0 60px rgba(124, 92, 255, 0.25);
+    border: 1px solid var(--cc-border-strong);
+    text-align: center;
+    animation: cc-fade-in-3d var(--cc-dur-slow) var(--cc-ease-entrance) both;
+}
+
+.textDialogText {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 10px;
+    background: var(--cc-grad-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.fileUploadContainer {
+    margin: 30px 2px;
+}
+
+.fileUpload {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px dashed var(--cc-border-strong);
+    border-radius: var(--cc-radius);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--cc-text-muted);
+    cursor: pointer;
+    transition: background-color var(--cc-dur) var(--cc-ease),
+                border-color var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease);
+    outline: none;
+}
+
+.fileUpload:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--cc-border-glow);
+    box-shadow: var(--cc-glow);
+}
+
+.fileUpload::-webkit-file-upload-button {
+    background: var(--cc-grad-primary);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    margin-right: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: var(--cc-radius-pill);
+    cursor: pointer;
+    transition: filter var(--cc-dur) var(--cc-ease);
+}
+
+.fileUpload::-webkit-file-upload-button:hover {
+    filter: brightness(1.12);
+}
+
+.usernameContainer {
+    margin: 20px 2px;
+}
+
+.changeUsername {
+    background: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    height: 46px;
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius);
+    outline: none;
+    color: var(--cc-text-strong) !important;
+    font-size: 18px;
+    text-align: center;
+    transition: border-color var(--cc-dur) var(--cc-ease),
+                background-color var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease);
+}
+
+.changeUsername:focus {
+    border-color: var(--cc-border-glow);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: var(--cc-ring);
+}
+
+.updatebtnProfile {
+    margin: 30px 2px 10px 2px;
+}
+
+.updateButton {
+    background: var(--cc-grad-primary);
+    color: #fff;
+    width: 100%;
+    height: 50px;
+    border-radius: var(--cc-radius-pill);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--cc-shadow), var(--cc-inset-rim);
+    transition: filter var(--cc-dur) var(--cc-ease),
+                transform var(--cc-dur-fast) var(--cc-ease-out-back),
+                box-shadow var(--cc-dur) var(--cc-ease);
+    border: 1px solid transparent;
+}
+
+.updateButton:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: var(--cc-glow-strong);
+}
+
+.updateButton:active {
+    transform: translateY(1px) scale(0.98);
+}
 
 .imageModalContainer {
     position: fixed;
@@ -334,21 +342,26 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(4, 4, 10, 0.86);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
+    animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
 }
 
 .imageModalContent {
     position: relative;
     max-width: 30%;
     max-height: 90%;
-    border-radius: 10px;
+    border-radius: var(--cc-radius-lg);
     overflow: hidden;
-    background-color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--cc-surface-solid);
+    border: 1px solid var(--cc-border-strong);
+    box-shadow: var(--cc-shadow-xl), 0 0 70px rgba(124, 92, 255, 0.3);
+    animation: cc-fade-in-3d var(--cc-dur-slow) var(--cc-ease-entrance) both;
 }
 
 .modalImage {
@@ -362,29 +375,37 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: none;
+    background-color: rgba(4, 4, 10, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--cc-text);
+    border: 1px solid var(--cc-border-strong);
     font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--cc-dur) var(--cc-ease),
+                color var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease),
+                transform var(--cc-dur-slow) var(--cc-ease-spring);
 }
 
 .closeModalButton:hover {
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: var(--cc-danger-wash);
+    color: var(--cc-danger);
+    box-shadow: var(--cc-glow-danger);
+    transform: rotate(90deg);
 }
 
-
-@media screen and (min-width:1000px) and (max-width: 1367px) {
+@media screen and (min-width: 1000px) and (max-width: 1367px) {
     .profilePageContainer {
         padding: 1.5rem;
     }
+
     .profilePage {
         display: flex;
         justify-content: space-between;
@@ -392,12 +413,12 @@
         gap: 2rem;
         flex-wrap: wrap;
     }
-    
+
     .profileCard,
     .totalDetailsForBuyAndSelling {
         flex: 1;
         height: 100%;
-        min-height: 300px; 
+        min-height: 300px;
         box-sizing: border-box;
     }
 
@@ -436,7 +457,6 @@
     }
 }
 
-
 @media (min-width: 481px) and (max-width: 768px) {
     .profilePageContainer {
         padding: 1rem;
@@ -474,11 +494,11 @@
         padding: 1.5rem;
         height: auto;
     }
-    
+
     .imageModalContent {
         max-width: 95%;
     }
-    
+
     .modalImage {
         max-height: 60vh;
     }
@@ -499,6 +519,10 @@
         height: 120px;
     }
 
+    .profileImage:hover {
+        transform: none;
+    }
+
     .accountCreateContainer {
         flex-direction: column;
         align-items: stretch;
@@ -512,10 +536,8 @@
     }
 
     .dialogPage {
-        background: rgba(30, 30, 30, 0.35);
-        backdrop-filter: none;
         padding: 22px 18px;
-        border-radius: 14px;
+        border-radius: var(--cc-radius-lg);
         height: auto;
     }
 
@@ -525,35 +547,36 @@
         line-height: 1.3;
     }
 
-    .fileUploadContainer{
+    .fileUploadContainer {
         margin: 16px 0 0;
     }
 
-    .usernameContainer{
+    .usernameContainer {
         margin: 14px 0 0;
     }
 
-    .updatebtnProfile{
+    .updatebtnProfile {
         margin: 18px 0 0;
     }
 
     .fileUpload {
-        padding: 7px;
+        padding: 8px;
         font-size: 0.85rem;
     }
 
     .fileUpload::-webkit-file-upload-button {
-        padding: 6px 11px;
+        padding: 6px 12px;
         font-size: 0.78rem;
+        margin-right: 8px;
     }
 
     .changeUsername {
-        height: 36px;
+        height: 40px;
         font-size: 1rem;
     }
 
     .updateButton {
-        height: 42px;
+        height: 44px;
         font-size: 1rem;
     }
 
@@ -566,9 +589,9 @@
     }
 
     .totalDetailsForBuyAndSelling span {
-        font-size: 14px;
+        font-size: 1.1rem;
     }
-    
+
     .modalImage {
         max-height: 50vh;
     }

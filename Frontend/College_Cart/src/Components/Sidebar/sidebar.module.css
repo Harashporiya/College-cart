@@ -3,8 +3,9 @@
   position: fixed;
   inset: 0;
   z-index: 998;
-  background-color: rgba(10, 12, 16, 0.55);
-  backdrop-filter: blur(2px);
+  background-color: rgba(4, 4, 10, 0.62);
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--cc-dur-slow) var(--cc-ease),
@@ -27,8 +28,11 @@
   width: var(--cc-drawer-w);
   height: 100vh;
   height: 100dvh;
-  background-color: var(--cc-surface);
-  box-shadow: 8px 0 32px rgba(15, 17, 17, 0.18);
+  background-color: rgba(11, 11, 21, 0.82);
+  backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  border-right: 1px solid var(--cc-border-strong);
+  box-shadow: 24px 0 80px rgba(0, 0, 0, 0.6), var(--cc-inset-rim);
   transform: translate3d(-100%, 0, 0);
   visibility: hidden;
   transition: transform var(--cc-dur-slow) var(--cc-ease-entrance),
@@ -55,8 +59,10 @@
 .sidebarLogo {
   width: 56px;
   height: 56px;
-  border-radius: var(--cc-radius-sm);
+  border-radius: var(--cc-radius);
   object-fit: cover;
+  border: 1px solid var(--cc-border);
+  box-shadow: var(--cc-shadow-sm);
 }
 
 .closeButton {
@@ -65,17 +71,21 @@
   width: 40px;
   height: 40px;
   padding: 0;
-  background: none;
-  border: none;
+  background-color: var(--cc-glass);
+  border: 1px solid var(--cc-border);
   border-radius: 50%;
-  color: var(--cc-text);
+  color: var(--cc-text-muted);
   transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease);
+              transform var(--cc-dur-slow) var(--cc-ease-spring),
+              color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .closeButton:hover {
-  background-color: var(--cc-surface-3);
+  background-color: var(--cc-danger-wash);
+  color: var(--cc-danger);
   transform: rotate(90deg);
+  box-shadow: var(--cc-glow-danger);
 }
 
 .sidebarContent {
@@ -91,14 +101,15 @@
   gap: 0.9rem;
   width: 100%;
   padding: 0.7rem 0.9rem;
-  background: none;
-  border: none;
+  background-color: transparent;
+  border: 1px solid transparent;
   border-radius: var(--cc-radius);
-  color: var(--cc-text);
+  color: var(--cc-text-muted);
   text-align: left;
   transition: background-color var(--cc-dur) var(--cc-ease),
               transform var(--cc-dur) var(--cc-ease),
-              color var(--cc-dur) var(--cc-ease);
+              color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
 
   opacity: 0;
   transform: translate3d(-14px, 0, 0);
@@ -123,8 +134,19 @@
 .sidebar.open .menuItem:nth-child(n + 9) { transition-delay: 380ms; }
 
 .menuItem:hover {
-  background-color: var(--cc-surface-3);
-  transform: translate3d(4px, 0, 0);
+  background-image: var(--cc-grad-primary-soft);
+  border-color: var(--cc-border);
+  color: var(--cc-text-strong);
+  transform: translate3d(6px, 0, 0);
+}
+
+.menuItem:hover .menuIcon {
+  color: var(--cc-aqua);
+  transform: scale(1.15);
+}
+
+.menuItem:active {
+  transform: translate3d(6px, 0, 0) scale(0.98);
 }
 
 .menuIcon {
@@ -132,7 +154,9 @@
   place-items: center;
   flex: none;
   width: 24px;
-  color: var(--cc-text);
+  color: var(--cc-text-soft);
+  transition: color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease-spring);
 }
 
 .menuTitle {
@@ -145,7 +169,7 @@
   flex: none;
   padding: 0.9rem;
   border-top: 1px solid var(--cc-border);
-  background-color: var(--cc-surface);
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 .profileContainer {
@@ -161,6 +185,10 @@
   flex: none;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--cc-bg-2), var(--cc-bg-2)) padding-box,
+    var(--cc-grad-primary) border-box;
 }
 
 .profileText {
@@ -171,7 +199,7 @@
   display: block;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--cc-text);
+  color: var(--cc-text-strong);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -193,36 +221,46 @@
 .loginBtn,
 .signupBtn {
   flex: 1;
-  padding: 10px 8px;
-  border: none;
-  border-radius: var(--cc-radius-sm);
+  padding: 11px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--cc-radius-pill);
   font-weight: 700;
   font-size: 0.9rem;
-  transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease);
+  transition: transform var(--cc-dur-fast) var(--cc-ease-out-back),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              filter var(--cc-dur) var(--cc-ease),
+              background-color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
 }
 
 .loginBtn {
-  background-color: var(--cc-yellow);
-  color: var(--cc-text);
+  background: var(--cc-grad-cta);
+  color: #1a1206;
+  box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
 }
 
 .loginBtn:hover {
-  background-color: var(--cc-yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--cc-glow-amber);
+  filter: brightness(1.06);
 }
 
 .signupBtn {
-  background-color: var(--cc-navy);
-  color: #fff;
+  background-color: var(--cc-glass);
+  border-color: var(--cc-border-strong);
+  color: var(--cc-text-strong);
 }
 
 .signupBtn:hover {
-  background-color: var(--cc-navy-dark);
+  background-color: var(--cc-glass-hover);
+  border-color: var(--cc-border-glow);
+  transform: translateY(-2px);
+  box-shadow: var(--cc-glow);
 }
 
 .loginBtn:active,
 .signupBtn:active {
-  transform: translateY(1px);
+  transform: translateY(1px) scale(0.98);
 }
 
 @media (max-width: 480px) {

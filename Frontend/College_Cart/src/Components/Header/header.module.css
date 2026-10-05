@@ -1,13 +1,35 @@
 
 .header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   height: var(--cc-header-h);
   padding: 0.5rem 1.5rem;
-  background-color: var(--cc-surface);
-  box-shadow: 0 1px 0 var(--cc-border), 0 2px 8px rgba(15, 17, 17, 0.05);
+  background-color: rgba(12, 12, 23, 0.72);
+  backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  box-shadow: 0 1px 0 var(--cc-border), 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(124, 92, 255, 0.55) 25%,
+    rgba(34, 211, 238, 0.55) 50%,
+    rgba(244, 114, 182, 0.5) 75%,
+    transparent 100%
+  );
+  opacity: 0.8;
 }
 
 .headerLeft {
@@ -24,31 +46,46 @@
   width: 44px;
   height: 44px;
   padding: 0;
-  background: none;
-  border: none;
+  background-color: var(--cc-glass);
+  border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-sm);
-  color: #333;
+  color: var(--cc-text-muted);
   transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease);
+              transform var(--cc-dur) var(--cc-ease-out-back),
+              color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .menuButton:hover {
-  background-color: var(--cc-surface-3);
-  transform: scale(1.05);
+  background-color: var(--cc-glass-hover);
+  border-color: var(--cc-border-glow);
+  color: var(--cc-text-strong);
+  transform: scale(1.06);
+  box-shadow: var(--cc-glow);
+}
+
+.menuButton:active {
+  transform: scale(0.96);
 }
 
 .logo {
   width: 64px;
   height: 64px;
   margin-left: auto;
-  border-radius: var(--cc-radius-sm);
+  border-radius: var(--cc-radius);
   object-fit: cover;
   cursor: pointer;
-  transition: transform var(--cc-dur) var(--cc-ease);
+  border: 1px solid var(--cc-border);
+  transition: transform var(--cc-dur) var(--cc-ease-out-back),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
 }
 
 .logo:hover {
-  transform: scale(1.04);
+  transform: perspective(600px) rotateY(-12deg) rotateX(6deg) scale(1.06);
+  border-color: var(--cc-border-glow);
+  box-shadow: var(--cc-glow-strong);
 }
 
 .middleHeader {
@@ -62,14 +99,15 @@
 
 .navLink {
   position: relative;
-  padding: 6px 0;
+  padding: 6px 2px;
   background: none;
   border: none;
   font-size: 0.975rem;
   font-weight: 600;
-  color: #444;
+  color: var(--cc-text-muted);
   white-space: nowrap;
-  transition: color var(--cc-dur) var(--cc-ease);
+  transition: color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease);
 }
 
 .navLink::after {
@@ -80,12 +118,14 @@
   width: 0;
   height: 2px;
   border-radius: 2px;
-  background-color: var(--cc-blue);
-  transition: width var(--cc-dur-slow) var(--cc-ease);
+  background: var(--cc-grad-primary);
+  box-shadow: 0 0 12px rgba(124, 92, 255, 0.8);
+  transition: width var(--cc-dur-slow) var(--cc-ease-entrance);
 }
 
 .navLink:hover {
-  color: var(--cc-blue);
+  color: var(--cc-text-strong);
+  transform: translateY(-1px);
 }
 
 .navLink:hover::after {
@@ -99,23 +139,28 @@
   flex: 0 1 400px;
   height: 44px;
   padding: 0 1rem;
-  background-color: #f2f3f5;
-  border: 1px solid transparent;
-  border-radius: var(--cc-radius);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-pill);
   transition: border-color var(--cc-dur) var(--cc-ease),
               background-color var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .searchContainer:focus-within {
-  background-color: var(--cc-surface);
-  border-color: var(--cc-blue);
-  box-shadow: var(--cc-ring);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--cc-border-glow);
+  box-shadow: var(--cc-ring), var(--cc-inset-rim);
 }
 
 .searchIcon {
   flex: none;
-  color: #666;
+  color: var(--cc-text-soft);
+  transition: color var(--cc-dur) var(--cc-ease);
+}
+
+.searchContainer:focus-within .searchIcon {
+  color: var(--cc-violet-light);
 }
 
 .searchInput {
@@ -125,11 +170,17 @@
   border: none;
   outline: none;
   font-size: 0.95rem;
-  color: #333;
+  color: var(--cc-text);
+}
+
+.searchInput:focus {
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .searchInput::placeholder {
-  color: #999;
+  color: var(--cc-text-faint);
 }
 
 .addProductCart {
@@ -140,17 +191,27 @@
   width: 46px;
   height: 46px;
   padding: 0;
-  background: none;
-  border: none;
-  border-radius: var(--cc-radius-sm);
-  color: #333;
+  background-color: var(--cc-glass);
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius);
+  color: var(--cc-text-muted);
   transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease);
+              transform var(--cc-dur) var(--cc-ease-out-back),
+              color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .addProductCart:hover {
-  background-color: var(--cc-surface-3);
-  transform: translateY(-2px);
+  background-color: var(--cc-glass-hover);
+  border-color: rgba(34, 211, 238, 0.45);
+  color: var(--cc-aqua);
+  transform: translate3d(0, -3px, 0);
+  box-shadow: var(--cc-glow-aqua);
+}
+
+.addProductCart:active {
+  transform: translate3d(0, 0, 0) scale(0.95);
 }
 
 .productCountInCart {
@@ -162,13 +223,14 @@
   min-width: 19px;
   height: 19px;
   padding: 0 4px;
-  background-color: #e00b0b;
-  border: 2px solid var(--cc-surface);
+  background: var(--cc-grad-danger);
+  border: 2px solid rgba(12, 12, 23, 0.9);
   border-radius: var(--cc-radius-pill);
   color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
   line-height: 1;
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.7);
   animation: badgePop var(--cc-dur-slow) var(--cc-ease-spring) both;
 }
 
@@ -188,15 +250,19 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 4px 8px 4px 4px;
-  background: none;
-  border: none;
+  padding: 4px 12px 4px 4px;
+  background-color: transparent;
+  border: 1px solid transparent;
   border-radius: var(--cc-radius-pill);
-  transition: background-color var(--cc-dur) var(--cc-ease);
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .profile:hover {
-  background-color: var(--cc-surface-3);
+  background-color: var(--cc-glass);
+  border-color: var(--cc-border);
+  box-shadow: var(--cc-shadow-sm);
 }
 
 .avatar {
@@ -204,18 +270,24 @@
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  transition: transform var(--cc-dur) var(--cc-ease-spring);
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--cc-bg-2), var(--cc-bg-2)) padding-box,
+    var(--cc-grad-primary) border-box;
+  transition: transform var(--cc-dur) var(--cc-ease-spring),
+              box-shadow var(--cc-dur) var(--cc-ease);
 }
 
 .profile:hover .avatar {
   transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(124, 92, 255, 0.55);
 }
 
 .username {
   max-width: 160px;
   font-size: 1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--cc-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -223,72 +295,110 @@
 
 .person {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .login,
 .signup {
-  padding: 9px 16px;
-  border: none;
-  border-radius: var(--cc-radius-sm);
+  position: relative;
+  overflow: hidden;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--cc-radius-pill);
   font-size: 0.875rem;
   font-weight: 700;
-  transition: background-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease),
-              box-shadow var(--cc-dur) var(--cc-ease);
+  transition: transform var(--cc-dur-fast) var(--cc-ease-out-back),
+              box-shadow var(--cc-dur) var(--cc-ease),
+              filter var(--cc-dur) var(--cc-ease),
+              background-color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
+}
+
+.login::after,
+.signup::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: 0;
+  width: 40%;
+  height: 220%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translate3d(-180%, 0, 0) rotate(18deg);
+  opacity: 0;
+}
+
+.login:hover::after,
+.signup:hover::after {
+  opacity: 1;
+  animation: sweep 800ms var(--cc-ease) forwards;
+}
+
+@keyframes sweep {
+  from { transform: translate3d(-180%, 0, 0) rotate(18deg); }
+  to   { transform: translate3d(220%, 0, 0) rotate(18deg); }
 }
 
 .login {
-  background-color: var(--cc-yellow);
-  color: var(--cc-text);
+  background: var(--cc-grad-cta);
+  color: #1a1206;
+  box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
 }
 
 .login:hover {
-  background-color: var(--cc-yellow-dark);
   transform: translateY(-2px);
-  box-shadow: 0 5px 14px rgba(252, 210, 0, 0.4);
+  box-shadow: var(--cc-glow-amber);
+  filter: brightness(1.06);
 }
 
 .signup {
-  background-color: var(--cc-navy);
-  color: #fff;
+  background-color: var(--cc-glass);
+  border-color: var(--cc-border-strong);
+  color: var(--cc-text-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .signup:hover {
-  background-color: var(--cc-navy-dark);
+  background-color: var(--cc-glass-hover);
+  border-color: var(--cc-border-glow);
   transform: translateY(-2px);
-  box-shadow: 0 5px 14px rgba(35, 47, 62, 0.3);
+  box-shadow: var(--cc-glow);
 }
 
 .login:active,
 .signup:active {
-  transform: translateY(0);
+  transform: translateY(1px) scale(0.98);
   transition-duration: var(--cc-dur-fast);
 }
 
 .profileDropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
   z-index: 1000;
   width: 260px;
-  background-color: var(--cc-surface);
-  border: 1px solid var(--cc-border);
+  background-color: var(--cc-surface-raised);
+  backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+  border: 1px solid var(--cc-border-strong);
   border-radius: var(--cc-radius);
-  box-shadow: var(--cc-shadow-md);
+  box-shadow: var(--cc-shadow-lg), var(--cc-inset-rim);
   cursor: pointer;
   transform-origin: top right;
   animation: dropdownIn var(--cc-dur) var(--cc-ease-entrance) both;
-  transition: background-color var(--cc-dur) var(--cc-ease);
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              border-color var(--cc-dur) var(--cc-ease);
 }
 
 .profileDropdown:hover {
-  background-color: var(--cc-surface-2);
+  background-color: rgba(40, 40, 66, 0.9);
+  border-color: var(--cc-border-glow);
 }
 
 @keyframes dropdownIn {
-  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: perspective(800px) translateY(-8px) rotateX(-12deg) scale(0.96); }
+  to   { opacity: 1; transform: perspective(800px) translateY(0) rotateX(0deg) scale(1); }
 }
 
 .profileMenu {
@@ -308,6 +418,10 @@
   flex: none;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--cc-bg-2), var(--cc-bg-2)) padding-box,
+    var(--cc-grad-accent) border-box;
 }
 
 .profileInfo {
@@ -319,7 +433,7 @@
 .profileName {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--cc-text);
+  color: var(--cc-text-strong);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -437,7 +551,7 @@
 
   .login,
   .signup {
-    padding: 7px 14px;
+    padding: 8px 15px;
     font-size: 0.78rem;
   }
 

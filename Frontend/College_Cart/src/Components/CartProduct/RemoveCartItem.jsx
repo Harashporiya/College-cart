@@ -91,7 +91,7 @@ const RemoveCartItem = ({ isOpen, onClose, cartItemId, setCartItem }) => {
                 )}
                 </AnimatePresence>
             </dialog>
-            <Toaster />
+            <Toaster toastOptions={{ className: 'cc-toast' }} />
         </>
     )
 }

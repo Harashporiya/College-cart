@@ -68,7 +68,7 @@ const ExchangeBookAllProduct = () => {
 
   return (
     <>
-      <div className="bg-gray-100 min-h-screen">
+      <div className="min-h-screen">
         <div className={styles.stickyHeader}><Header /></div>
         <div className="container mx-auto px-3 py-5 sm:px-4 sm:py-8">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
@@ -78,7 +78,7 @@ const ExchangeBookAllProduct = () => {
               filterData.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl"
+                  className="bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:border-violet-400/40 hover:shadow-[0_14px_48px_rgba(124,92,255,0.3)]"
                 >
                   <div className="relative items-center flex justify-center overflow-hidden transition-transform duration-300 hover:scale-95">
                     <img
@@ -90,34 +90,34 @@ const ExchangeBookAllProduct = () => {
                     />
                   </div>
                   <div className="p-2 sm:p-4">
-                    <h2 className="text-sm sm:text-xl font-semibold mb-1 sm:mb-2 line-clamp-2">{item.name}</h2>
+                    <h2 className="text-sm sm:text-xl font-semibold text-zinc-100 mb-1 sm:mb-2 line-clamp-2">{item.name}</h2>
                     <div className="mb-2 sm:mb-4">
                       {item.selectHostel === "Hostler" ? (
-                        <div className="text-xs sm:text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-zinc-400">
                           <div className='flex'><HomeIcon size={14} className="flex-shrink-0" /> <p className='ml-1.5 truncate'> Room: {item.roomNumber}</p></div>
                           <div className='flex'><Hotel size={14} className="flex-shrink-0" /> <p className='ml-1.5 truncate'>Hostel: {item.hostleName}</p></div>
                         </div>
                       ) : (
-                        <div className="text-xs sm:text-sm text-gray-600 flex">
+                        <div className="text-xs sm:text-sm text-zinc-400 flex">
                           <Phone size={14} className="flex-shrink-0" /> <p className='ml-1.5 truncate'>Contact: {item.dayScholarContectNumber}</p>
                         </div>
                       )}
                     </div>
 
-                    <p className="hidden sm:block text-gray-700 mb-4 line-clamp-3">{item.description}</p>
+                    <p className="hidden sm:block text-zinc-400 mb-4 line-clamp-3">{item.description}</p>
 
                     <div className="flex justify-between items-center">
                       {
                         requestedBooks[item._id] ? (
                           <button
-                            className="bg-yellow-500 text-white px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-base rounded-full hover:bg-yellow-400 w-full cursor-not-allowed"
+                            className="bg-white/[0.07] border border-white/10 text-zinc-500 px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-base rounded-full w-full cursor-not-allowed"
                             disabled
                           >
                              Requested
                           </button>
                         ) : (
                           <button
-                            className="bg-yellow-500 text-white px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-base rounded-full hover:bg-yellow-400 w-full"
+                            className="bg-gradient-to-r from-amber-300 to-amber-500 text-[#1a1206] font-bold px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-base rounded-full w-full transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,159,28,0.45)] active:translate-y-px active:scale-95"
                             onClick={() => handleExchangeClick(item)}
                           >
                             Exchange
@@ -129,7 +129,7 @@ const ExchangeBookAllProduct = () => {
                 </div>
               ))
             ) : (
-              <p className='text-2xl text-black font-bold'>Product Not Found</p>
+              <p className='text-2xl text-zinc-500 font-bold'>Product Not Found</p>
             )}
           </div>
         </div>

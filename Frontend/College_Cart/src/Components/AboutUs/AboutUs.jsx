@@ -1,9 +1,4 @@
-/* eslint-disable react/no-unknown-property -- `fetchpriority` on the hero
-   image below is deliberately lowercase. React 19 maps the camelCase
-   `fetchPriority`, but this project runs React 18.3, which does not
-   recognise that form and logs an unknown-prop warning at runtime; the
-   all-lowercase spelling is passed straight through to the DOM. The lint
-   rule assumes React 19. */
+/* eslint-disable react/no-unknown-property */
 import React, { useContext } from "react";
 import collegeCartInterface from '../../assets/collegeCartInterface.webp';
 import styles from "./aboutus.module.css";

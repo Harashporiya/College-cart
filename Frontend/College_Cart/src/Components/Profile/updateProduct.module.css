@@ -6,7 +6,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(4, 4, 10, 0.68);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,113 +16,178 @@
     z-index: 999;
     animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
   }
-  
+
   .modalContent {
-    background-color: white;
+    background:
+      linear-gradient(165deg, rgba(124, 92, 255, 0.12) 0%, transparent 45%),
+      var(--cc-surface-raised);
+    backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
+    border: 1px solid var(--cc-border-strong);
     padding: 2rem;
-    border-radius: 1rem;
+    border-radius: var(--cc-radius-xl);
     width: 100%;
     max-width: 650px;
     max-height: min(90dvh, 90vh);
     overflow-y: auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    animation: cc-scale-in var(--cc-dur) var(--cc-ease-entrance) both;
+    box-shadow: var(--cc-shadow-xl), var(--cc-inset-rim), 0 0 60px rgba(124, 92, 255, 0.22);
+    animation: cc-fade-in-3d var(--cc-dur-slow) var(--cc-ease-entrance) both;
   }
-  
+
   .modalTitle {
     text-align: center;
     font-size: 1.8rem;
-    font-weight: 600;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     margin-bottom: 1.5rem;
-    color: #333;
+    background: var(--cc-grad-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
-  
+
   .formContainer {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
   }
-  
+
   .formGroup {
     display: flex;
     flex-direction: column;
   }
 
   .formGroup label {
-    margin-bottom: 0.3rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #444;
+    margin-bottom: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cc-text-soft);
   }
-  
+
   .inputColorText {
-    padding: 0.6rem 1rem;
+    padding: 0.7rem 1rem;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    background-color: #f8f8f8;
-    transition: border-color 0.3s ease;
+    color: var(--cc-text);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius);
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: border-color var(--cc-dur) var(--cc-ease),
+                background-color var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease);
   }
-  
+
   .inputColorText:focus {
     outline: none;
-    border-color: #6c63ff;
-    background-color: #fff;
+    border-color: var(--cc-border-glow);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: var(--cc-ring);
   }
-  
+
   .imageUploadContainer {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .imagePreview {
     width: 120px;
     height: 120px;
     object-fit: cover;
-    border-radius: 0.5rem;
-    border: 1px solid #ccc;
+    border-radius: var(--cc-radius);
+    border: 1px solid var(--cc-border-strong);
+    box-shadow: var(--cc-shadow-sm);
   }
-  
+
   .imageInput {
     margin-top: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 9px;
+    font-size: 0.9rem;
+    color: var(--cc-text-muted);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px dashed var(--cc-border-strong);
+    border-radius: var(--cc-radius);
+    cursor: pointer;
+    transition: background-color var(--cc-dur) var(--cc-ease),
+                border-color var(--cc-dur) var(--cc-ease);
   }
-  
+
+  .imageInput:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--cc-border-glow);
+  }
+
+  .imageInput::-webkit-file-upload-button {
+    background: var(--cc-grad-primary);
+    color: #fff;
+    border: none;
+    padding: 7px 14px;
+    margin-right: 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: var(--cc-radius-pill);
+    cursor: pointer;
+    transition: filter var(--cc-dur) var(--cc-ease);
+  }
+
+  .imageInput::-webkit-file-upload-button:hover {
+    filter: brightness(1.12);
+  }
+
   .modalActions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
   }
-  
+
   .cancelButton {
-    background-color: #e0e0e0;
-    color: #333;
-    padding: 0.6rem 1.4rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: 500;
+    background-color: var(--cc-glass);
+    color: var(--cc-text);
+    padding: 0.65rem 1.5rem;
+    border: 1px solid var(--cc-border-strong);
+    border-radius: var(--cc-radius-pill);
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color var(--cc-dur) var(--cc-ease),
+                border-color var(--cc-dur) var(--cc-ease),
+                transform var(--cc-dur-fast) var(--cc-ease-out-back);
   }
-  
+
   .cancelButton:hover {
-    background-color: #d0d0d0;
+    background-color: var(--cc-glass-hover);
+    border-color: var(--cc-border-glow);
+    transform: translateY(-2px);
   }
-  
+
   .updateButton {
-    background-color: #6c63ff;
-    color: white;
-    padding: 0.6rem 1.4rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: 500;
+    background: var(--cc-grad-primary);
+    color: #fff;
+    padding: 0.65rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--cc-radius-pill);
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
+    transition: filter var(--cc-dur) var(--cc-ease),
+                box-shadow var(--cc-dur) var(--cc-ease),
+                transform var(--cc-dur-fast) var(--cc-ease-out-back);
   }
-  
+
   .updateButton:hover {
-    background-color: #5a52e0;
+    filter: brightness(1.1);
+    box-shadow: var(--cc-glow-strong);
+    transform: translateY(-2px);
+  }
+
+  .cancelButton:active,
+  .updateButton:active {
+    transform: translateY(1px) scale(0.98);
   }
 
   @media (max-width: 560px) {
@@ -149,9 +216,9 @@
     }
 
     .inputColorText {
-      padding: 0.45rem 0.7rem;
+      padding: 0.5rem 0.75rem;
       font-size: 0.9rem;
-      border-radius: 0.45rem;
+      border-radius: var(--cc-radius-sm);
     }
 
     .imagePreview {

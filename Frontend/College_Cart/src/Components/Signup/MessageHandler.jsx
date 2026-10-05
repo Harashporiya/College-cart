@@ -23,7 +23,7 @@ const MessageHandler = () => {
     }
     return () => clearTimeout(timer); 
   },[status,error,message,dispatch]);
-  return <Toaster/>
+  return <Toaster toastOptions={{ className: 'cc-toast' }} />
 }
 
 export default MessageHandler
