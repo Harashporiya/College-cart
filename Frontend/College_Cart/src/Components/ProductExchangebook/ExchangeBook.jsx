@@ -71,9 +71,6 @@ const ExchangeBookAllProduct = () => {
       <div className="bg-gray-100 min-h-screen">
         <div className={styles.stickyHeader}><Header /></div>
         <div className="container mx-auto px-3 py-5 sm:px-4 sm:py-8">
-          {/* Was `grid-cols-1` on mobile, which combined with the fixed
-              300x400 image below produced one 646px-tall card per row on a
-              phone. Two columns from the smallest size up. */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {loading ? (
               Array.from(new Array(8)).map((_, index) => <ProductSkeleton key={index} />)
@@ -83,10 +80,6 @@ const ExchangeBookAllProduct = () => {
                   key={item._id}
                   className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl"
                 >
-                  {/* The image was a hardcoded `w-[300px] h-[400px]`, which
-                      overflowed a phone-width card and made every card 646px
-                      tall. It now fills the card and takes its height from the
-                      viewport size. */}
                   <div className="relative items-center flex justify-center overflow-hidden transition-transform duration-300 hover:scale-95">
                     <img
                       className="w-full h-36 sm:h-72 object-cover mt-2 sm:mt-4 rounded-lg"
@@ -111,8 +104,6 @@ const ExchangeBookAllProduct = () => {
                       )}
                     </div>
 
-                    {/* Hidden on phones: at ~150px wide the name, location and
-                        the exchange button are what the card is for. */}
                     <p className="hidden sm:block text-gray-700 mb-4 line-clamp-3">{item.description}</p>
 
                     <div className="flex justify-between items-center">

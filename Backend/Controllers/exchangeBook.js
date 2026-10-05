@@ -137,7 +137,6 @@ exports.getAllProduct = async(req,res)=>{
 
 exports.getProductById=async(req,res)=>{
   const {id} = req.params;
-  // console.log(id)
   try {
     const productById = await exchange.findById({_id:id}).populate('userId', 'name email');
     if(!productById){
@@ -152,13 +151,11 @@ exports.getProductById=async(req,res)=>{
 
 exports.deleteProductById = async(req,res)=>{
   const{id} = req.params;
-  // console.log(id)
   try {
     const productById = await exchange.findById({_id:id});
     if(!productById){
       return res.status(404).json({success:false, message:"Product not found"})
     }
-    // console.log(productById)
     if(productById.cloudinaryPublicId){
       await deleteFromCloudinary(productById.cloudinaryPublicId)
     }

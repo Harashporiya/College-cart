@@ -1,12 +1,3 @@
-/* ==========================================================================
-   Forgot password
-
-   Two rules at the top and bottom of the old file were NOT scoped by CSS
-   Modules, which only scopes class selectors:
-     `* { font-family; margin: 0; padding: 0; box-sizing }`  and  `button { }`
-   Both leaked into the global stylesheet and applied to every page in the app.
-   The reset now lives once in index.css.
-   ========================================================================== */
 
 .bodyContainer {
   min-height: 100vh;
@@ -26,8 +17,6 @@
   border-radius: var(--cc-radius-lg);
   overflow: hidden;
   box-shadow: var(--cc-shadow-lg);
-  /* Replaces absolute centring with a fixed height, which clipped the verify
-     button on short screens. */
   animation: cardIn var(--cc-dur-slower) var(--cc-ease-entrance) both;
 }
 
@@ -97,8 +86,6 @@
   width: 100%;
 }
 
-/* ------------------------------------------------------- floating labels -- */
-
 .inputBox {
   position: relative;
   width: 100%;
@@ -113,9 +100,6 @@
   background: transparent;
   border: none;
   outline: none;
-  /* The email field carried an inline `style={{color:"white"}}`, which made the
-     text invisible against the yellow active fill. Both fields use the dark
-     ink now; the inline override has been removed from the JSX. */
   color: var(--cc-dark-bg);
   font-weight: 700;
   font-size: 1rem;
@@ -169,8 +153,6 @@
   transition: background-color 5000s ease-in-out 0s !important;
 }
 
-/* --------------------------------------------------------------- buttons -- */
-
 .btnOTP,
 .btnContainer button {
   display: inline-flex;
@@ -205,8 +187,6 @@
   transition-duration: var(--cc-dur-fast);
 }
 
-/* Both buttons are disabled until their field has a value, so the disabled
-   state needed to actually look disabled. */
 .btnOTP:disabled,
 .btnContainer button:disabled {
   opacity: 0.45;
@@ -218,10 +198,6 @@
   display: flex;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
-/* The old block was gated on `orientation: portrait` and `max-width: 472px`, so
-   a phone held sideways got the desktop layout with its fixed 500px height. */
 @media (max-width: 420px) {
   .form {
     padding: 32px 22px;

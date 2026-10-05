@@ -1,7 +1,3 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
 
 .modalOverlay {
@@ -14,8 +10,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* The dialog inside is `width: 100%`, so without padding here it ran edge
-       to edge on a phone with no dark margin to sit against. */
     padding: 16px;
     z-index: 999;
     animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
@@ -27,9 +21,6 @@
     border-radius: 1rem;
     width: 100%;
     max-width: 650px;
-    /* dvh rather than vh: on mobile browsers vh is measured against the
-       viewport with the URL bar hidden, so 90vh can exceed what is actually
-       on screen and the dialog's own scrolling never engages. */
     max-height: min(90dvh, 90vh);
     overflow-y: auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -55,9 +46,6 @@
     flex-direction: column;
   }
 
-  /* The labels had no styling at all, so they rendered at the browser default
-     16px - the same size as the values in the fields below them, which made
-     the form read as one undifferentiated column of large text. */
   .formGroup label {
     margin-bottom: 0.3rem;
     font-size: 0.85rem;
@@ -135,13 +123,6 @@
     background-color: #5a52e0;
   }
 
-  /* ------------------------------------------------------- mobile sizing --
-   * Nothing in this file was responsive: the 1.8rem title, 1rem inputs,
-   * 1.2rem gaps and 2rem padding were used unchanged on a 335px screen, so the
-   * dialog filled the viewport and only a few fields were visible at a time.
-   * Everything scales down together here rather than the dialog just being
-   * cropped. */
-
   @media (max-width: 560px) {
     .modalOverlay {
       padding: 12px;
@@ -181,8 +162,6 @@
     .imageInput {
       margin-top: 0.25rem;
       font-size: 0.8rem;
-      /* File inputs report a wide intrinsic width from their button plus the
-         filename, which pushed the dialog sideways. */
       max-width: 100%;
     }
 

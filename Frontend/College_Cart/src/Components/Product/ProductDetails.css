@@ -44,7 +44,6 @@
 
 .main-product-image {
     width: 70%;
-    /* height: 100%; */
     object-fit: contain;
     cursor: crosshair;
 }
@@ -178,8 +177,6 @@
 }
 
 .buy-box {
-    /* position: sticky; */
-    /* top: 0px; */
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 14px;
@@ -276,8 +273,6 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        /* Was `width: 50vh` with `margin-left: 60px`, which sized the container
-           from the viewport height and then shoved it right off the screen. */
         width: 100%;
         margin-left: 0;
     }

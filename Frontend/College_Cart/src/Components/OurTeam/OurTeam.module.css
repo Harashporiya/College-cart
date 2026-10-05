@@ -1,12 +1,4 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
-
-/* ==========================================================================
-   Our Team
-   ========================================================================== */
 
 .container {
   display: flex;
@@ -14,8 +6,6 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
 }
-
-/* ---------------------------------------------------------------- banner -- */
 
 .header {
   position: relative;
@@ -26,8 +16,6 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* Diagonal texture. Was a base64-encoded SVG data URI - the same pattern
-   expressed as a repeating gradient, which needs no decode step. */
 .header::before {
   content: '';
   position: absolute;
@@ -70,8 +58,6 @@
   opacity: 0.92;
   animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) 140ms both;
 }
-
-/* --------------------------------------------------------------- mission -- */
 
 .missionSection,
 .teamSection {
@@ -121,20 +107,13 @@
   text-align: center;
 }
 
-/* ------------------------------------------------------------------ team -- */
-
 .teamSection {
   text-align: center;
 }
 
 .teamGrid {
   display: grid;
-  /* Was a hard `repeat(4, 1fr)` combined with fixed 250px cards, so between
-     roughly 700px and 1000px four 250px cards could not fit their tracks and
-     overflowed - and the 500-768px media query that was meant to handle it was
-     an empty block. auto-fit sizes itself at every width. */
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  /* Only the hovered card grows; without this its whole row would stretch. */
   align-items: start;
   gap: 26px;
   margin-top: 32px;
@@ -152,10 +131,6 @@
   background: var(--cc-surface);
   border-radius: var(--cc-radius-lg);
   box-shadow: var(--cc-shadow);
-  /* The old card animated `height: 300px -> 560px` over 1.8s. Height is a
-     layout property, so every frame re-ran layout for the whole grid, and
-     1.8s is far too slow to feel like a response to a hover. The card now
-     sizes to its content and only the tasks panel expands. */
   transition: transform var(--cc-dur-slow) var(--cc-ease),
               box-shadow var(--cc-dur-slow) var(--cc-ease);
 }
@@ -174,9 +149,6 @@
   border: 4px solid rgba(118, 75, 162, 0.2);
   box-shadow: var(--cc-shadow-sm);
   background: var(--cc-surface);
-  /* Previously `opacity: 0` with `pointer-events: none`, revealed only on
-     hover - so the team photos were invisible until you happened to hover a
-     card, and unreachable entirely on touch devices. */
   transition: border-color var(--cc-dur-slow) var(--cc-ease),
               transform var(--cc-dur-slow) var(--cc-ease-spring);
 }
@@ -227,12 +199,6 @@
   transition: transform var(--cc-dur) var(--cc-ease);
 }
 
-/* --------------------------------------------------- expanding task list -- */
-
-/* grid-template-rows 0fr -> 1fr is animatable and, unlike a max-height guess,
-   expands to exactly the content height. The old rule paired a max-height
-   transition with a 0.6s delay and a 1.8s duration, so the list arrived well
-   after the pointer had usually moved on. */
 .tasksContainer {
   display: grid;
   grid-template-rows: 0fr;
@@ -250,7 +216,6 @@
   padding-top: 16px;
 }
 
-/* The animated row needs a child that can be clipped to zero height. */
 .tasksContainer > * {
   overflow: hidden;
   min-height: 0;
@@ -275,13 +240,6 @@
   line-height: 1.5;
   color: #555;
 }
-
-/* ----------------------------------------------------------- responsive -- */
-
-/* Replaces an empty `(min-width:500px) and (max-width:768px)` block and a
-   phone block that set `.container { width: 63vh }`, `.teamSection
-   { width: 63vh }` and `.teamGrid { max-width: 55vh }` - viewport height used
-   as a width, which is what pushed this page sideways on a phone. */
 
 @media (max-width: 768px) {
   .header {
@@ -317,8 +275,6 @@
     font-size: 1.05rem;
   }
 
-  /* Hover is not available on touch, so the contributions list is simply
-     always open at phone widths rather than being unreachable. */
   .tasksContainer {
     grid-template-rows: 1fr;
     opacity: 1;

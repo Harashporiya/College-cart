@@ -222,7 +222,6 @@
     background-color: #1a73e8;
     color: white;
     border-bottom-right-radius: 4px;
-    /* display: flex; */
 }
 
 .message-bubble.other {
@@ -337,9 +336,6 @@
     border-bottom-left-radius: 4px;
 }
 
-/* Was `min-width:500px`, which left 481px-499px matching neither this block
-   nor the 480px one below - the two panes stayed side by side in under 500px
-   of width. */
 @media screen and (min-width:481px) and (max-width: 768px) {
     .messages-container {
         flex-direction: column;
@@ -363,17 +359,10 @@
 
 @media (max-width: 480px) {
     .header{
-        /* Was `width: 59vh` - viewport height as a width. */
         width: 100%;
     }
     .messages-container {
         flex-direction: column;
-        /* `width: 100%` was here, on an element that also carries
-           `margin: 20px` from the base rule. With border-box sizing that makes
-           the box one full viewport wide *and then* pushes it 20px right, so
-           the page scrolled sideways by exactly the right margin. A block
-           element already fills its parent minus its margins, so the width
-           declaration only did harm. */
         height: 100%;
         margin: 10px;
         padding: 10px;
@@ -394,9 +383,6 @@
         width: 140px;
     }
 }
-/* Placeholder bubbles shown while a thread is being fetched for the first
-   time. Reuses the same bubble geometry as the real thread so the pane does
-   not jump when the messages land. */
 .thread-loading {
   display: flex;
   flex-direction: column;

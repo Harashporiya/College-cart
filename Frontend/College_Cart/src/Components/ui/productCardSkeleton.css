@@ -1,5 +1,3 @@
-/* Placeholder product card. Mirrors the real card's padding, radius and
-   border so the grid does not shift when the data arrives. */
 
 .pcs {
   display: flex;

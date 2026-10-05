@@ -1,8 +1,5 @@
 const Message = require("../Model/message");
 
-// A single thread is capped so one very long chat cannot turn into an unbounded
-// response. The newest messages are the ones worth having, so the query takes
-// them from the end and the page is flipped back into reading order.
 const THREAD_LIMIT = 500;
 
 exports.messagePost=async(req,res)=>{
@@ -22,11 +19,6 @@ exports.messagePost=async(req,res)=>{
 
 exports.getMessageRoomId=async(req,res)=>{
     try {
-        // Was an unbounded `Message.find({roomId})` returning full Mongoose
-        // documents. `.lean()` skips hydrating a model instance per message,
-        // the projection keeps the fields the client never reads off the wire,
-        // and the sort is now explicit instead of relying on insertion order.
-        // Backed by the { roomId, createdAt } index on the model.
         const messages = await Message.find({ roomId: req.params.roomId })
           .select("message senderId createdAt")
           .sort({ createdAt: -1 })
@@ -40,10 +32,6 @@ exports.getMessageRoomId=async(req,res)=>{
 
 exports.getAllMessage=async(req,res)=>{
     try {
-        // This returns messages across every conversation in the database. The
-        // app does not call it, but it was reachable without a session, so it
-        // was an open dump of every private chat; the route now requires
-        // authentication and the result is capped.
         const messages = await Message.find()
           .select("message senderId roomId createdAt")
           .sort({ createdAt: -1 })

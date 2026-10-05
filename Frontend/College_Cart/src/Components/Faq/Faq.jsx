@@ -39,11 +39,6 @@ const faqData = [
 const Faq = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  // This was written as `useState(() => { window.scrollTo(0,0) }, [])` - a
-  // useEffect body passed to useState, so it ran as a side effect during
-  // render rather than after commit. Scroll reset is handled globally by
-  // <ScrollToTop /> in App.jsx.
-
   const toggleFAQ = (index) => {
     setActiveIndex(prevIndex => (prevIndex === index ? null : index));
   };
@@ -59,8 +54,6 @@ const Faq = () => {
           className={`faq-item ${activeIndex === index ? 'active' : ''}`}
           key={faq.question}
         >
-          {/* A real button, so the accordion is reachable by keyboard and
-              announces its own state. It was a plain div with an onClick. */}
           <button
             type="button"
             className="question"
@@ -69,13 +62,8 @@ const Faq = () => {
             aria-controls={`faq-answer-${index}`}
           >
             {faq.question}
-            {/* One static caret rotated by CSS rather than swapping the ▲/▼
-                glyph, which could not animate. */}
             <span className="icon" aria-hidden="true">▼</span>
           </button>
-          {/* Kept mounted and collapsed to zero height so opening and closing
-              can transition. Previously it was unmounted outright, so the
-              panel appeared and vanished in a single frame. */}
           <div className="answer-wrap" id={`faq-answer-${index}`} role="region">
             <div className="answer">{faq.answer}</div>
           </div>

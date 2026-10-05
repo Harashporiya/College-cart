@@ -1,18 +1,6 @@
 import React from 'react';
 import './button.css';
 
-/**
- * "Explore" pill used in each category shelf header.
- *
- * Every class on this button was written as `class="..."` rather than
- * `className="..."`. React 18 ignores `class` outright (it only warns), so none
- * of the styling applied and this rendered as a bare browser button. It was
- * also `type="submit"`, which would submit any form it ever landed inside.
- *
- * The long Tailwind utility string it carried - a wipe-in ::before, a rotating
- * arrow, a colour swap on hover - is now plain CSS in button.css, which keeps
- * the effect readable and independent of Tailwind's arbitrary-value syntax.
- */
 const Button = () => (
   <button type="button" className="explore-btn">
     <span className="explore-btn__label">Explore</span>

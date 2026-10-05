@@ -26,13 +26,6 @@ const ProductCard = ({ product, handleAddToCart }) => {
   };
 
   return (
-    // The framer-motion wrappers here (whileHover on the card and a spring
-    // scale on the image) have been replaced by CSS transitions in
-    // ProductCard.css. Motion had to re-render and recompute a style object for
-    // every card on every pointer move; the CSS version runs on the compositor
-    // and costs nothing on a grid of dozens of cards.
-    // `cc-reveal` opts this card into the grid's scroll-reveal cascade
-    // (see useScrollReveal in Product.jsx).
     <article className="product-card cc-reveal">
       <div className="product-image-wrapper" onClick={handleNavigate} role="button" tabIndex={0}
         onKeyDown={(e) => {

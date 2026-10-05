@@ -11,14 +11,9 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
-    /* Was a fixed `width: 300px`. Inside the price panel there is only ~252px
-       of room on a 320px screen, so the button pushed the page sideways. */
     width: 100%;
 }
 
-/* These two were written as `.pay-button`, a class that appears nowhere in the
-   markup - the real class is `.pay-button-cart-Item` - so neither the hover
-   nor the disabled styling ever applied. */
 .pay-button-cart-Item:hover {
     background-color: #2980b9;
 }

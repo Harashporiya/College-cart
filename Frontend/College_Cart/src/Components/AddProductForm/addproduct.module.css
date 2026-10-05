@@ -1,6 +1,3 @@
-/* Merged from two separate `.form-wrapper` blocks: the second declared
-   `background-color: #f4f4f4`, which overrode the dark backdrop the first one
-   set, so the page flashed light grey before the photo arrived. */
 .form-wrapper {
   padding: 60px 20px;
   min-height: 100vh;
@@ -8,8 +5,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* The source was a 2.5 MB PNG of a photograph, re-encoded to a ~108 kB JPEG
-     with a WebP alternative. */
   background-color: #1b2733;
   background-image:
     linear-gradient(rgba(15, 17, 17, 0.55), rgba(15, 17, 17, 0.65)),
@@ -19,9 +14,6 @@
     );
   background-size: cover;
   background-position: center;
-  /* `background-attachment: fixed` was removed here: the browser cannot
-     composite a fixed background, so it repainted this full-page image on
-     every scroll frame while the user filled in the form. */
 }
 
 .pageHeading {

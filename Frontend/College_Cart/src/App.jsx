@@ -7,15 +7,10 @@ import PersistentAuth from './util/PersistentAuth'
 import ProtectedRoute from './util/ProtectedRoute'
 import ScrollToTop from './util/ScrollToTop'
 
-// Home and the two auth screens are the realistic entry points, so they stay in
-// the main bundle - lazily loading a landing page only adds a round trip.
 import Home from './Components/Home/Home'
 import Signin from './Components/Signin/Signin'
 import Signup from './Components/Signup/Signup'
 
-// Everything else is split out. Previously all 30-odd screens (checkout, chat,
-// profile, the exchange flows) were eagerly imported into a single 761 kB chunk
-// that every visitor paid for before the first paint.
 const ForgotPassword = lazy(() => import('./Components/ForgetPassword/Form'))
 const Reset = lazy(() => import('./Components/ResetPassword/Reset'))
 const Profile = lazy(() => import('./Components/Profile/Profile'))
@@ -49,8 +44,6 @@ const App = () => {
     <Provider store={Store}>
       <PersistentAuth>
         <BrowserRouter>
-          {/* React Router keeps the previous scroll offset across navigations,
-              which landed users mid-page on every route change. */}
           <ScrollToTop />
           <Suspense fallback={<RouteFallback />}>
             <Routes>

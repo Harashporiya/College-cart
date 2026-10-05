@@ -14,26 +14,15 @@ const UserDataProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [productId, setProductIdBy] = useState([]);
   const [exchangeProduct, setExchangeProduct] = useState([]);
-  // Exposed so listing sections can stop showing skeletons even when the
-  // response is empty or fails. They previously cleared their own local
-  // `loading` flag only inside `if (products.length > 0)`, so an empty catalogue
-  // or a failed request left placeholder cards shimmering forever.
   const [productsLoading, setProductsLoading] = useState(true);
 
-  // `getToken()` reads a cookie and localStorage on every call. Both effects
-  // below used to pass the *call* as their dependency - `[getToken()]` - so it
-  // re-ran on every render of the provider, which wraps the whole app.
   const token = getToken();
 
-  // Start the API container waking as early as possible, in parallel with the
-  // two fetches below rather than behind them.
   useEffect(() => {
     warmBackend();
   }, []);
 
   useEffect(() => {
-    // Aborted on unmount and on token change so a slow in-flight response
-    // cannot overwrite fresher state.
     const controller = new AbortController();
 
     const fetchProductData = async () => {
@@ -60,9 +49,6 @@ const UserDataProvider = ({ children }) => {
   }, [token]);
 
   useEffect(() => {
-    // This endpoint is authenticated. It used to fire regardless, so every
-    // logged-out visitor spent a request on a guaranteed 401 before the page
-    // could settle.
     if (!token) {
       setExchangeProduct([]);
       return;
@@ -90,9 +76,6 @@ const UserDataProvider = ({ children }) => {
 
   const clearSearch = useCallback(() => setSearchQuery(""), []);
 
-  // The provider sits above every route, so an unmemoised object literal here
-  // handed each consumer a new value on every render and re-rendered the whole
-  // tree - including all the product grids - on each keystroke in the search box.
   const value = useMemo(
     () => ({
       data, setData,

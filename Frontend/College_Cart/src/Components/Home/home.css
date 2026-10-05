@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Home page
-   Hero, the four action cards, then the category shelves.
-   ========================================================================== */
 
 .home-container {
   margin: 0;
@@ -15,15 +11,11 @@
   width: 100%;
 }
 
-/* ------------------------------------------------------------------ hero -- */
-
 .hero {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* svh tracks the *small* viewport, so mobile browser chrome collapsing does
-     not resize the hero mid-scroll and reflow the page under the user. */
   min-height: 100vh;
   min-height: 100svh;
   overflow: hidden;
@@ -37,8 +29,6 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  /* The gradient paints immediately, so the hero has a finished-looking ground
-     from the first frame while the photo is still in flight. */
   background-color: #1b2733;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
@@ -50,15 +40,11 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* Promotes the image to its own compositor layer. Combined with dropping
-     background-attachment: fixed, scrolling the hero no longer repaints it. */
   transform: translateZ(0);
   will-change: transform;
   animation: heroSettle 1.4s var(--cc-ease-entrance) both;
 }
 
-/* A slow settle from slightly over-scaled: the hero feels alive on arrival
-   without any scroll-linked work. */
 @keyframes heroSettle {
   from { transform: translateZ(0) scale(1.06); }
   to   { transform: translateZ(0) scale(1); }
@@ -115,7 +101,6 @@
   transition-duration: var(--cc-dur-fast);
 }
 
-/* Quiet nudge that there is more below the fold. */
 .hero-scroll-hint {
   position: absolute;
   bottom: 28px;
@@ -145,8 +130,6 @@
   70%, 100% { transform: translateY(16px); opacity: 0; }
 }
 
-/* --------------------------------------------------------- action cards -- */
-
 .cards-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -165,7 +148,6 @@
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
   box-shadow: var(--cc-shadow-sm);
-  /* Explicit properties, and only compositor-friendly ones animate. */
   transition: transform var(--cc-dur-slow) var(--cc-ease),
               box-shadow var(--cc-dur-slow) var(--cc-ease),
               border-color var(--cc-dur-slow) var(--cc-ease);
@@ -177,12 +159,6 @@
   border-color: var(--cc-border-strong);
 }
 
-/* The image moved above the heading and the body became its own flex column,
-   so the button sits flush at the bottom of every card no matter how long the
-   copy runs. Previously the cards ended at different heights. */
-/* The three blocks are ordered explicitly so the phone breakpoint can move the
-   heading to the top without touching the markup. Desktop keeps the original
-   image-first arrangement. */
 .card-image {
   order: 1;
   aspect-ratio: 16 / 10;
@@ -203,15 +179,12 @@
   flex-direction: column;
   gap: 8px;
   flex: 1;
-  /* Top padding is reduced because .card-title now supplies it. */
   padding: 8px 20px 20px;
 }
 
 .card-title {
   order: 2;
   margin: 0;
-  /* Matches .card-body's horizontal padding, since the heading sits outside
-     it now. */
   padding: 20px 20px 0;
   font-size: 1.2rem;
   font-weight: 700;
@@ -251,9 +224,6 @@
   transition-duration: var(--cc-dur-fast);
 }
 
-/* Remote Unsplash photos. They are decorative and below the fold, so they are
-   left as-is rather than bundled; the preconnect in index.html removes the
-   handshake cost. */
 .buy-image      { background-image: url('https://images.unsplash.com/photo-1556742044-3c52d6e88c62?ixlib=rb-4.0.3&w=640&q=70&auto=format'); }
 .sell-image     { background-image: url('https://images.unsplash.com/photo-1556745757-8d76bdb6984b?ixlib=rb-4.0.3&w=640&q=70&auto=format'); }
 .exchange-image { background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&w=640&q=70&auto=format'); }
@@ -262,14 +232,6 @@
 .home-categories {
   padding-bottom: 8px;
 }
-
-/* ----------------------------------------------------------- responsive -- */
-
-/* The old file set `.hero { width: 63vh }` and `.cards-section { width: 63vh }`
-   under max-width 480px - viewport *height* used as a width. On a 390x844
-   phone that computes to 532px on a 390px-wide screen, which is exactly what
-   produced the horizontal scrollbar and the content running off the right edge.
-   Fluid grids handle this without a fixed width at all. */
 
 @media (max-width: 768px) {
   .cards-section {
@@ -280,7 +242,6 @@
 
 @media (max-width: 520px) {
   .hero {
-    /* A full-height hero on a phone pushes everything else out of reach. */
     min-height: 78svh;
   }
 
@@ -294,9 +255,6 @@
     padding: 26px 14px;
   }
 
-  /* Phone layout: the card becomes a padded panel with the title first, the
-     photograph inset and rounded beneath it, then the copy and a full-width
-     button. Desktop keeps the full-bleed image above the title. */
   .card {
     padding: 14px;
     gap: 10px;
@@ -315,8 +273,6 @@
     border-radius: var(--cc-radius);
   }
 
-  /* The photo no longer bleeds to the card edge, so there is nothing to scale
-     into - the zoom would just clip against its own rounded corners. */
   .card:hover .card-image {
     transform: none;
   }

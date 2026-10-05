@@ -1,11 +1,5 @@
-/* exchange.module.css */
 
-/* Hero Section Styles */
 .heroSection {
-    /* This referenced assets/books-hero.jpg, which had never been committed -
-       the url() silently failed and the hero fell back to the flat gradient.
-       Pointed at the library photograph the project already ships rather than
-       adding a second copy of it under another name. */
     background:
         linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         image-set(
@@ -83,8 +77,6 @@
     font-size: 1.5rem;
   }
   
-  /* Merged from two consecutive `.container` blocks, the second of which
-     silently overrode the first's background-color. */
   .container {
     padding: 30px 20px;
     min-height: unset;
@@ -92,11 +84,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* The remote photo is layered over a gradient so the page has a finished
-       ground on the first frame instead of a flat block, and
-       `background-attachment: fixed` is gone - the browser cannot composite a
-       fixed background, so it repainted this full-page image on every scroll
-       frame while the user filled in the form. */
     background-color: #1b2733;
     background-image:
       linear-gradient(rgba(15, 17, 17, 0.55), rgba(15, 17, 17, 0.68)),
@@ -228,7 +215,7 @@
   
   
   .submitButton {
-    background: linear-gradient(135deg, #000000, #333333); /* Black gradient */
+    background: linear-gradient(135deg, #000000, #333333);
     color: white;
     width: 100%;
     height: 50px;
@@ -263,9 +250,6 @@
     box-shadow: none;
   }
 
-  /* The span that wraps the spinner and the "Processing..." label while the
-     request is in flight. It was never declared here, so the two sat flush
-     against each other with no gap and no shared baseline. */
   .buttonLoading {
     display: inline-flex;
     align-items: center;
@@ -302,7 +286,6 @@
     
     .formContainer {
       padding: 30px 20px;
-      /* Same unused-hero overlap as the phone block below. */
       margin-top: 0;
     }
     
@@ -317,8 +300,6 @@
   }
 
 
-/* Was `max-width: 450px`, leaving 451px-560px on the 768px block's larger
-   sizing. */
 @media (max-width: 560px) {
     .heroSection {
       padding: 50px 15px;
@@ -346,15 +327,10 @@
   
     .formContainer {
       padding: 18px 14px 20px;
-      /* `margin-top: -30px` pulled the card up to overlap a .heroSection that
-         this page does not actually render, so it butted straight against the
-         header with its top corners clipped. */
       margin-top: 0;
       border-radius: 12px;
     }
 
-    /* Lifting the card on hover is pointless on touch and leaves it stuck
-       raised after the tap. */
     .formContainer:hover {
       transform: none;
     }
@@ -371,8 +347,6 @@
       margin-bottom: 16px;
     }
 
-    /* These were 24px apart with 15px labels, which is what made the form
-       784px tall on a 700px screen. */
     .formGroup {
       margin-bottom: 14px;
     }

@@ -12,8 +12,6 @@ const DeleteProduct = ({ isOpen, onClose, productId, bookId, onDeleted }) => {
   
   useEffect(() => {
     const dialogElement = dialogRef.current;
-    // The ref is null on the very first commit and after unmount, and calling
-    // showModal on an already-open dialog throws.
     if (!dialogElement) return;
     if (isOpen) {
       if (!dialogElement.open) dialogElement.showModal();
@@ -53,8 +51,6 @@ const DeleteProduct = ({ isOpen, onClose, productId, bookId, onDeleted }) => {
       }
       
       toast.success("Product deleted successfully");
-      // The deleted card used to stay in the profile grid until the page was
-      // reloaded, because the list was only ever fetched on mount.
       onDeleted?.(productId || bookId);
       onClose();
     } catch (error) {

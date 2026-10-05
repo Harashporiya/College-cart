@@ -20,13 +20,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const handleLogout = () => {
     dispatch(logout());
-    // The provider still held the old profile after logout, so the header kept
-    // showing the signed-in avatar until a full page reload.
     setData('');
-    // Was `toast` from react-toastify, but no <ToastContainer /> is mounted
-    // anywhere in this tree - the confirmation simply never appeared. The rest
-    // of the app uses react-hot-toast, whose <Toaster /> the login screen
-    // renders via MessageHandler.
     toast.success("Logged out successfully");
     onClose?.();
     navigate("/login");
@@ -34,9 +28,6 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    // Lock the page behind the drawer, and restore whatever overflow the page
-    // had rather than hard-coding 'auto' (which broke pages relying on the
-    // default `visible`).
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
@@ -44,8 +35,6 @@ const Sidebar = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  // Close on Escape - the drawer could previously only be dismissed by
-  // clicking the backdrop or the X.
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (e) => {
@@ -60,8 +49,6 @@ const Sidebar = ({ isOpen, onClose }) => {
     navigate(path);
   };
 
-  // Anything account-scoped used to interpolate `data._id` unconditionally,
-  // sending signed-out visitors to /undefined/user-profile.
   const goAccount = (path) => () => {
     onClose?.();
     navigate(isAuthenticated ? path : '/login');
@@ -90,21 +77,12 @@ const Sidebar = ({ isOpen, onClose }) => {
       <div
         className={`${styles.sidebarOverlay} ${isOpen ? styles.overlayVisible : ''}`}
         onClick={onClose}
-        // Kept mounted so the backdrop can fade out. It was previously
-        // unmounted outright, which made it vanish instantly.
         aria-hidden="true"
       />
 
-      {/* The slide-in, the backdrop fade and the staggered menu items were all
-          framer-motion variants. They are CSS transitions now (see
-          sidebar.module.css): identical motion, and it keeps framer-motion out
-          of the initial bundle entirely, since the Sidebar ships with the
-          always-loaded Header. */}
       <aside
         className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}
         aria-hidden={!isOpen}
-        // Removes the whole drawer from tab order while closed; the links were
-        // previously still focusable off-screen.
         {...(!isOpen && { inert: '' })}
       >
         <div className={styles.sidebarHeader}>

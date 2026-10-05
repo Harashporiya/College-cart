@@ -1,10 +1,3 @@
-/* ==========================================================================
-   Reset password (set a new password)
-
-   As in form.module.css, this file opened with an unscoped `* { }` reset and
-   ended with a bare `button { }` rule. CSS Modules scopes class selectors only,
-   so both leaked app-wide. The reset lives once in index.css now.
-   ========================================================================== */
 
 .bodyContainer {
   min-height: 100vh;
@@ -96,8 +89,6 @@
   flex-direction: column;
 }
 
-/* ------------------------------------------------------- floating labels -- */
-
 .inputBox {
   position: relative;
   width: 100%;
@@ -165,8 +156,6 @@
   transition: background-color 5000s ease-in-out 0s !important;
 }
 
-/* --------------------------------------------------------------- button -- */
-
 .btnContainer {
   display: flex;
   margin-top: 26px;
@@ -208,11 +197,6 @@
   color: #d8d8d8;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
-/* The old mobile block required `orientation: portrait`, so it never applied
-   to a phone in landscape - which then rendered a card with a hard 500px
-   height inside a ~400px-tall viewport. */
 @media (max-width: 420px) {
   .form {
     padding: 32px 22px;

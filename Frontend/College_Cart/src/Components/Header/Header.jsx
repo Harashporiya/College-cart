@@ -51,10 +51,6 @@ const Header = ({ showSearch = true, showMiddleHeader = true, isProductsPage = f
     }
   }, [dispatch, isAuthenticated]);
 
-  // Two console.log effects used to run here - one on every cart-count change
-  // and one logging cart initialisation - which spammed the console on every
-  // page and every add-to-cart.
-
   return (
     <>
       <header className={style.header}>
@@ -102,8 +98,6 @@ const Header = ({ showSearch = true, showMiddleHeader = true, isProductsPage = f
           aria-label={`Cart, ${totalQuantity} items`}
         >
           <FaCartPlus className={style.cart} size={30} />
-          {/* The badge used to render even at zero, showing a red "0" bubble
-              on every page before anything was added. */}
           {totalQuantity > 0 && (
             <span className={style.productCountInCart}>{totalQuantity}</span>
           )}
@@ -112,9 +106,6 @@ const Header = ({ showSearch = true, showMiddleHeader = true, isProductsPage = f
         <div className={style.headerRight} ref={profileRef}>
           {isAuthenticated ? (
             <button type="button" className={style.profile} onClick={() => setShow(!show)} aria-expanded={show}>
-              {/* framer-motion's whileHover scale is now a CSS transform, which
-                  keeps the library out of the initial bundle - the Header ships
-                  on every route. */}
               <img
                 src={data.profileImage || AVATAR_FALLBACK}
                 alt=""

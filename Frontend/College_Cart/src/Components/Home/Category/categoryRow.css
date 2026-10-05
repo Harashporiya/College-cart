@@ -1,9 +1,3 @@
-/* ==========================================================================
-   Category shelf
-   One stylesheet for all five home-page category rows. Replaces electronic.css,
-   book.css and two empty files (clothing.css, sport.css) that left the Clothing
-   and Sports rows completely unstyled.
-   ========================================================================== */
 
 .cat-section {
   max-width: var(--cc-content-max);
@@ -12,8 +6,6 @@
   background-color: var(--cc-surface);
 }
 
-/* Hairline between consecutive shelves, so five stacked white sections read as
-   distinct rows instead of one undifferentiated slab. */
 .cat-section + .cat-section {
   border-top: 1px solid var(--cc-border);
 }
@@ -47,19 +39,12 @@
   color: var(--cc-teal);
 }
 
-/* --------------------------------------------------------------- the grid -- */
-
-/* auto-fill with a minimum track means the row reflows on its own at every
-   width. The old flex layout hard-coded `flex: 0 0 calc(20% - 16px)` and then
-   re-declared it at four separate breakpoints. */
 .cat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 18px;
   padding: 0 4px;
 }
-
-/* ------------------------------------------------------------------ card -- */
 
 .cat-card {
   display: flex;
@@ -69,9 +54,6 @@
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius);
   cursor: pointer;
-  /* Named properties rather than `transition: all`, which also animated
-     border-color, background and any inherited change, and forced the browser
-     to re-check every property on each frame. */
   transition: transform var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease),
               border-color var(--cc-dur) var(--cc-ease);
@@ -91,15 +73,12 @@
 
 .cat-card--skeleton {
   cursor: default;
-  /* Keep placeholders inert so a hover over loading content does not lift it. */
   pointer-events: none;
 }
 
 .cat-card__media {
   display: grid;
   place-items: center;
-  /* A fixed ratio reserves the space before the image arrives, so the row does
-     not jump as each one loads. */
   aspect-ratio: 1 / 1;
   width: 100%;
   margin-bottom: 12px;
@@ -123,8 +102,6 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  /* Pushes the price to the bottom so it lines up across cards whose titles
-     wrap to different numbers of lines. */
   flex: 1;
 }
 
@@ -134,8 +111,6 @@
   font-weight: 500;
   line-height: 1.4;
   color: var(--cc-text);
-  /* Clamp to two lines. The old rule set a bare `height: 40px` with
-     `overflow: hidden`, which sliced the third line in half mid-glyph. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -155,21 +130,17 @@
   vertical-align: 2px;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
 @media (max-width: 640px) {
   .cat-section {
     padding: 22px 12px 26px;
   }
 
   .cat-grid {
-    /* Two comfortable columns on a phone rather than four cramped ones. */
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
   }
 
   .cat-header {
-    /* The heading and the Explore button no longer fit side by side. */
     flex-wrap: wrap;
     gap: 10px;
   }

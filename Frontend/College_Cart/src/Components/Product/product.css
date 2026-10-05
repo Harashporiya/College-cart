@@ -1,6 +1,3 @@
-/* ==========================================================================
-   All-products page shell
-   ========================================================================== */
 
 .stickyHeader {
   position: sticky;
@@ -16,10 +13,6 @@
   padding: 28px 20px 56px;
 }
 
-/* Replaces an inline `display:flex; flex-wrap:wrap; gap:40px;
-   justify-content:center` on the container, which centred the last row and
-   left ragged gaps whenever the item count was not a multiple of the column
-   count. A grid keeps every card on the same column rails. */
 .productGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -50,17 +43,11 @@
   }
 
   .productGrid {
-    /* `auto-fill, minmax(160px, 1fr)` cannot fit two tracks on a 335px phone:
-       2 x 160 + 14 gap = 334px against 311px of available width, so it
-       silently collapsed to a single 311px-wide, 525px-tall card per row. Two
-       explicit columns always fit, and the 0 floor stops a long product name
-       from widening a track. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 }
 
-/* Very narrow phones: one column is genuinely better than two 130px cards. */
 @media (max-width: 330px) {
   .productGrid {
     grid-template-columns: minmax(0, 1fr);

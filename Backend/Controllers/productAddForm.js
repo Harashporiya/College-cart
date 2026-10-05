@@ -9,13 +9,7 @@ const { deleteProductFromPinecone } = require("../Config/pineconeSync");
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        // console.log("Received file in multer:", file);
-        // const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        // if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
-        // } else {
-        //     cb(new Error('Invalid file type'), false);
-        // }
     },
      limits: { fileSize: 5 * 1024 * 1024 } 
 })
@@ -25,8 +19,6 @@ exports.productAddForm = upload.single('image');
 exports.createProduct = async (req, res) => {
     try {
 
-     
-        // console.log("file created",req.body)
 
         const { cloudinaryPublicId,name, brand, category,quantity, selectHostel, hostleName, roomNumber, dayScholarContectNumber, prevAmount, newAmount, description } = req.body;
 
@@ -57,7 +49,6 @@ exports.createProduct = async (req, res) => {
         }
 
 
-        // const image = req.file ? `/assets/${req.file.filename}` : null;
         if (!req.file) {
             return res.status(400).json({ message: "Product image is required" });
         }
@@ -128,17 +119,11 @@ exports.createProduct = async (req, res) => {
 
 exports.getAllProduct = async (req, res) => {
     try {
-        // console.log(req.user._id)
         const products = await ProductAdd.find().populate('userId','name profileImage');
         const findProduct = products.filter(user=>
             user.userId._id.toString() !== req.user._id.toString()
         )
-        // console.log("userId",findProductUserId)
-        //  if(!findProductUserId){ 
             return res.status(200).json({success: true, count: findProduct.length, products:findProduct });
-        //  }
-        // const products = await ProductAdd.find().populate('userId','name');
-        // return res.status(200).json({success: true, count: products.length, products });
     } catch (error) {
         console.error("Get all products error:", error);
         return res.status(500).json({success:false, message: "Error during product fetch",error:error.message });
@@ -149,17 +134,10 @@ exports.getAllProduct = async (req, res) => {
 exports.getAllProfileProductUserCreate = async (req,res)=>{
     const {id} = req.params
     try {
-        // The mismatch case used to fall through the `if` below without sending
-        // anything at all, so the request hung until the client gave up rather
-        // than failing fast.
         if(!id || id !== req.user._id.toString()){
             return res.status(403).json({ success: false, message: "Unauthorized access" });
         }
 
-        // Was `ProductAdd.find()` - every product in the database, each one
-        // hydrated into a Mongoose document and populated - followed by a JS
-        // filter down to this user's own items. Now an indexed query for
-        // exactly those items.
         const products = await ProductAdd.find({ userId: req.user._id })
             .populate('userId','name')
             .sort({ createdAt: -1 })
@@ -308,10 +286,6 @@ exports.updateProduct = async (req, res) => {
             return res.status(404).json({success:false, message: "Product not found" });
         }
 
-        // There was no ownership check here, and the update payload wrote
-        // `userId: req.user._id` unconditionally - so any signed-in user could
-        // edit any listing in the marketplace and become its owner in the
-        // process. The owner is now verified and never reassigned.
         if (String(product.userId) !== String(req.user._id)) {
             return res.status(403).json({ success: false, message: "You can only update your own products" });
         }
@@ -328,10 +302,6 @@ exports.updateProduct = async (req, res) => {
         const set = { name, brand, category, quantity, selectHostel, description, prevAmount, newAmount };
         const unset = {};
 
-        // The two student types own different contact fields. The previous
-        // version built a separate update object per branch and simply left the
-        // other branch's fields in place, so a listing switched from Hostler to
-        // Day_Scholar kept its old hostel and room number on the document.
         if (selectHostel === "Hostler") {
             set.hostleName = hostleName;
             set.roomNumber = roomNumber;
@@ -341,9 +311,6 @@ exports.updateProduct = async (req, res) => {
             unset.hostleName = "";
             unset.roomNumber = "";
         } else {
-            // Neither branch matched, which used to mean the handler returned
-            // nothing at all: the client waited on a response that was never
-            // sent instead of being told what was wrong.
             return res.status(400).json({
                 success: false,
                 message: "Student type must be either Hostler or Day_Scholar"
@@ -356,13 +323,6 @@ exports.updateProduct = async (req, res) => {
                 return res.status(400).json({ success:false, message: "Image upload failed" });
             }
 
-            // The new URL goes into the update payload. It used to be assigned
-            // onto `req.body` *after* req.body had already been destructured
-            // into consts, and `image` was not among the fields written to the
-            // document anyway - so a replacement image was uploaded, the old
-            // asset was deleted from Cloudinary, and the product kept pointing
-            // at the file that had just been removed. Updating a product with a
-            // new photo left it with a broken image.
             set.image = cloudinaryResult.url;
             set.cloudinaryPublicId = cloudinaryResult.public_id;
 

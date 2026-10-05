@@ -43,7 +43,6 @@ const RemoveCartItem = ({ isOpen, onClose, cartItemId, setCartItem }) => {
           console.error(error);
       }
     };
-    // console.log(cartItem.length)
      
     const handleDeleteProduct = async () => {
         try {
@@ -91,7 +90,6 @@ const RemoveCartItem = ({ isOpen, onClose, cartItemId, setCartItem }) => {
                     </motion.div>
                 )}
                 </AnimatePresence>
-            {/* </Animation> */}
             </dialog>
             <Toaster />
         </>

@@ -445,15 +445,7 @@ const ProductDetails = () => {
                                     `${product?.product.hostleName} Hostel - Room ${product?.product.roomNumber}` :
                                     'Day Scholar'}
                             </div>
-                            {/* <button className="buy-now-button"> */}
                                 Buy Now <Checkout product={product}/>
-                            {/* </button> */}
-                            {/* <button 
-                                className="add-to-cart-button" 
-                                onClick={(e) => handleAddToCart(e, product)}
-                            >
-                                Add to Cart
-                            </button> */}
                         </div>
                        
                         <button className="messageButton" onClick={toggleMessageModal}>

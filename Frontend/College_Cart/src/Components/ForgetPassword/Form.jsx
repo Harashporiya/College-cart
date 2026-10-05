@@ -15,12 +15,8 @@ const ForgotPassword = () => {
   
   const { status, isLoading, message, error: reduxError } = useSelector((state) => state.app);
   
-  // Effect to handle Redux state changes
   useEffect(() => {
     if (status === 'success' && message && message.includes('verified')) {
-      // Only navigate if OTP verification was successful
-      // Was a 2000 ms wait. Shortened to just long enough for the success
-      // toast to register before the screen changes.
       const timer = setTimeout(() => {
         navigate("/newPassword");
       }, 700);

@@ -4,15 +4,12 @@ import axios from 'axios';
 import toast,{Toaster} from "react-hot-toast"
 
 const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
-  // console.log(bookData.userId._id,bookData.userId.name,userData._id, userData.name)
   const [selectOption, setSelectOption] = useState('');
   const [hostleName, setHostleName] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
   const [dayScholarContactNumber, setDayScholarContactNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const backend_url = import.meta.env.VITE_BACKEND_API_URL;
-
-  // console.log(bookData)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,11 +51,8 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
 
       const response = await axios.post(`${backend_url}/${bookData._id}/order-create-book-exchange`, payload);
 
-      // if (response.data) { 
         toast.success('Exchange order placed successfully!');
         onClose();
-      //   return;
-      // }
      
     } catch (error) {
       console.error('Error submitting exchange order:', error);
@@ -93,7 +87,6 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
               className="shadow border rounded w-full py-2 px-3 text-gray-700"
               value={selectOption}
               onChange={(e) => setSelectOption(e.target.value)}
-              // required
             >
               <option value="">Select Option</option>
               <option value="Hostler">Hostler</option>
@@ -112,7 +105,6 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
                   name="hostleName" 
                   value={hostleName}
                   onChange={(e) => setHostleName(e.target.value)}
-                  // required
                 >
                   <option value="">Select Hostel</option>
                   <option value="Boss">Boss</option>
@@ -134,7 +126,6 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
                   placeholder="Enter your room number" 
                   value={roomNumber}
                   onChange={(e) => setRoomNumber(e.target.value)}
-                  // required
                 />
               </div>
             </>
@@ -152,7 +143,6 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
                 value={dayScholarContactNumber}
                 onChange={(e) => setDayScholarContactNumber(e.target.value)}
                
-                // required
               />
             </div>
           )}

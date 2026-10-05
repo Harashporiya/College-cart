@@ -19,8 +19,6 @@ const Signup = () => {
 
   const isLoading = status === 'loading';
 
-  // Signing up hits the same cold API container as signing in; start it warming
-  // while the form is being filled in.
   useEffect(() => {
     warmBackend();
   }, []);
@@ -28,8 +26,6 @@ const Signup = () => {
   useEffect(() => {
     if (status === 'success') {
       setVerificationShowInput(true);
-      // Clear the credentials once the account exists, but keep `email` - the
-      // verification dialog shows it and the verify call needs it.
       setName('');
       setUserName('');
       setPassword('');
@@ -50,8 +46,6 @@ const Signup = () => {
 
   useEffect(() => {
     if (status === 'success' && user && token) {
-      // The old 2000 ms setTimeout here made a completed signup sit on the form
-      // for two seconds before moving on.
       navigate('/dashboard', { replace: true });
     }
   }, [status, user, token, navigate]);
@@ -131,9 +125,6 @@ const Signup = () => {
                 </div>
 
                 <div className={styles.btnContainer}>
-                  {/* Was `disabled={isLoading && !name}`, which only ever
-                      disabled the button in a state the form could not reach,
-                      so the real in-flight request stayed clickable. */}
                   <button type="submit" disabled={isLoading} aria-busy={isLoading}>
                     {isLoading && <span className="cc-spinner" />}
                     {isLoading ? 'Verifying...' : 'Account Verification'}

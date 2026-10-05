@@ -63,7 +63,6 @@ const Checkout = ({ cartItem }) => {
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature
                         });
-                        //   console.log(verifyResponse.data.success)
                         if (verifyResponse.data.success) {
                             toast.success('Payment successful! Your order has been placed.');
                         } else {

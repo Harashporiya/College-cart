@@ -1,13 +1,7 @@
-/* ==========================================================================
-   Product card (all-products grid)
-   ========================================================================== */
 
 .product-card {
   display: flex;
   flex-direction: column;
-  /* Was a fixed `width: 330px` with `margin-right: 20px`, so the card could not
-     take part in a responsive grid and the trailing margin knocked the last
-     column out of alignment. The grid owns sizing and spacing now. */
   width: 100%;
   height: 100%;
   padding: 15px;
@@ -15,13 +9,11 @@
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
   box-shadow: var(--cc-shadow-sm);
-  /* Named properties rather than `transition: all 0.3s ease`. */
   transition: transform var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease),
               border-color var(--cc-dur) var(--cc-ease);
 }
 
-/* :focus-within keeps the lift while a keyboard user is inside the card. */
 .product-card:hover,
 .product-card:focus-within {
   transform: translateY(-5px);
@@ -33,7 +25,6 @@
   position: relative;
   display: grid;
   place-items: center;
-  /* A reserved square stops the grid reflowing as each photo decodes. */
   aspect-ratio: 1 / 1;
   width: 100%;
   margin-bottom: 12px;
@@ -71,8 +62,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  /* Lets the card body absorb the extra height so the button stays flush at
-     the bottom of every card in a row. */
   flex: 1;
   padding: 4px 0 12px;
 }
@@ -84,8 +73,6 @@
   line-height: 1.4;
   color: var(--cc-text);
   cursor: pointer;
-  /* Was a bare `height: 40px; overflow: hidden`, which sliced the third line of
-     a long title in half. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -177,8 +164,6 @@
   font-size: 0.75rem;
   line-height: 1.5;
   color: var(--cc-text-muted);
-  /* Clamped instead of the old fixed `height: 50px`, which left a half-line of
-     clipped text at the bottom of the box. */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -233,10 +218,6 @@
   box-shadow: none;
 }
 
-/* Two cards per row on a phone means roughly 150px each, so the type and
-   spacing below are sized for that rather than for a full-width card.
-   (The old rule here also pushed the grid over with `margin-left: 140px`,
-   which shoved the whole listing off the right edge of the screen.) */
 @media (max-width: 640px) {
   .product-card {
     padding: 8px;
@@ -267,8 +248,6 @@
     font-size: 0.7rem;
   }
 
-  /* The blurb is the first thing to go at this width - the name, price and
-     the add-to-cart button are what the card is for. */
   .product-description {
     display: none;
   }

@@ -12,7 +12,6 @@ const cartProductSchema = new mongoose.Schema({
     prevPrice: Number,
     totalPrice: Number,
     image: String,
-    // description: String,
     productQuantity: Number,
     quantity: Number,
    userId:{

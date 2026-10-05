@@ -17,24 +17,6 @@ const CardSkeleton = () => (
   </div>
 );
 
-/**
- * One horizontal "shelf" of products for a single category.
- *
- * Replaces five near-identical components (Electronics, Books, Clothing,
- * Sports, Grocery) that had been copy-pasted along with their own stylesheets,
- * so every layout fix had to be made five times - and two of those stylesheets
- * (clothing.css, sport.css) were empty files, leaving those rows unstyled.
- *
- * Behaviour changes worth noting:
- *  - The whole section used to carry an onClick that navigated to the category
- *    listing, so clicking a product card could never open that product.
- *    Cards now open their own detail page; only the heading and Explore button
- *    go to the listing.
- *  - Placeholders are driven by the provider's shared `productsLoading` flag.
- *    Each copy previously cleared a local flag only inside
- *    `if (products.length > 0)`, so an empty or failed response left the
- *    skeletons shimmering indefinitely.
- */
 const CategoryRow = ({ title, category, exploreTo, limit = PLACEHOLDER_COUNT }) => {
   const navigate = useNavigate();
   const { products, productsLoading } = useContext(UserDataContext);
@@ -46,12 +28,9 @@ const CategoryRow = ({ title, category, exploreTo, limit = PLACEHOLDER_COUNT }) 
   );
 
   const openProduct = (productId) => {
-    // Product details are behind auth, same gate the main product grid uses.
     navigate(getToken() ? `/${productId}/product` : '/login');
   };
 
-  // Nothing loading and nothing to show: drop the section rather than render an
-  // empty shelf with a heading over blank space.
   if (!productsLoading && items.length === 0) return null;
 
   return (
@@ -89,9 +68,6 @@ const CategoryRow = ({ title, category, exploreTo, limit = PLACEHOLDER_COUNT }) 
                     src={product.image}
                     alt={product.name}
                     className="cat-card__image"
-                    /* Five of these shelves stack down the home page, so all
-                       ~30 images used to be requested during the initial load
-                       even though only the first row is ever visible. */
                     loading="lazy"
                     decoding="async"
                   />

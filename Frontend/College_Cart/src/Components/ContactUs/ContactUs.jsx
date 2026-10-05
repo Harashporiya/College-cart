@@ -155,9 +155,6 @@ function ContactUs() {
           </form>
         </div>
       </div>
-      {/* Every other informational page (About Us, Our Team, FAQ) renders the
-          footer; this one was the only one without it, so the site navigation
-          simply disappeared at the bottom of the contact page. */}
       <Footer />
     </>
   );

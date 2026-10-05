@@ -7,8 +7,6 @@
     );
   background-size: cover;
   background-position: center;
-  /* Dropped `background-attachment: fixed`, which forced a full-viewport
-     repaint on every scroll frame of the cart page. */
   background-color: #1b2733;
 }
 
@@ -22,12 +20,6 @@
     margin-right: auto;
     max-width: 75rem;
     display: flex;
-    /* The cart list and the price panel used to be a rigid two-column flex row
-       with a hardcoded 500px panel, and the stacking only kicked in at 560px -
-       so between 561px and roughly 740px the row was wider than the screen
-       (130px of overflow at 561px). Wrapping lets the panel drop below on its
-       own as soon as the two columns stop fitting, at whatever width that is,
-       rather than at a guessed breakpoint. */
     flex-wrap: wrap;
     align-items: flex-start;
     gap: 2.5rem;
@@ -37,7 +29,6 @@
     background-color: #ffffff;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     margin-top: 2.5rem;
-    /* Was `width: 100%`, which in a flex row left no room for the panel. */
     flex: 1 1 380px;
     min-width: 0;
     margin-bottom: 30px;
@@ -97,9 +88,6 @@
     text-align: center;
   }
 
-  /* `.button`, `.icon` and `.cartFooter` are all applied by CartProduct.jsx but
-     were never declared here, so the stepper icons rendered at lucide's
-     default 24px inside 30px circles with no room to spare. */
   .button {
     padding: 0;
     flex: none;
@@ -169,8 +157,6 @@
     color: #1d4ed8;
 }
   
-/* Was gated on `orientation: portrait`, so a phone in landscape fell through
-   to the desktop layout. `width: 63vh` was viewport height used as a width. */
 @media (max-width: 560px) {
 
   .header {
@@ -183,11 +169,6 @@
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    /* Was `width: 100%` together with `margin: 0 10px`, which under border-box
-       sizing makes the box a full viewport wide and then shifts it 10px right -
-       the page scrolled sideways by exactly that margin. Padding does the
-       insetting instead. `max-width: fit-content` also fought the full-width
-       intent, shrinking the column to its content. */
     max-width: none;
     width: 100%;
     margin: 0 0 20px;
@@ -195,10 +176,6 @@
     box-sizing: border-box;
   }
 
-  /* The base grid is `20% 80%`. On a 335px screen that first track is 60px
-     wide while .imageContainer is a hardcoded 140px, so the thumbnail and its
-     stepper spilled straight across the second column and the product name
-     rendered on top of the image. Fixed 84px media column instead. */
   .cartItem {
     grid-template-columns: 84px minmax(0, 1fr);
     gap: 12px;
@@ -216,7 +193,6 @@
     width: 84px;
   }
 
-  /* Trimmed to fit inside the 84px media column: 26 + 4 + 24 + 4 + 26 = 84. */
   .quantityControls {
     margin-top: 0.6rem;
     gap: 4px;
@@ -263,9 +239,6 @@
     font-size: 1rem;
   }
 
-  /* This block used to set `gap: 0` with `margin-left: auto`, so the two
-     labels ran together as "SAVE FOR LATERREMOVE" and were pushed under the
-     stepper. */
   .actionButtons {
     margin: 0.7rem 0 0;
     padding: 0;

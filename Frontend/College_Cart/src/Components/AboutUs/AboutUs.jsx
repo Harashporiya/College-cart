@@ -16,7 +16,6 @@ import useScrollReveal from '../../util/useScrollReveal';
 const AboutUs = () => {
     const navigate = useNavigate()
     const {data } = useContext(UserDataContext);
-    // Scroll reset is handled globally by <ScrollToTop /> in App.jsx now.
     const revealRef = useScrollReveal();
 
 
@@ -41,9 +40,6 @@ const AboutUs = () => {
               Empowering students through a smarter, safer campus marketplace that saves money and builds community.
             </p>
           </div>
-          {/* Above the fold, so it is fetched at high priority rather than
-              being queued behind the six decorative feature icons below.
-              width/height reserve its box and stop the hero reflowing. */}
           <img
             src="https://images.pexels.com/photos/5428770/pexels-photo-5428770.jpeg?auto=compress&cs=tinysrgb&w=900"
             alt="Students using College Cart"

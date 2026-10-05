@@ -15,11 +15,6 @@ const PRODUCT_CATEGORIES = [
 ];
 
 const UpdateProduct = ({ isOpen, onClose, productData, onUpdated }) => {
-  // The `if (!isOpen) return null` guard used to sit here, above the hooks
-  // below. That changed the hook count from zero to four the moment the
-  // modal opened, which is exactly the case React rejects with "Rendered
-  // more hooks than during the previous render". The guard now runs after
-  // every hook has been called, just before the markup is returned.
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -106,16 +101,11 @@ const UpdateProduct = ({ isOpen, onClose, productData, onUpdated }) => {
 
       const response = await axios.put(`${backend_url}/${productData._id}/product-update`, formDataToSend, {
         headers: {
-          // Deliberately not setting Content-Type: the browser has to add the
-          // multipart boundary itself, and a hardcoded header omits it.
           'Authorization': `Bearer ${token}`
         }
       });
 
       toast.success(response.data.message);
-      // Hand the saved document back so the profile grid can show the new
-      // values without the user reloading the page. Setting quantity to zero
-      // deletes the listing, in which case there is nothing to merge.
       onUpdated?.(response.data.deleted ? null : response.data.updateProduct);
       setSelectedImage(null);
       onClose();

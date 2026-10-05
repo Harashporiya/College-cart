@@ -3,7 +3,6 @@ import styles from "./ProductPriceDetails.module.css";
 import Checkout from "./Checkout";
 
 const ProductPriceDetails = ({ cartItem }) => {
-  // console.log(cartItem)
   const calculateTotals = () => {
     return cartItem.reduce(
       (acc, item) => ({
@@ -52,9 +51,6 @@ const ProductPriceDetails = ({ cartItem }) => {
         )}
       </div>
 
-      {/* Checkout renders its own <button>. Wrapping it in another one made
-          invalid nested-button markup (React logged a validateDOMNesting
-          error), and the outer element had no handler or styling of its own. */}
       <Checkout cartItem={cartItem} />
     </div>
   );

@@ -1,11 +1,7 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      // `animate-fadeIn` and `animate-slideUp` are used in the chatbot and a
-      // few modals, but `theme.extend` was empty - so Tailwind generated no
-      // such utilities and those elements appeared with no animation at all.
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },

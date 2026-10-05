@@ -29,9 +29,6 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                 const res = await axios.get(`${backend_url}/allrequest`);
                 setAllRequests(res.data.allRequest);
                 console.log(res.data.allRequest)
-                // const readafterDelete = res.data.allRequest.filter(
-                //     ()=>
-                // )
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
@@ -71,7 +68,6 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                 }
             };
             const response = await axios.post(`${backend_url}/${selectedRequest._id}/request-handle`, payload);
-           // console.log(response.data);//
             
             toast.success("Request is approved");
             closeConfirmationModal();
@@ -99,7 +95,6 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                 }
             };
             const response = await axios.post(`${backend_url}/${selectedRequest._id}/request-handle`, payload);
-        //    console.log(response.data);
             toast.success("Request is cancelled");
         await handleCancelRequestBookDelete(selectedRequest._id);
             closeConfirmationModal();
@@ -121,15 +116,12 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
         console.log(requestId)
         try {
            const res = await axios.delete(`${backend_url}/${requestId}/deleteOrder`);
-        //    console.log(res.data)
         } catch (error) {
            console.error("Error:", error)
         }
        }
 
-    //  console.log(allRequests)
     const getRequestStatus = (requestId,buyUserId) => {
-    //    console.log("he",requestId, buyUserId)
         const foundRequest = allRequests.find(req => req.bookId === requestId && req.approvedBookForUser.userId === buyUserId);
        console.log("found",foundRequest)
         return foundRequest?.approvedStatus || "Pending";
@@ -137,7 +129,6 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
     
     const renderStatusBadge = (requestId,buyUserId) => {
         const status = getRequestStatus(requestId,buyUserId);
-        //console.log(status)
         switch (status) {
             case "Approve":
                 return (

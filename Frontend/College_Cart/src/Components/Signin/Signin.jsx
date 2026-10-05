@@ -13,13 +13,8 @@ const Signin = () => {
   const navigate = useNavigate();
   const { status, user, token, error } = useSelector((state) => state.app);
 
-  // Derived from the store rather than mirrored in local state. The old local
-  // `isLoading` flag was set on submit but only cleared on failure, so a second
-  // attempt after a success left the button stuck on "Signing In...".
   const isLoading = status === 'loading';
 
-  // Start the API container spinning up while the user is still typing, so the
-  // cold-start delay does not land on the submit itself.
   useEffect(() => {
     warmBackend();
   }, []);
@@ -32,8 +27,6 @@ const Signin = () => {
 
   useEffect(() => {
     if (status === 'success' && user && token) {
-      // Previously wrapped in a 2000 ms setTimeout, which added two seconds of
-      // dead waiting to every successful login on top of the network round trip.
       navigate('/dashboard', { replace: true });
     }
   }, [status, user, token, navigate]);
@@ -87,8 +80,6 @@ const Signin = () => {
                   </button>
                 </div>
 
-                {/* The failure message used to appear only as a toast, so a
-                    mistyped password left the form itself looking unchanged. */}
                 {status === 'failed' && error && (
                   <p className={styles.formError} role="alert">{error}</p>
                 )}

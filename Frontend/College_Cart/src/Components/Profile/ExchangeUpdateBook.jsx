@@ -7,11 +7,6 @@ import styles from './updateProduct.module.css';
 const backend_url = import.meta.env.VITE_BACKEND_API_URL;
 
 const ExchangeBookUpdate = ({ isOpen, onClose, productData, onUpdated }) => {
-  // The `if (!isOpen) return null` guard used to sit here, above the hooks
-  // below. That changed the hook count from zero to four the moment the
-  // modal opened, which is exactly the case React rejects with "Rendered
-  // more hooks than during the previous render". The guard now runs after
-  // every hook has been called, just before the markup is returned.
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -80,15 +75,12 @@ const ExchangeBookUpdate = ({ isOpen, onClose, productData, onUpdated }) => {
         formDataToSend,
         {
           headers: {
-            // The browser sets Content-Type with the multipart boundary; a
-            // hardcoded value leaves the boundary off.
             'Authorization': `Bearer ${token}`
           }
         }
       );
 
       toast.success(response.data.message);
-      // Lets the profile grid pick up the edit without a page reload.
       onUpdated?.(response.data.updateBook);
       setSelectedImage(null);
       onClose();

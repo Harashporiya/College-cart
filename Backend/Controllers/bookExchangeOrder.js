@@ -9,7 +9,6 @@ exports.createBookExchangeOrder=async(req,res)=>{
     try {
 
        const createProductId = await exchange.findById({_id:id})
-    //    console.log(createProductId._id);   
    
         if(createProductId){
             if (selectOption === "Hostler" && (!hostleName || !roomNumber)) {
@@ -65,10 +64,8 @@ exports.getAllExchangeBookOrder = async(req,res)=>{
 
 exports.deleteExchangeBookOrderById=async (req,res) => {
     const {id} = req.params;
-    // console.log(id)
     try {
         const orderDelete = await bookExchangeOrder.findById(id);
-        // console.log(orderDelete)
         if(!orderDelete){
             return res.status(404).json({message:"Order not found"})
         }

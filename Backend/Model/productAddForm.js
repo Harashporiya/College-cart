@@ -2,12 +2,9 @@ const mongoose = require("mongoose")
 
 const PRODUCT_CATEGORIES = [
     "Electronics",
-    // "Furniture",
     "Clothing",
     "Books",
-    // "Stationary",
     "Sports Equipment",
-    // "Miscellaneous",
     "Grocery",
 ];
 
@@ -86,8 +83,6 @@ const productAddFormSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
-// The profile page lists 'my products'. That was done by loading every product
-// in the database and filtering in JS; it is now a query on this field.
 productAddFormSchema.index({ userId: 1, createdAt: -1 });
 
 productAddFormSchema.pre('save', function(next){

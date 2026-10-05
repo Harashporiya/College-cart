@@ -1,15 +1,4 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
-
-/* ==========================================================================
-   Sign up
-   Shares the sign-in card language: form panel, photo panel, rotating glow.
-   The former `* { }` block at the top of this file was unscoped by CSS Modules
-   and leaked a global reset; that now lives once in index.css.
-   ========================================================================== */
 
 .bodyContainer {
   min-height: 100vh;
@@ -27,8 +16,6 @@
   display: flex;
   width: 100%;
   max-width: 1200px;
-  /* Replaces a hard `height: 820px`, which overflowed shorter laptop screens
-     and pushed the submit button below the fold. */
   min-height: 700px;
   max-height: calc(100dvh - 48px);
   border-radius: var(--cc-radius-lg);
@@ -37,9 +24,6 @@
   animation: cardIn var(--cc-dur-slower) var(--cc-ease-entrance) both;
 }
 
-/* Single rotating conic sweep, showing through the 5px inset around the panels
-   as an animated border. Was two stacked pseudo-elements repainting the same
-   area twice per cycle for the same visual result. */
 .container::before {
   content: '';
   position: absolute;
@@ -121,8 +105,6 @@
   color: #a9a9ad;
 }
 
-/* ------------------------------------------------------- floating labels -- */
-
 .inputBox {
   position: relative;
   width: 100%;
@@ -190,8 +172,6 @@
   box-shadow: 0 0 0 1000px var(--cc-yellow-deep) inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
-
-/* --------------------------------------------------------------- actions -- */
 
 .btnContainer {
   margin-top: 30px;
@@ -268,8 +248,6 @@
   color: #ffe14d;
 }
 
-/* --------------------------------------------------- verification dialog -- */
-
 .verificationOverlay {
   position: fixed;
   inset: 0;
@@ -278,16 +256,11 @@
   place-items: center;
   padding: 20px;
   background-color: rgba(10, 12, 16, 0.72);
-  /* Pushes the page behind the modal out of focus, which separates the two
-     layers far better than a flat scrim alone. */
   backdrop-filter: blur(4px);
   animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
 }
 
 .verificationDialog {
-  /* Was `position: fixed` with a translate(-50%, -50%) and a hard 550x400px
-     box, so it overflowed small screens and clipped the resend link. The
-     overlay is now a centring grid and the dialog sizes to its content. */
   position: relative;
   width: 100%;
   max-width: 520px;
@@ -316,7 +289,6 @@
   font-size: 0.95rem;
   text-align: center;
   color: #928f8f;
-  /* Long addresses used to widen the fixed-width dialog and overflow it. */
   overflow-wrap: anywhere;
 }
 
@@ -479,20 +451,12 @@
   transform: rotate(90deg);
 }
 
-/* ----------------------------------------------------------- photo panel -- */
-
 .rightContainer {
   display: flex;
   align-items: flex-end;
   flex: 1 1 38%;
   padding: 5px 5px 5px 0;
   background-color: #1b2733;
-  /* `background-size: 415px 790px` used to pin the photo to a fixed pixel box,
-     so it tiled a gap on wide screens and cropped oddly on narrow ones.
-     `cover` lets it fill whatever the flex layout gives it.
-
-     The gradient behind the photo paints on the first frame, so the panel never
-     shows as an empty rectangle while the image is still arriving. */
   background-image:
     linear-gradient(180deg, rgba(27, 39, 51, 0.1) 0%, rgba(27, 39, 51, 0.8) 100%),
     image-set(
@@ -517,12 +481,6 @@
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
   animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) 220ms both;
 }
-
-/* ----------------------------------------------------------- responsive -- */
-
-/* Continuous breakpoints. The old file's only mobile block required
-   `orientation: portrait` and `max-width: 472px`, leaving landscape phones and
-   everything from 473px to 999px on the desktop layout. */
 
 @media (max-width: 1024px) {
   .container {

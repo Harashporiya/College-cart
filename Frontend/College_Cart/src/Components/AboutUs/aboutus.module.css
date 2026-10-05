@@ -1,12 +1,4 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
-
-/* ==========================================================================
-   About Us
-   ========================================================================== */
 
 .pageWrapper {
   display: flex;
@@ -25,8 +17,6 @@
   color: #333;
 }
 
-/* ------------------------------------------------------------------ hero -- */
-
 .hero {
   display: flex;
   align-items: center;
@@ -42,9 +32,6 @@
 
 .title {
   margin: 0 0 20px;
-  /* Fluid type replaces four fixed font-size overrides across the old media
-     queries - and covers the 471-499px and 769-799px widths that had no
-     breakpoint at all, so text stayed desktop-sized on small screens. */
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   line-height: 1.15;
@@ -62,8 +49,6 @@
 
 .heroImage {
   width: 450px;
-  /* Sized by aspect ratio rather than a hard height, so the crop stays right
-     as the flex box narrows. */
   aspect-ratio: 9 / 7;
   height: auto;
   flex: none;
@@ -76,8 +61,6 @@
 .content {
   padding: 20px 0 60px;
 }
-
-/* --------------------------------------------------------------- section -- */
 
 .sectionHeader {
   margin-bottom: 40px;
@@ -105,8 +88,6 @@
   line-height: 1.8;
   color: #4a5568;
 }
-
-/* ----------------------------------------------------------------- cards -- */
 
 .problemGrid {
   display: grid;
@@ -144,8 +125,6 @@
   color: #4a5568;
 }
 
-/* -------------------------------------------------------------- solution -- */
-
 .solutionContent {
   display: flex;
   align-items: center;
@@ -165,8 +144,6 @@
 .highlightItem {
   margin-bottom: 22px;
   padding-left: 16px;
-  /* A left rule ties each highlight to the group and gives the hover something
-     to respond to. */
   border-left: 3px solid var(--cc-border);
   transition: border-color var(--cc-dur) var(--cc-ease),
               padding-left var(--cc-dur) var(--cc-ease);
@@ -200,8 +177,6 @@
   border-radius: var(--cc-radius-lg);
   box-shadow: var(--cc-shadow-md);
 }
-
-/* -------------------------------------------------------------- features -- */
 
 .featuresGrid {
   display: grid;
@@ -260,8 +235,6 @@
   line-height: 1.6;
   color: #4a5568;
 }
-
-/* ---------------------------------------------------------------- impact -- */
 
 .impactContent {
   display: flex;
@@ -341,8 +314,6 @@
   color: var(--cc-heading);
 }
 
-/* ---------------------------------------------------------------- future -- */
-
 .roadmapList {
   margin: 30px 0;
   padding: 0;
@@ -406,8 +377,6 @@
 
 .ctaButton:hover {
   transform: translateY(-3px);
-  /* Was `background-color: yellow` - the pure sRGB primary, which clashed with
-     the brand yellow used everywhere else. */
   background-color: var(--cc-yellow);
   color: var(--cc-text);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
@@ -416,13 +385,6 @@
 .ctaButton:active {
   transform: translateY(-1px);
 }
-
-/* ----------------------------------------------------------- responsive -- */
-
-/* The old file used three disjoint ranges - (800-1024), (500-768) and
-   (100-470) - leaving 471-499px and 769-799px with no rules at all, and its
-   phone block set `.container { width: 63vh }` and `.hero { width: 59vh }`,
-   using viewport *height* as a width. Continuous max-width breakpoints now. */
 
 @media (max-width: 1024px) {
   .hero {

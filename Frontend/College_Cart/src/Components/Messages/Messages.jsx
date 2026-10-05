@@ -17,17 +17,6 @@ const toThread = (rows, userId) =>
     timestamp: msg.createdAt,
   }));
 
-/**
- * Conversation list built in the browser, used only when the API does not yet
- * expose GET /conversations.
- *
- * This is what the page used to do unconditionally, and it was the reason
- * opening Messages took so long: a `for` loop that awaited three requests per
- * room, one after another - 1 + 3N sequential round trips. The requests are the
- * same here, but every room resolves concurrently and the three lookups inside
- * a room are concurrent too, so the whole list costs about one round trip
- * rather than dozens in series.
- */
 const loadConversationsLegacy = async (backendUrl, userId, config) => {
   const { data: rooms } = await axios.get(`${backendUrl}/joinRooms`, config);
 
@@ -61,8 +50,6 @@ const loadConversationsLegacy = async (backendUrl, userId, config) => {
           otherUserAvatar: userRes.data.profileImage || DEFAULT_AVATAR,
           timestamp: last.createdAt ?? room.updatedAt ?? room.createdAt,
           unread: 0,
-          // The history is already in hand on this path, so hand it to the
-          // cache and clicking the conversation costs nothing.
           thread: toThread(rows, userId),
         };
       } catch {
@@ -92,16 +79,9 @@ const Messages = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const userId = data?._id;
 
-  // Threads already fetched this visit, keyed by room. Re-opening a
-  // conversation used to refetch the entire history and leave the pane blank
-  // until it arrived; now it paints from here and revalidates behind that.
   const threadCacheRef = useRef(new Map());
-  // Which room is on screen right now, read inside async callbacks. State
-  // would be stale there, and a slow response for a conversation the user has
-  // already navigated away from must not overwrite the visible thread.
   const activeRoomRef = useRef(null);
 
-  // Socket initialization - runs once
   useEffect(() => {
     if (!userId) return;
 
@@ -130,10 +110,6 @@ const Messages = () => {
           timestamp: new Date().toISOString(),
         };
 
-        // Append to the cached thread for whichever room the message belongs
-        // to. This used to push every arrival into the open conversation
-        // regardless of its room, so a message from one chat appeared inside
-        // another.
         const cached = threadCacheRef.current.get(roomId);
         if (cached) threadCacheRef.current.set(roomId, [...cached, incoming]);
 
@@ -163,16 +139,12 @@ const Messages = () => {
     };
   }, [userId, socket_url]);
 
-  // Join room when conversation is selected
   useEffect(() => {
     if (socketRef.current && socketConnected && selectedConversation) {
       socketRef.current.emit("join_room", { joinRoomId: selectedConversation.roomId });
     }
   }, [selectedConversation, socketConnected]);
 
-  // Conversation list. One request against /conversations, which joins the
-  // rooms, the last message of each, the products and the other participants
-  // server-side; see Backend/Controllers/conversation.js.
   useEffect(() => {
     const token = getToken();
     if (!userId || !token) {
@@ -203,9 +175,6 @@ const Messages = () => {
       } catch (error) {
         if (cancelled || axios.isCancel(error) || controller.signal.aborted) return;
 
-        // An API instance that has not picked up the new endpoint yet answers
-        // 404 (or 401 if the session is stale). Only the missing-endpoint case
-        // is worth rebuilding the list in the browser for.
         if (error.response?.status === 404) {
           try {
             const legacy = await loadConversationsLegacy(backend_url, userId, config);
@@ -257,8 +226,6 @@ const Messages = () => {
     }
   }, [backend_url, userId]);
 
-  // Keep the cache in step with what is rendered, so optimistic sends and
-  // socket arrivals survive switching conversations and switching back.
   useEffect(() => {
     const roomId = selectedConversation?.roomId;
     if (roomId && messages.length) threadCacheRef.current.set(roomId, messages);
@@ -270,7 +237,6 @@ const Messages = () => {
     }
   };
 
-  // Send message
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || !selectedConversation || !userId) return;
 
@@ -282,11 +248,9 @@ const Messages = () => {
       timestamp
     };
 
-    // Update UI immediately (optimistic update)
     setMessages((prev) => [...prev, newMessage]);
     setInputMessage("");
 
-    // Update conversation list
     setConversations((prev) => {
       const updatedConversations = [...prev];
       const convoIndex = updatedConversations.findIndex(
@@ -303,7 +267,6 @@ const Messages = () => {
       return updatedConversations;
     });
 
-    // Send via socket for real-time delivery
     if (socketRef.current && socketConnected) {
       socketRef.current.emit("send_message", {
         joinRoomId: selectedConversation.roomId,
@@ -312,7 +275,6 @@ const Messages = () => {
       });
     }
 
-    // Save to database
     try {
       const token = getToken();
       await axios.post(`${backend_url}/message`, {
@@ -328,7 +290,6 @@ const Messages = () => {
     }
   };
 
-  // onKeyPress is deprecated and does not fire for every key in every browser.
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -336,14 +297,12 @@ const Messages = () => {
     }
   };
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
-  // Format timestamp
   const formatRelativeTime = (timestamp) => {
     if (!timestamp) return "";
 
@@ -363,7 +322,6 @@ const Messages = () => {
     }
   };
 
-  // Loading state
   if (loading) {
     return (
       <>
@@ -506,9 +464,6 @@ const Messages = () => {
 
                 <div className="messages-display">
                   {threadLoading && messages.length === 0 ? (
-                    // A thread being fetched for the first time. The pane used
-                    // to show the "no messages yet" empty state while the
-                    // request was still in flight.
                     <div className="thread-loading" aria-live="polite">
                       {[1, 2, 3, 4, 5, 6].map((i) => (
                         <div key={i} className={`message-group ${i % 2 === 0 ? 'self' : 'other'}`}>

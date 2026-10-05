@@ -1,6 +1,3 @@
-/* ==========================================================================
-   Site footer
-   ========================================================================== */
 
 .footer {
   padding: 3.5rem 2rem 1.5rem;
@@ -33,9 +30,6 @@
   margin-bottom: 0.55rem;
 }
 
-/* The old file styled `.footer-section ul li a`, but the markup used <p>
-   elements - so none of that hover or transition styling ever applied. These
-   are real buttons now and the styling targets them directly. */
 .footerLinks {
   padding: 2px 0;
   background: none;
@@ -49,8 +43,6 @@
 
 .footerLinks:hover {
   color: var(--cc-orange);
-  /* Nudge instead of an underline: it does not shift the line box, so
-     neighbouring links stay put. */
   transform: translateX(3px);
 }
 
@@ -60,8 +52,6 @@
 }
 
 .social-links a {
-  /* Anchors are inline by default, and `transform` has no effect on an inline
-     box - the old translateY(-3px) hover silently did nothing. */
   display: grid;
   place-items: center;
   width: 40px;
@@ -99,19 +89,12 @@
   color: #b9c0c8;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
 @media (max-width: 768px) {
   .footer {
     padding: 2.5rem 1.25rem 1.25rem;
   }
 
   .footer-content {
-    /* minmax(0, 1fr) rather than a bare 1fr. `1fr` means
-       `minmax(auto, 1fr)`, so the five 40px social icons - an unbreakable
-       ~230px row of min-content - forced the second column wider than the
-       first and squeezed the link lists. Between 481px and 520px that came out
-       as a 155px column beside a 258px one. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.75rem;
   }
@@ -127,32 +110,16 @@
 
   .social-links {
     justify-content: center;
-    /* Lets the icon row break instead of dictating the column width. */
     flex-wrap: wrap;
   }
 }
 
 @media (max-width: 480px) {
-  /* The old block here set `.footer { width: 63vh }` - viewport height used as
-     a width, which overflowed the screen - and
-     `grid-template-columns: 1/3`, which is not a valid value for that property
-     (that is grid-row/column shorthand syntax), so the declaration was dropped
-     and the columns never changed at all.
-   *
-   * It then stacked all four sections into a single column, which made the
-   * footer 801px tall on a 335px phone - taller than the viewport itself, so
-   * it took two full screens of scrolling to get past. Two columns fit the
-   * four sections into two rows, and the type and spacing below are scaled
-   * down to match, which brings it back to roughly a third of that. */
   .footer {
     padding: 1.75rem 1rem 1rem;
   }
 
   .footer-content {
-    /* Columns and icon wrapping are inherited from the 768px block above;
-       only the spacing tightens here. Row gap stays generous enough to
-       separate the two rows of sections, while the column gap only has to keep
-       two short link lists apart. */
     gap: 1.4rem 0.75rem;
   }
 
@@ -170,7 +137,6 @@
     font-size: 0.82rem;
   }
 
-  /* No hover on touch, and the nudge would only fight the centred text. */
   .footerLinks:hover {
     transform: none;
   }
@@ -188,10 +154,6 @@
   .footer-bottom {
     margin-top: 1.4rem;
     padding-top: 1rem;
-    /* The chat launcher is fixed to the bottom-right of the viewport, which is
-       exactly where this centred text lands once the page is scrolled to the
-       end - it covered the tail of the credit line. The launcher is 48px tall
-       and sits 16px off the bottom, so the last line has to clear 64px. */
     padding-bottom: 4.75rem;
   }
 

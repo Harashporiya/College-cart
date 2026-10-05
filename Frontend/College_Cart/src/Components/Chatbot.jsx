@@ -58,7 +58,6 @@ const Chatbot = () => {
       console.log('Response status:', response.status);
       console.log('Response headers:', response.headers);
 
-      // Check if response is JSON
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
         const textResponse = await response.text();
@@ -74,7 +73,6 @@ const Chatbot = () => {
       }
 
       if (data.success) {
-        // Check if response is structured (JSON) or plain text
         if (data.isStructured && data.response?.type === 'product_card') {
           setMessages(prev => [...prev, { 
             sender: 'bot',
@@ -82,7 +80,6 @@ const Chatbot = () => {
             products: data.response.products || []
           }]);
         } else {
-          // Plain text response
           const responseText = typeof data.response === 'string' 
             ? data.response 
             : JSON.stringify(data.response);
@@ -293,9 +290,6 @@ const Chatbot = () => {
 
   return (
     <>
-      {/* Tailwind is mobile-first, so the bare values below are the phone size
-          and `sm:` restores the original 64px circle from 640px up. At w-16 the
-          launcher covered a noticeable slice of a 335px screen. */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}

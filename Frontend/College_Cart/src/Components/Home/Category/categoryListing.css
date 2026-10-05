@@ -1,10 +1,3 @@
-/* ==========================================================================
-   Category listing page
-   Shared by all five "explore a category" routes. These pages previously
-   styled themselves with inline Tailwind utility strings duplicated across
-   five files, which is why their cards drifted out of sync with the rest of
-   the site.
-   ========================================================================== */
 
 .listing-page {
   display: flex;
@@ -46,17 +39,11 @@
   color: var(--cc-text-muted);
 }
 
-/* --------------------------------------------------------------- the grid -- */
-
 .listing-grid {
   display: grid;
-  /* One auto-fill rule instead of the four stacked width classes
-     (`w-full md:w-1/2 lg:w-1/3 xl:w-1/4`) the old pages carried. */
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 22px;
 }
-
-/* ------------------------------------------------------------------ card -- */
 
 .listing-card {
   display: flex;
@@ -93,8 +80,6 @@
   position: relative;
   display: grid;
   place-items: center;
-  /* Reserves the exact space the image will occupy, so the grid never reflows
-     as photos arrive one by one. */
   aspect-ratio: 1 / 1;
   width: 100%;
   padding: 16px;
@@ -140,7 +125,6 @@
   font-weight: 600;
   line-height: 1.35;
   color: var(--cc-text);
-  /* Two lines keeps every card the same height without cutting a line in half. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -157,8 +141,6 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  /* Pushes pricing to the bottom so it aligns across cards regardless of how
-     far the title wraps. */
   margin-top: auto;
   padding-top: 6px;
 }
@@ -188,8 +170,6 @@
   color: var(--cc-success);
 }
 
-/* ----------------------------------------------------------- empty state -- */
-
 .listing-empty {
   margin: 64px auto;
   max-width: 420px;
@@ -199,21 +179,16 @@
   animation: cc-fade-in var(--cc-dur-slow) var(--cc-ease) both;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
 @media (max-width: 640px) {
   .listing-main {
     padding: 20px 12px 40px;
   }
 
   .listing-grid {
-    /* Same as the all-products grid: 2 x 155 + 14 exceeded the 311px available
-       on a 335px screen, so this fell back to one 463px-tall card per row. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
-  /* Sized for the ~150px card the two-column grid above produces. */
   .listing-card__body {
     padding: 8px;
     gap: 2px;

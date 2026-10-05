@@ -20,16 +20,9 @@ const Product = () => {
   const revealRef = useScrollReveal({ stagger: 40 });
 
   useEffect(() => {
-    // The cart endpoint is authenticated. This used to dispatch
-    // unconditionally, so every signed-out visitor to the products page spent
-    // a request on a guaranteed 401.
     if (getToken()) dispatch({ type: 'cart/initialize' });
   }, [dispatch]);
 
-  // Derived with useMemo instead of being mirrored into state by an effect.
-  // The old effect also called window.scrollTo(0, 0) on every run - and it ran
-  // on every `searchQuery` change - so typing in the search box yanked the page
-  // back to the top after each keystroke.
   const filteredProducts = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return products ?? [];
@@ -70,17 +63,11 @@ const Product = () => {
 
   return (
     <>
-      {/* Was `class="stickyHeader"`, which React ignores - the header was not
-          actually sticky on this page. */}
       <div className="stickyHeader">
         <Header showSearch={true} showMiddleHeader={true} isProductsPage={true} />
       </div>
 
       <main className="productPage">
-        {/* Driven by the provider's shared flag. The local `loading` state it
-            replaced was only ever cleared inside `if (products.length > 0)`, so
-            an empty catalogue or a failed request left eight placeholder cards
-            shimmering forever. */}
         <div className="productGrid" ref={revealRef}>
           {productsLoading
             ? Array.from({ length: SKELETON_COUNT }, (_, index) => (

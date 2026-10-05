@@ -14,7 +14,6 @@ const ExchangeBookCard = ({ exchangeBooks, onChanged }) => {
 
     const toggleMenu = (bookId) => {
         setOpenMenuId(openMenuId === bookId ? null : bookId);
-        // console.log(bookId)
     };
 
     const textDescription = (text) => {

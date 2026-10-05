@@ -1,32 +1,6 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
 
-/* Cards for the listings a user owns, on their profile page.
- *
- * This file previously declared its whole ruleset twice - .productWrapper,
- * .productImageProfile, .hrline, .allProductContainer, .item, .saleBadge,
- * .popupMenu and .skeletonWrapper each appeared in two blocks, the second
- * silently overriding the first - and twelve of the class names the JSX asks
- * for (.productName, .productBrand, .productCategory, .productSelectHostel,
- * .productHostleName, .productRoomNumber, .productPrevAmount,
- * .productNewAmount, .productDescription, .productOwner, .productAddedOn,
- * .productImageContainer) were never defined at all, so every line of detail
- * on every card rendered with no class and no styling.
- *
- * It also carried a bare `span { font-weight: 550; font-size: 20px }`, plus
- * three more copies inside media queries. CSS Modules only scopes *class*
- * selectors, so that leaked into the global stylesheet and resized every
- * <span> in the application - the header, the cart, the product grid - as soon
- * as the profile chunk loaded. The label styling now lives on .item, which is
- * the class the markup actually puts on those spans.
- */
-
 .productContainer {
-  /* Was `margin-left: 360px`, a hardcoded offset for a sidebar this page does
-     not render, which pushed the whole grid 392px off the left edge. */
   width: 100%;
   max-width: 1040px;
   margin: 0 auto;
@@ -63,9 +37,6 @@
   border-color: var(--cc-border-strong);
 }
 
-/* Media column. Deliberately *not* a positioning context: the overflow button
-   and its menu live inside this element in the markup but should hang off the
-   card's own top-right corner, which is .productWrapper. */
 .productImageContainer {
   flex: 0 0 auto;
   display: flex;
@@ -74,7 +45,6 @@
   padding: 16px;
 }
 
-/* Wrapper around the photo, replacing an inline width:300px in the JSX. */
 .productMedia {
   display: flex;
   align-items: center;
@@ -89,7 +59,6 @@
   object-fit: contain;
   border-radius: var(--cc-radius);
   background-color: var(--cc-surface-2);
-  /* Reserves the box before the photo arrives, so the row does not jump. */
   aspect-ratio: 300 / 230;
 }
 
@@ -110,7 +79,6 @@
   gap: 6px;
 }
 
-/* The label half of every "Label: value" line. */
 .item {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 0.78rem;
@@ -128,9 +96,6 @@
   overflow-wrap: anywhere;
 }
 
-/* The listing's name is the heading of the card, not another label:value row.
-   It used to render at the same weight and size as everything else - and its
-   label was larger than the name itself, because of the leaked span rule. */
 .productName {
   font-size: 1.35rem;
   font-weight: 700;
@@ -177,8 +142,6 @@
   margin-top: 6px;
   color: var(--cc-text-soft);
   line-height: 1.55;
-  /* Descriptions are user-entered and unbounded; three lines keeps every card
-     the same height instead of letting one long entry stretch the row. */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -264,8 +227,6 @@
   filter: brightness(0.92);
 }
 
-/* Loading placeholders, laid out to the same geometry as a real card so the
-   grid does not shift when the data lands. */
 .skeletonWrapper {
   display: flex;
   background-color: var(--cc-surface);
@@ -355,8 +316,6 @@
     border-radius: var(--cc-radius);
   }
 
-  /* Hover lift is meaningless on touch and leaves the card stuck raised
-     after a tap. */
   .productWrapper:hover {
     transform: none;
     box-shadow: var(--cc-shadow-sm);

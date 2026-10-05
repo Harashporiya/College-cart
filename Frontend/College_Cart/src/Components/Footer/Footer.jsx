@@ -10,9 +10,6 @@ const Footer = () => {
 
   const isAuthenticated = Boolean(data && data._id);
 
-  // "Sell Items" interpolated `data._id` unconditionally. The footer renders on
-  // every page including the signed-out home page, so this link pointed at
-  // /undefined/add-products-user for any visitor without an account.
   const goSell = () => {
     navigate(isAuthenticated ? `/${data._id}/add-products-user` : '/login');
   };
@@ -62,10 +59,6 @@ const Footer = () => {
             <ul>
               {column.links.map((link) => (
                 <li key={link.label}>
-                  {/* Was a <p> styled to look like a link, so it was not
-                      focusable or operable by keyboard - and footer.css only
-                      ever styled `li a`, meaning the hover transition never
-                      applied to these at all. */}
                   <button type="button" className="footerLinks" onClick={link.onClick}>
                     {link.label}
                   </button>

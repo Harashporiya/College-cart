@@ -22,16 +22,6 @@ const CardSkeleton = () => (
   </div>
 );
 
-/**
- * Full listing page for one category.
- *
- * Replaces five copy-pasted pages (ExploreBooks, ExploreElectronices,
- * ExploreClothings, ExploreSports, ExploreGrocery) that differed only in a
- * heading string and a filter value. Each of them also declared its card and
- * skeleton components *inside* the page body, so React saw a brand-new
- * component type on every render and threw away and rebuilt the entire grid
- * rather than updating it.
- */
 const CategoryListing = ({ title, category }) => {
   const navigate = useNavigate();
   const { products, productsLoading, data } = useContext(UserDataContext);
@@ -54,7 +44,6 @@ const CategoryListing = ({ title, category }) => {
       <main className="listing-main">
         <header className="listing-head">
           <h1 className="listing-title">{title}</h1>
-          {/* Only meaningful once the count is real, so it waits for the fetch. */}
           {!productsLoading && (
             <p className="listing-count">
               {items.length} {items.length === 1 ? 'item' : 'items'} available
@@ -122,8 +111,6 @@ const CategoryListing = ({ title, category }) => {
           )}
         </div>
 
-        {/* The old pages rendered an empty grid in this case, which looked like
-            a page that had failed to load. */}
         {!productsLoading && items.length === 0 && (
           <p className="listing-empty">
             Nothing listed under {title} just yet. Check back soon.

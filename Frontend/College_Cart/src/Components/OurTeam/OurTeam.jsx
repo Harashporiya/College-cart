@@ -58,7 +58,6 @@ const teamMembers = [
 ];
 
 const OurTeam = () => {
-  // Scroll reset is handled globally by <ScrollToTop /> in App.jsx now.
   const revealRef = useScrollReveal({ stagger: 90 });
 
   return (
@@ -99,13 +98,6 @@ const OurTeam = () => {
                 <p className={styles.memberRole}>{member.role}</p>
                 <p className={styles.memberBio}>{member.bio}</p>
                 
-                {/* The inner wrapper is required, not decorative: the
-                    expand/collapse animates `grid-template-rows: 0fr -> 1fr`,
-                    which only sizes the first row. With the heading and the
-                    list as two separate children the list landed in an
-                    implicit auto-sized row and kept reserving its full height
-                    while invisible, leaving a block of blank space in every
-                    card. One child means one row to collapse. */}
                 <div className={styles.tasksContainer}>
                   <div>
                     <h4 className={styles.tasksTitle}>Key Contributions:</h4>

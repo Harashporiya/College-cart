@@ -34,8 +34,6 @@ const Checkout = ({ product }) => {
             if (!response.data.success) {
                 throw new Error('Failed to create order');
             }
-            // console.log(razorpay_key)
-            // console.log(response.data)
             const { order } = response.data;
 
             const options = {

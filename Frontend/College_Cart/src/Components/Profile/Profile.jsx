@@ -23,7 +23,6 @@ const Profile = () => {
     const backend_url = import.meta.env.VITE_BACKEND_API_URL;
     const [showRequestModal, setShowRequestModal] = useState(false);
 
-// console.log(userProduct)
     const handleProfileUpdate = () => {
         const formData = new FormData();
         formData.append('userId', data._id);
@@ -92,8 +91,6 @@ const Profile = () => {
                 (item) => data._id === item.sealUser.userId
             )
             setExchangeBookData(fileterUserSealId)
-            // console.log(response.data.order)
-           // console.log(fileterUserSealId)
         } catch (error) {
             console.error("Error:", error);
         }
@@ -129,12 +126,6 @@ const Profile = () => {
                             <p className={styles.accountCreate}>Account Create: { new Date(data.createdAt).toLocaleDateString() ||  <Skeleton variant="text" width={80} height={30} />}, {new Date(data.createdAt).toLocaleTimeString() ||  <Skeleton variant="text" width={80} height={30} />}</p>
                             <p className={styles.profileUpdate}>Profile Update: {new Date(data.updatedAt).toLocaleDateString() ||  <Skeleton variant="text" width={80} height={30} />}, {new Date(data.updatedAt).toLocaleTimeString() ||  <Skeleton variant="text" width={80} height={30} />}</p>
                         </div>
-                        {/* The click handler used to sit on this wrapper div
-                            rather than the button, so the whole row was a
-                            silent click target with no role and no keyboard
-                            affordance while the real button did nothing. The
-                            spring hover is a CSS transition now, matching the
-                            other buttons on the site. */}
                         <div className={styles.btnEditProfileContainer}>
                             <button type="button" className={styles.btn} onClick={() => setIsOpen(true)}>
                                 Edit Profile

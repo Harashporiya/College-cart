@@ -2,15 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ==========================================================================
-   College Cart - design foundation
-   Tokens, reset, motion primitives and shared building blocks.
-   Every page-level stylesheet builds on the variables declared here, so a
-   colour or radius changes in exactly one place.
-   ========================================================================== */
-
 :root {
-  /* Brand ---------------------------------------------------------------- */
   --cc-yellow: #ffd814;
   --cc-yellow-deep: #fcd200;
   --cc-yellow-dark: #f7ca00;
@@ -22,7 +14,6 @@
   --cc-blue-dark: #2980b9;
   --cc-teal: #007185;
 
-  /* Surfaces ------------------------------------------------------------- */
   --cc-bg: #f6f7f9;
   --cc-surface: #ffffff;
   --cc-surface-2: #f8f9fa;
@@ -30,28 +21,23 @@
   --cc-dark-surface: #28292d;
   --cc-dark-bg: #23242a;
 
-  /* Text ----------------------------------------------------------------- */
   --cc-text: #0f1111;
   --cc-text-muted: #565959;
   --cc-text-soft: #6b7280;
   --cc-heading: #2c3e50;
 
-  /* Lines ---------------------------------------------------------------- */
   --cc-border: #e4e7eb;
   --cc-border-strong: #d5d9d9;
 
-  /* Feedback ------------------------------------------------------------- */
   --cc-danger: #cc0c39;
   --cc-success: #067d62;
 
-  /* Radii ---------------------------------------------------------------- */
   --cc-radius-sm: 6px;
   --cc-radius: 10px;
   --cc-radius-lg: 16px;
   --cc-radius-xl: 24px;
   --cc-radius-pill: 999px;
 
-  /* Elevation - layered, low-alpha shadows read as depth rather than grime */
   --cc-shadow-sm: 0 1px 2px rgba(15, 17, 17, 0.06), 0 1px 3px rgba(15, 17, 17, 0.05);
   --cc-shadow: 0 2px 4px rgba(15, 17, 17, 0.05), 0 6px 16px rgba(15, 17, 17, 0.07);
   --cc-shadow-md: 0 4px 8px rgba(15, 17, 17, 0.06), 0 12px 28px rgba(15, 17, 17, 0.1);
@@ -59,28 +45,20 @@
   --cc-ring: 0 0 0 3px rgba(52, 152, 219, 0.35);
   --cc-ring-yellow: 0 0 0 3px rgba(252, 210, 0, 0.45);
 
-  /* Motion --------------------------------------------------------------- */
   --cc-dur-fast: 140ms;
   --cc-dur: 220ms;
   --cc-dur-slow: 380ms;
   --cc-dur-slower: 620ms;
-  /* standard: UI settling. entrance: decelerate in. spring: slight overshoot. */
   --cc-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --cc-ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
   --cc-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Layout --------------------------------------------------------------- */
   --cc-header-h: 90px;
-  /* Width of the slide-out navigation drawer. Shared so the header can line
-     the logo up with the drawer's edge without the two values drifting apart;
-     sidebar.module.css consumes it too. */
   --cc-drawer-w: min(300px, 70vw);
   --cc-content-max: 1400px;
 
   color-scheme: light;
 }
-
-/* ---------------------------------------------------------------- reset -- */
 
 *,
 *::before,
@@ -90,9 +68,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* Anchor jumps and scrollIntoView glide instead of snapping. */
   scroll-behavior: smooth;
-  /* Keep in-page anchor targets clear of the sticky header. */
   scroll-padding-top: calc(var(--cc-header-h) + 16px);
 }
 
@@ -105,8 +81,6 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* A stray horizontal scrollbar was the most visible symptom of the old
-     vh-based widths; belt and braces now that those are gone. */
   overflow-x: hidden;
 }
 
@@ -119,8 +93,6 @@ p {
   text-wrap: pretty;
 }
 
-/* Images are replaced elements: give them sane defaults so a missing width
-   attribute cannot blow out a layout or shift content on load. */
 img,
 picture,
 video,
@@ -156,14 +128,11 @@ ul, ol {
   padding: 0;
 }
 
-/* Visible, consistent keyboard focus. :focus-visible keeps it off mouse users. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--cc-blue);
   outline-offset: 2px;
   border-radius: var(--cc-radius-sm);
 }
-
-/* ------------------------------------------------------- motion library -- */
 
 @keyframes cc-fade-in {
   from { opacity: 0; }
@@ -189,14 +158,11 @@ ul, ol {
   to { transform: rotate(360deg); }
 }
 
-/* Left-to-right sheen used by the loading skeletons. */
 @keyframes cc-shimmer {
   from { background-position: 200% 0; }
   to   { background-position: -200% 0; }
 }
 
-/* Reusable entrance helpers. `both` holds the from-state so nothing flashes
-   at full opacity before a delayed animation starts. */
 .cc-animate-fade  { animation: cc-fade-in var(--cc-dur-slow) var(--cc-ease-entrance) both; }
 .cc-animate-up    { animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) both; }
 .cc-animate-down  { animation: cc-fade-in-down var(--cc-dur-slower) var(--cc-ease-entrance) both; }
@@ -207,11 +173,6 @@ ul, ol {
 .cc-delay-3 { animation-delay: 240ms; }
 .cc-delay-4 { animation-delay: 320ms; }
 
-/* --------------------------------------------------------- scroll reveal -- */
-
-/* Applied by the useScrollReveal hook. The element starts offset and
-   transparent, then transitions in once it enters the viewport. Transform and
-   opacity only, so the whole thing runs on the compositor. */
 .cc-reveal {
   opacity: 0;
   transform: translate3d(0, 28px, 0);
@@ -223,18 +184,11 @@ ul, ol {
 .cc-reveal.cc-revealed {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  /* Release the compositor layer once the element has landed. */
   will-change: auto;
 }
 
-/* -------------------------------------------------------------- skeleton -- */
-
-/* Replaces @mui/material's Skeleton, which pulled the whole MUI runtime plus
-   Emotion into the initial bundle for two components. */
 .cc-skeleton {
   position: relative;
-  /* Rendered as a <span>, so it needs an explicit box for width/height to
-     apply at all. */
   display: block;
   overflow: hidden;
   background-color: #e8eaed;
@@ -260,8 +214,6 @@ ul, ol {
   border-radius: 50%;
 }
 
-/* --------------------------------------------------------------- spinner -- */
-
 .cc-spinner {
   width: 20px;
   height: 20px;
@@ -272,10 +224,6 @@ ul, ol {
   flex: none;
 }
 
-/* ------------------------------------------------------- route fallback -- */
-
-/* Shown by <Suspense> while a lazily loaded route chunk arrives. Centred and
-   quiet, and it fades in only after a beat so a fast chunk never flashes it. */
 .cc-route-fallback {
   min-height: 60vh;
   display: flex;
@@ -294,8 +242,6 @@ ul, ol {
   color: var(--cc-orange);
 }
 
-/* ------------------------------------------------------------ utilities -- */
-
 .cc-visually-hidden {
   position: absolute;
   width: 1px;
@@ -308,10 +254,6 @@ ul, ol {
   border: 0;
 }
 
-/* ------------------------------------------------------- reduced motion -- */
-
-/* Honour the OS setting: collapse every animation and transition rather than
-   merely shortening it, and drop the reveal offsets so content is simply there. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

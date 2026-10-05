@@ -7,10 +7,6 @@ const messageSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Every read of this collection is "the messages of one room, in time order":
-// opening a thread, and the conversation-list aggregation that picks the most
-// recent message per room. Without an index each of those was a full collection
-// scan, and the Messages page ran one such scan per conversation.
 messageSchema.index({ roomId: 1, createdAt: -1 });
 
 const Message = mongoose.model('Message', messageSchema);

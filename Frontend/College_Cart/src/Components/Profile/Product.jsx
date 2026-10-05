@@ -23,10 +23,6 @@ const Product = () => {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [exchangeBooks, setExchangeBooks] = useState([])
 
-  // Hoisted out of the effect so it can be called again after an edit or a
-  // delete. `silent` skips the loading flag: a refresh triggered by the update
-  // modal should leave the existing cards on screen and swap in the new data,
-  // not blank the grid back to skeletons.
   const fetchProductData = useCallback(async ({ silent = false } = {}) => {
     if (!data._id) return;
     if (!silent) setIsLoading(true);
@@ -80,11 +76,6 @@ const Product = () => {
    fetchDataExchangeBook()
   },[fetchDataExchangeBook])
 
-  // Handed to the update and delete modals. Nothing used to happen after a
-  // successful edit beyond closing the dialog, so the card kept rendering the
-  // values fetched when the page first mounted - the effect that populated it
-  // is keyed on the user id, which never changes - and a deleted product stayed
-  // in the grid until a manual page reload.
   const refreshProfileProducts = useCallback(() => Promise.all([
     fetchProductData({ silent: true }),
     fetchDataExchangeBook(),
@@ -116,18 +107,12 @@ const Product = () => {
                 </div>
                 <div className={styles.skeletonActionsContainer}>
                   <Skeleton variant="rectangular" width={70} height={30} />
-                  {/* <Skeleton variant="rectangular" width={70} height={30} />
-                  <Skeleton variant="rectangular" width={70} height={30} /> */}
                 </div>
               </div>
             ))
           : products.map((product) => (
               <div key={product._id} className={styles.productWrapper}>
                 <div className={styles.productImageContainer}>
-                  {/* Was an inline style={{width:"300px"}} wrapper, which pinned the
-                      photo to 300px on every screen and cancelled the
-                      stylesheet's responsive rules. (Its `justifyItems` was a
-                      no-op on a flex container too.) */}
                   <div className={styles.productMedia}>
                   <motion.img
                     whileHover={{ scale: 0.9 }}
@@ -147,9 +132,6 @@ const Product = () => {
                       onClick={()=>{
                         setProductToUpdate(product);
                         setIsUpdateModalOpen(true);
-                        // The menu used to stay open behind the dialog and was
-                        // still there afterwards, so the next click on the
-                        // card's badge closed it instead of reopening it.
                         setOpenMenuId(null);
                        }
                       }
@@ -223,7 +205,6 @@ const Product = () => {
         productId={productToDeleteId}
         bookId=""
         onDeleted={(deletedId) => {
-          // Drop the card straight away, then reconcile with the server.
           setProducts((prev) => prev.filter((product) => product._id !== deletedId));
           setUserProduct((count) => Math.max(0, (count || 1) - 1));
           refreshProfileProducts();
@@ -234,9 +215,6 @@ const Product = () => {
         onClose={() => setIsUpdateModalOpen(false)}
         productData={productToUpdate}
         onUpdated={(updated) => {
-          // The API returns the saved document, so the card can show the new
-          // values immediately; the refetch behind it keeps the rest of the
-          // page (and the exchange listings) in step.
           if (updated?._id) {
             setProducts((prev) =>
               prev.map((product) =>

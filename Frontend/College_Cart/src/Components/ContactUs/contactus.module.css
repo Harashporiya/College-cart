@@ -1,25 +1,11 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
-
-/* ==========================================================================
-   Contact Us
-   ========================================================================== */
 
 .contactContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Was a hard `height: 100vh`, so on any screen where the form was taller
-     than the viewport the card was cut off with no way to scroll to the submit
-     button. */
   min-height: 100vh;
   padding: 56px 20px 72px;
-  /* The background was a single remote wallpaper from a third-party host, so
-     the panel stayed blank until that request finished. The gradient paints
-     immediately and the image layers over it once it arrives. */
   background-color: #1e2a38;
   background-image:
     linear-gradient(160deg, rgba(30, 42, 56, 0.86), rgba(16, 24, 34, 0.92)),
@@ -42,8 +28,6 @@
 }
 
 .formCard:hover {
-  /* A translate rather than `scale(1.01)`: scaling a card full of text
-     resamples every glyph and makes the whole form look momentarily blurry. */
   transform: translateY(-4px);
   box-shadow: 0 20px 56px rgba(0, 0, 0, 0.28);
 }
@@ -63,8 +47,6 @@
   color: #444;
 }
 
-/* ---------------------------------------------------------------- fields -- */
-
 .inputBox {
   display: flex;
   align-items: center;
@@ -74,7 +56,6 @@
   background-color: #fafafa;
   border: 2px solid #ccc;
   border-radius: var(--cc-radius);
-  /* Named properties rather than `transition: all`. */
   transition: background-color var(--cc-dur) var(--cc-ease),
               border-color var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease);
@@ -85,8 +66,6 @@
   border-color: #888;
 }
 
-/* Focus gets a distinct, stronger treatment than hover so it is obvious which
-   field is active - previously the two shared one rule. */
 .inputBox:focus-within {
   background-color: #fff;
   border-color: var(--cc-blue);
@@ -122,8 +101,6 @@
 
 .captcha {
   display: grid;
-  /* Was `20% 80%`, which left the label column too narrow to hold its text at
-     small widths and pushed the checkbox out of the card. */
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 12px;
@@ -145,8 +122,6 @@
   line-height: 1.5;
   color: #333;
 }
-
-/* --------------------------------------------------------------- actions -- */
 
 .submitBtn {
   display: flex;
@@ -191,14 +166,6 @@
   animation: cc-fade-in var(--cc-dur) var(--cc-ease) both;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
-/* The tablet block was written `(min-width:500px) and(max-width: 768px)` -
-   no space before `(max-width`, which makes the whole query invalid, so the
-   browser discarded the entire block. The phone block was additionally gated
-   on `orientation: portrait` and set `width: 63vh` plus a fixed
-   `height: 1200px`. All of it is replaced below. */
-
 @media (max-width: 768px) {
   .contactContainer {
     padding: 40px 15px 56px;
@@ -219,8 +186,6 @@
     border-radius: var(--cc-radius);
   }
 
-  /* Hover lift is meaningless on touch and can leave the card offset after a
-     tap. */
   .formCard:hover {
     transform: none;
   }

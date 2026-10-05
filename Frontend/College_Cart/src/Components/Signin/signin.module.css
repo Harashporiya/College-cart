@@ -1,23 +1,7 @@
-/* The cc-* entrance keyframes this file animates with are defined globally in
-   index.css, but CSS Modules rewrites animation names to hashed local ones, so
-   those references resolved to names that did not exist and never ran. Importing
-   the definitions makes them local to this module, matching the rewrite. */
 @import '../../styles/keyframes.css';
-
-/* ==========================================================================
-   Sign in
-   Two-panel auth card: form on the left, campus photo on the right, wrapped in
-   a slowly rotating gradient glow.
-
-   The bare `* { }` reset that used to sit at the top of this file was NOT
-   scoped by CSS Modules - only class names are - so it leaked a global
-   font-family and margin reset into every page that shared the bundle. The
-   reset now lives once in index.css.
-   ========================================================================== */
 
 .bodyContainer {
   min-height: 100vh;
-  /* Dynamic viewport unit avoids the mobile browser chrome cropping the card. */
   min-height: 100dvh;
   display: grid;
   place-items: center;
@@ -32,8 +16,6 @@
   display: flex;
   width: 100%;
   max-width: 1200px;
-  /* Was a hard `height: 800px` plus absolute centring, which overflowed every
-     laptop screen shorter than that and clipped the submit button. */
   min-height: 620px;
   max-height: calc(100dvh - 48px);
   border-radius: var(--cc-radius-lg);
@@ -42,17 +24,9 @@
   animation: cardIn var(--cc-dur-slower) var(--cc-ease-entrance) both;
 }
 
-/* The rotating sheen that reads as an animated border. It sits behind both
-   panels, which are inset by 5px and clip their own background to the content
-   box, letting the sweep show through as a glowing edge.
-
-   Consolidated from two stacked pseudo-elements to one: the second was an
-   identical layer offset by half the cycle, doubling the continuously
-   repainting area for an effect a single conic sweep gives on its own. */
 .container::before {
   content: '';
   position: absolute;
-  /* Oversized and centred so the rotation never sweeps a corner into view. */
   top: 50%;
   left: 50%;
   width: 180%;
@@ -68,8 +42,6 @@
     transparent 360deg
   );
   animation: sweep 9s linear infinite;
-  /* Transform-only animation on its own compositor layer: the sweep never
-     invalidates layout or forces the panels above it to repaint. */
   will-change: transform;
   z-index: 0;
 }
@@ -112,7 +84,6 @@
   display: flex;
   flex-direction: column;
   padding: 48px 44px;
-  /* Long viewports are fine, short ones scroll the form rather than clip it. */
   overflow-y: auto;
   background: var(--cc-dark-surface);
   border-radius: calc(var(--cc-radius-lg) - 5px) 0 0 calc(var(--cc-radius-lg) - 5px);
@@ -133,8 +104,6 @@
   text-align: center;
   color: #a9a9ad;
 }
-
-/* ------------------------------------------------------- floating labels -- */
 
 .inputBox {
   position: relative;
@@ -165,8 +134,6 @@
   font-size: 1rem;
   letter-spacing: 0.04em;
   color: #8f8f8f;
-  /* Named properties instead of a blanket `transition: 0.5s`, which animated
-     every inherited property including colour changes we want instant. */
   transition: transform var(--cc-dur) var(--cc-ease),
               font-size var(--cc-dur) var(--cc-ease),
               color var(--cc-dur) var(--cc-ease);
@@ -179,7 +146,6 @@
   color: var(--cc-yellow-deep);
 }
 
-/* The fill that grows up behind the text once the field is active. */
 .inputBox i {
   position: absolute;
   left: 0;
@@ -198,8 +164,6 @@
   height: 44px;
 }
 
-/* Chrome paints its own autofill background; force it to match the fill above
-   so an autofilled field does not look broken. */
 .inputBox input:-webkit-autofill,
 .inputBox input:-webkit-autofill:hover,
 .inputBox input:-webkit-autofill:focus,
@@ -238,8 +202,6 @@
   animation: cc-fade-in-down var(--cc-dur) var(--cc-ease-entrance) both;
 }
 
-/* --------------------------------------------------------------- actions -- */
-
 .btnContainer {
   margin-top: 26px;
 }
@@ -269,7 +231,6 @@
   box-shadow: 0 10px 24px rgba(252, 210, 0, 0.32);
 }
 
-/* Press feedback: settle back down so the click feels physical. */
 .btnContainer button:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: 0 4px 12px rgba(252, 210, 0, 0.24);
@@ -283,7 +244,6 @@
 .alreadyAccountContainer {
   display: flex;
   justify-content: center;
-  /* Pins the sign-up prompt to the bottom of the panel on tall screens. */
   margin-top: auto;
   padding-top: 24px;
 }
@@ -306,24 +266,11 @@
   color: #ffe14d;
 }
 
-/* ----------------------------------------------------------- photo panel -- */
-
 .rightContainer {
   display: flex;
   align-items: flex-end;
   padding: 5px 5px 5px 0;
-  /* The photo used to be a remote Pexels URL, so it needed a DNS lookup and a
-     TLS handshake to a third party before it could even start downloading -
-     that is why this panel showed up noticeably after the rest of the page.
-     It is now a local, resized, hashed asset served from the same origin.
-
-     The gradient underneath is the point: it paints instantly, so the panel
-     looks finished from the first frame and the photo simply sharpens into it
-     rather than replacing a blank rectangle. */
   background-color: #1b2733;
-  /* Three stacked layers, front to back: a scrim for text contrast, the photo,
-     and the instant gradient. image-set() lets the browser take the ~75 kB
-     WebP and fall back to the JPEG on its own - no JS, no double download. */
   background-image:
     linear-gradient(180deg, rgba(27, 39, 51, 0.15) 0%, rgba(27, 39, 51, 0.85) 100%),
     image-set(
@@ -349,13 +296,6 @@
   animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) 220ms both;
 }
 
-/* ----------------------------------------------------------- responsive -- */
-
-/* One continuous set of breakpoints. The old file gated its only mobile block
-   on `orientation: portrait` and `max-width: 472px`, so a phone held sideways -
-   and every device between 473px and 999px - fell through to the desktop
-   two-panel layout and overflowed. */
-
 @media (max-width: 1024px) {
   .container {
     min-height: 560px;
@@ -372,8 +312,6 @@
   }
 
   .container {
-    /* Below this width the photo panel would squeeze the form to an unusable
-       column, so the form takes the full card and the photo steps aside. */
     max-width: 520px;
     min-height: 0;
   }
@@ -428,8 +366,6 @@
   }
 }
 
-/* The sweep is decorative and the only thing on the page that animates
-   forever; stop it outright when the user asks for less motion. */
 @media (prefers-reduced-motion: reduce) {
   .container::before {
     animation: none;
