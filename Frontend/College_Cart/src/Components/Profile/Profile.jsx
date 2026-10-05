@@ -229,7 +229,7 @@ const Profile = () => {
                             }
                             
                             </p>
-                            <button className='bg-green-500 w-[200px] text-white font-bold hover:bg-green-600' onClick={() => setShowRequestModal(true)}>Show Request</button>
+                            <button className='w-[200px] px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-500 to-cyan-400 text-white font-bold transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(124,92,255,0.45)] active:translate-y-px active:scale-95' onClick={() => setShowRequestModal(true)}>Show Request</button>
                     </div>
                </div>
             </div>
