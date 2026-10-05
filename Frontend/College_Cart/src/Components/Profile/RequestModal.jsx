@@ -6,6 +6,7 @@ import axios from 'axios';
 import toast, { Toaster } from "react-hot-toast";
 import usePagination from '../../util/usePagination';
 import Pagination from '../ui/Pagination';
+import Portal from '../../util/Portal';
 
 const PAGE_SIZE = 4;
 
@@ -163,7 +164,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
     };
 
     return (
-        <>
+        <Portal>
             <AnimatePresence>
                 {confirmationModal && (
                     <motion.div
@@ -328,7 +329,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                 )}
             </AnimatePresence>
             <Toaster toastOptions={{ className: 'cc-toast' }} />
-        </>
+        </Portal>
     );
 };
 

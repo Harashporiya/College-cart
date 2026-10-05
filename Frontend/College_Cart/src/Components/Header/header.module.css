@@ -1,6 +1,7 @@
 
 .header {
   position: relative;
+  z-index: 900;
   display: flex;
   align-items: center;
   justify-content: space-between;

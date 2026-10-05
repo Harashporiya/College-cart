@@ -12,6 +12,7 @@ import Footer from "../Footer/Footer"
 import { X } from 'lucide-react';
 import axios from 'axios';
 import RequestModal from './RequestModal';
+import Portal from '../../util/Portal';
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -131,7 +132,7 @@ const Profile = () => {
                                 Edit Profile
                             </button>
                         </div>
-                        <div className={styles.dialog}>
+                        <Portal>
                             <AnimatePresence>
                                 {isOpen && (
                                     <motion.div className={styles.dialogContainer} onClick={() => setIsOpen(false)}>
@@ -162,7 +163,8 @@ const Profile = () => {
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-                        </div>
+                        </Portal>
+                        <Portal>
                         <AnimatePresence>
                             {showImageModal && (
                                 <motion.div 
@@ -196,6 +198,7 @@ const Profile = () => {
                                 </motion.div>
                             )}
                         </AnimatePresence>
+                        </Portal>
                     </div>
                 </div>
                <div className={styles.totalDetailsForBuyAndSelling}>

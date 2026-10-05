@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { getToken } from '../../util/tokenService';
 import styles from './updateProduct.module.css';
+import Portal from '../../util/Portal';
 
 const backend_url = import.meta.env.VITE_BACKEND_API_URL;
 
@@ -95,6 +96,7 @@ const ExchangeBookUpdate = ({ isOpen, onClose, productData, onUpdated }) => {
   if (!isOpen) return null;
 
   return (
+    <Portal>
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <h2 className={styles.modalTitle}>Update Product</h2>
@@ -226,6 +228,7 @@ const ExchangeBookUpdate = ({ isOpen, onClose, productData, onUpdated }) => {
         </form>
       </div>
     </div>
+    </Portal>
   );
 };
 

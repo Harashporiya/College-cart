@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import toast,{Toaster} from "react-hot-toast"
+import Portal from '../../util/Portal';
 
 const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
   const [selectOption, setSelectOption] = useState('');
@@ -65,7 +66,7 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
   if (!isOpen) return null;
 
   return (
-    <>
+    <Portal>
     <div className="fixed inset-0 bg-[rgba(4,4,10,0.68)] backdrop-blur-lg flex items-center justify-center z-50 p-4">
       <div className="bg-zinc-900/85 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-5">
@@ -169,7 +170,7 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
       </div>
 
     </div><Toaster toastOptions={{ className: 'cc-toast' }} />
-    </>
+    </Portal>
 
   );
 };
