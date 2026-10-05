@@ -5,6 +5,7 @@ import { Routes, BrowserRouter, Route } from "react-router-dom"
 import Store from './Components/SagaRedux/Store'
 import PersistentAuth from './util/PersistentAuth'
 import ProtectedRoute from './util/ProtectedRoute'
+import Seo from './util/Seo'
 import ScrollToTop from './util/ScrollToTop'
 
 import Home from './Components/Home/Home'
@@ -45,6 +46,7 @@ const App = () => {
       <PersistentAuth>
         <BrowserRouter>
           <ScrollToTop />
+          <Seo />
           <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path='/' element={<Home />} />

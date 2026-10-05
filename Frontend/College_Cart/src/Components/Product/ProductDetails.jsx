@@ -15,6 +15,14 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import toast, { Toaster } from 'react-hot-toast';
 import Checkout from "./Checkout";
+import useSeo from "../../util/useSeo";
+import { SITE_URL } from "../../util/seoConfig";
+
+const clamp = (text, limit) => {
+    if (!text) return "";
+    const clean = String(text).replace(/\s+/g, " ").trim();
+    return clean.length > limit ? `${clean.slice(0, limit - 1).trimEnd()}…` : clean;
+};
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -28,6 +36,41 @@ const ProductDetails = () => {
     const { data } = useContext(UserDataContext);
     const backend_url = import.meta.env.VITE_BACKEND_API_URL;
     const socket_url = import.meta.env.VITE_SOCKET_URL;
+
+    const item = product?.product;
+    useSeo(
+        item
+            ? {
+                  title: `${item.name} | College Cart`,
+                  description:
+                      clamp(item.description, 155) ||
+                      `Buy ${item.name} on College Cart, the campus marketplace for verified students.`,
+                  image: item.image,
+                  noindex: false,
+                  jsonLd: {
+                      '@context': 'https://schema.org',
+                      '@type': 'Product',
+                      name: item.name,
+                      image: item.image ? [item.image] : undefined,
+                      description: clamp(item.description, 300) || undefined,
+                      category: item.category || undefined,
+                      brand: item.brand ? { '@type': 'Brand', name: item.brand } : undefined,
+                      itemCondition: 'https://schema.org/UsedCondition',
+                      offers: {
+                          '@type': 'Offer',
+                          url: `${SITE_URL}/${id}/product`,
+                          priceCurrency: 'INR',
+                          price: item.newAmount,
+                          itemCondition: 'https://schema.org/UsedCondition',
+                          availability:
+                              Number(item.quantity) > 0
+                                  ? 'https://schema.org/InStock'
+                                  : 'https://schema.org/OutOfStock',
+                      },
+                  },
+              }
+            : {}
+    );
     const messagesEndRef = useRef(null);
 
     useEffect(() => {

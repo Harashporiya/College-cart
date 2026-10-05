@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "seo": "node scripts/generate-seo.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",

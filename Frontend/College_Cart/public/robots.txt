@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+Disallow: /login
+Disallow: /signup
+Disallow: /forgotpassword
+Disallow: /newPassword
+Disallow: /setting
+Disallow: /messages
+Disallow: /addCartProudct
+Disallow: /dashboard
+Disallow: /*/user-profile
+Disallow: /*/add-products-user
+Disallow: /*/exchange-add-product-form
+
+Sitemap: https://college-cart.netlify.app/sitemap.xml
