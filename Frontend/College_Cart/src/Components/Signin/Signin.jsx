@@ -5,10 +5,12 @@ import { signInUser } from '../SagaRedux/Slice';
 import MessageHandler from '../Signup/MessageHandler';
 import { useNavigate } from 'react-router-dom';
 import { warmBackend } from '../../util/warmBackend';
+import { Eye, EyeOff } from 'lucide-react';
 
 const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, user, token, error } = useSelector((state) => state.app);
@@ -62,7 +64,8 @@ const Signin = () => {
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      className={styles.passwordInput}
+                      type={showPassword ? 'text' : 'password'}
                       autoComplete="current-password"
                       required
                       value={password}
@@ -70,6 +73,15 @@ const Signin = () => {
                     />
                     <span>Password</span>
                     <i></i>
+                    <button
+                      type="button"
+                      className={styles.passwordToggle}
+                      onClick={() => setShowPassword((visible) => !visible)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      aria-pressed={showPassword}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
                   <button
                     type="button"

@@ -422,3 +422,38 @@
     background: var(--cc-grad-primary);
   }
 }
+
+.inputBox input.passwordInput {
+  padding-right: 46px;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 2px;
+  bottom: 3px;
+  z-index: 11;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--cc-radius-pill);
+  background: transparent;
+  color: var(--cc-text-faint);
+  cursor: pointer;
+  transition: color var(--cc-dur) var(--cc-ease),
+              background-color var(--cc-dur) var(--cc-ease);
+}
+
+.passwordToggle:hover {
+  color: var(--cc-text-strong);
+  background: var(--cc-glass-hover);
+}
+
+.passwordToggle:focus-visible {
+  outline: none;
+  color: var(--cc-text-strong);
+  box-shadow: var(--cc-ring);
+}
