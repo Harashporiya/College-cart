@@ -7,10 +7,8 @@
   place-items: center;
   padding: 24px 16px;
   background:
-    radial-gradient(900px 620px at 10% -8%, rgba(124, 92, 255, 0.3), transparent 62%),
-    radial-gradient(760px 540px at 92% 6%, rgba(34, 211, 238, 0.2), transparent 60%),
-    radial-gradient(820px 600px at 70% 104%, rgba(244, 114, 182, 0.18), transparent 62%),
-    var(--cc-bg);
+    radial-gradient(1000px 620px at 12% -10%, rgba(252, 210, 0, 0.14), transparent 60%),
+    var(--cc-dark-bg);
 }
 
 .container {
@@ -20,9 +18,9 @@
   max-width: 1200px;
   min-height: 620px;
   max-height: calc(100dvh - 48px);
-  border-radius: var(--cc-radius-xl);
+  border-radius: var(--cc-radius-lg);
   overflow: hidden;
-  box-shadow: var(--cc-shadow-xl), 0 0 80px rgba(124, 92, 255, 0.28);
+  box-shadow: var(--cc-shadow-lg);
   animation: cardIn var(--cc-dur-slower) var(--cc-ease-entrance) both;
 }
 
@@ -37,12 +35,10 @@
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    var(--cc-violet) 50deg,
-    var(--cc-aqua) 95deg,
-    #ffffff 120deg,
-    var(--cc-magenta) 150deg,
-    var(--cc-violet) 190deg,
-    transparent 250deg,
+    var(--cc-yellow-deep) 70deg,
+    #fff3b0 110deg,
+    var(--cc-yellow-deep) 150deg,
+    transparent 220deg,
     transparent 360deg
   );
   animation: sweep 9s linear infinite;
@@ -55,8 +51,8 @@
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: perspective(1400px) translate3d(0, 26px, -90px) rotateX(7deg); }
-  to   { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.985); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 .leftContainer,
@@ -89,30 +85,24 @@
   flex-direction: column;
   padding: 48px 44px;
   overflow-y: auto;
-  background:
-    linear-gradient(165deg, rgba(124, 92, 255, 0.1) 0%, transparent 42%),
-    #20203a;
-  border-radius: calc(var(--cc-radius-xl) - 5px) 0 0 calc(var(--cc-radius-xl) - 5px);
+  background: var(--cc-dark-surface);
+  border-radius: calc(var(--cc-radius-lg) - 5px) 0 0 calc(var(--cc-radius-lg) - 5px);
 }
 
 .signupText {
   margin: 0 0 6px;
-  font-size: clamp(1.8rem, 3vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-align: center;
-  background: var(--cc-grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--cc-yellow-deep);
 }
 
 .textInformation {
   margin: 0 0 8px;
   font-size: 1rem;
   text-align: center;
-  color: var(--cc-text-soft);
+  color: #a9a9ad;
 }
 
 .inputBox {
@@ -129,17 +119,11 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--cc-text-strong);
-  font-weight: 600;
+  color: var(--cc-dark-bg);
+  font-weight: 700;
   font-size: 1rem;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   transition: color var(--cc-dur) var(--cc-ease);
-}
-
-.inputBox input:focus {
-  background: transparent;
-  border: none;
-  box-shadow: none;
 }
 
 .inputBox span {
@@ -149,7 +133,7 @@
   pointer-events: none;
   font-size: 1rem;
   letter-spacing: 0.04em;
-  color: var(--cc-text-faint);
+  color: #8f8f8f;
   transition: transform var(--cc-dur) var(--cc-ease),
               font-size var(--cc-dur) var(--cc-ease),
               color var(--cc-dur) var(--cc-ease);
@@ -159,10 +143,7 @@
 .inputBox input:focus ~ span {
   transform: translateY(-32px);
   font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cc-violet-light);
+  color: var(--cc-yellow-deep);
 }
 
 .inputBox i {
@@ -172,28 +153,24 @@
   z-index: 9;
   width: 100%;
   height: 2px;
-  background: var(--cc-grad-primary);
-  border-radius: var(--cc-radius-sm);
+  background: var(--cc-yellow-deep);
+  border-radius: 4px;
   pointer-events: none;
-  transition: height var(--cc-dur) var(--cc-ease),
-              opacity var(--cc-dur) var(--cc-ease),
-              box-shadow var(--cc-dur) var(--cc-ease);
+  transition: height var(--cc-dur) var(--cc-ease);
 }
 
 .inputBox input:valid ~ i,
 .inputBox input:focus ~ i {
   height: 44px;
-  opacity: 0.22;
-  box-shadow: 0 0 0 1px rgba(124, 92, 255, 0.45);
 }
 
 .inputBox input:-webkit-autofill,
 .inputBox input:-webkit-autofill:hover,
 .inputBox input:-webkit-autofill:focus,
 .inputBox input:-webkit-autofill:active {
-  -webkit-text-fill-color: var(--cc-text-strong) !important;
-  caret-color: var(--cc-text-strong) !important;
-  box-shadow: 0 0 0 1000px #191928 inset !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: var(--cc-dark-bg) !important;
+  box-shadow: 0 0 0 1000px var(--cc-yellow-deep) inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
 
@@ -204,26 +181,24 @@
   background: none;
   border: none;
   font-size: 0.95rem;
-  color: var(--cc-text-soft);
+  color: #8d8b90;
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color var(--cc-dur) var(--cc-ease);
 }
 
 .forgotpassword:hover {
-  color: var(--cc-aqua);
+  color: var(--cc-yellow-deep);
 }
 
 .formError {
   margin: 16px 0 0;
-  padding: 11px 14px;
+  padding: 10px 14px;
   border-radius: var(--cc-radius-sm);
-  border: 1px solid rgba(244, 63, 94, 0.3);
-  border-left: 3px solid var(--cc-danger);
-  background: var(--cc-danger-wash);
-  color: var(--cc-danger);
+  border-left: 3px solid #ff6b6b;
+  background: rgba(255, 107, 107, 0.12);
+  color: #ffb3b3;
   font-size: 0.9rem;
-  font-weight: 500;
   animation: cc-fade-in-down var(--cc-dur) var(--cc-ease-entrance) both;
 }
 
@@ -232,59 +207,37 @@
 }
 
 .btnContainer button {
-  position: relative;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   width: 200px;
   height: 50px;
-  border: 1px solid transparent;
-  border-radius: var(--cc-radius-pill);
-  background: var(--cc-grad-primary);
-  color: #fff;
-  font-weight: 700;
+  border: none;
+  border-radius: var(--cc-radius-sm);
+  background: var(--cc-yellow-deep);
+  color: var(--cc-text);
+  font-weight: 600;
   font-size: 1rem;
-  letter-spacing: 0.01em;
-  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
-  transition: filter var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur-fast) var(--cc-ease-out-back),
+  box-shadow: 0 6px 18px rgba(252, 210, 0, 0.22);
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease);
 }
 
-.btnContainer button::after {
-  content: '';
-  position: absolute;
-  top: -60%;
-  left: 0;
-  width: 40%;
-  height: 220%;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transform: translate3d(-200%, 0, 0) rotate(18deg);
-  opacity: 0;
-}
-
-.btnContainer button:hover:not(:disabled)::after {
-  opacity: 1;
-  animation: cc-sweep 850ms var(--cc-ease) forwards;
-}
-
 .btnContainer button:hover:not(:disabled) {
-  filter: brightness(1.1);
+  background: #ffe14d;
   transform: translateY(-2px);
-  box-shadow: var(--cc-glow-strong);
+  box-shadow: 0 10px 24px rgba(252, 210, 0, 0.32);
 }
 
 .btnContainer button:active:not(:disabled) {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: var(--cc-shadow-sm);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(252, 210, 0, 0.24);
 }
 
 .btnContainer button:disabled {
-  opacity: 0.5;
-  filter: saturate(0.4);
+  opacity: 0.72;
   box-shadow: none;
 }
 
@@ -298,12 +251,11 @@
 .alreadyAccount {
   margin: 0;
   font-size: 1rem;
-  color: var(--cc-text-soft);
+  color: #a9a9ad;
 }
 
 .alreadySignin {
-  font-weight: 600;
-  color: var(--cc-violet-light);
+  color: var(--cc-yellow-deep);
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
@@ -311,38 +263,36 @@
 }
 
 .alreadySignin:hover {
-  color: var(--cc-aqua);
+  color: #ffe14d;
 }
 
 .rightContainer {
   display: flex;
   align-items: flex-end;
   padding: 5px 5px 5px 0;
-  background-color: #1b1b33;
+  background-color: #1b2733;
   background-image:
-    linear-gradient(145deg, rgba(124, 92, 255, 0.34) 0%, transparent 48%, rgba(34, 211, 238, 0.24) 100%),
-    linear-gradient(180deg, rgba(27, 27, 51, 0.1) 0%, rgba(27, 27, 51, 0.68) 100%),
+    linear-gradient(180deg, rgba(27, 39, 51, 0.15) 0%, rgba(27, 39, 51, 0.85) 100%),
     image-set(
       url('../../assets/cartbackground.webp') type('image/webp'),
       url('../../assets/cartbackground.jpg') type('image/jpeg')
     ),
-    linear-gradient(135deg, #1a1140 0%, #1b1b33 55%, #102030 100%);
+    linear-gradient(135deg, #24425c 0%, #1b2733 55%, #2a2418 100%);
   background-size: cover;
   background-position: center;
   background-clip: content-box;
-  border-radius: 0 var(--cc-radius-xl) var(--cc-radius-xl) 0;
+  border-radius: 0 var(--cc-radius-lg) var(--cc-radius-lg) 0;
   overflow: hidden;
 }
 
 .panelTagline {
   margin: 0;
   padding: 28px 32px;
-  font-size: 1.55rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: #fff;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
   animation: cc-fade-in-up var(--cc-dur-slower) var(--cc-ease-entrance) 220ms both;
 }
 
@@ -375,7 +325,7 @@
     position: relative;
     inset: auto;
     min-height: 560px;
-    border-radius: calc(var(--cc-radius-xl) - 5px);
+    border-radius: calc(var(--cc-radius-lg) - 5px);
   }
 
   .rightContainer {
@@ -419,7 +369,7 @@
 @media (prefers-reduced-motion: reduce) {
   .container::before {
     animation: none;
-    background: var(--cc-grad-primary);
+    background: var(--cc-yellow-deep);
   }
 }
 
@@ -441,19 +391,19 @@
   border: none;
   border-radius: var(--cc-radius-pill);
   background: transparent;
-  color: var(--cc-text-faint);
+  color: var(--cc-text-muted);
   cursor: pointer;
   transition: color var(--cc-dur) var(--cc-ease),
               background-color var(--cc-dur) var(--cc-ease);
 }
 
 .passwordToggle:hover {
-  color: var(--cc-text-strong);
-  background: var(--cc-glass-hover);
+  color: var(--cc-text);
+  background-color: var(--cc-surface-3);
 }
 
 .passwordToggle:focus-visible {
   outline: none;
-  color: var(--cc-text-strong);
+  color: var(--cc-text);
   box-shadow: var(--cc-ring);
 }

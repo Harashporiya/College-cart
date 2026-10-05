@@ -13,7 +13,7 @@ import { io } from "socket.io-client";
 import { UserDataContext } from "../Header/context";
 import axios from "axios";
 import { motion } from "framer-motion";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast'; 
 import Checkout from "./Checkout";
 import useSeo from "../../util/useSeo";
 import { SITE_URL } from "../../util/seoConfig";
@@ -133,7 +133,7 @@ const ProductDetails = () => {
                     setRoomId(joinRoomId);
 
                     socketRef.current.emit("join_room", { joinRoomId });
-
+                    
                     loadPreviousMessages(joinRoomId);
                 }
             }
@@ -206,11 +206,11 @@ const ProductDetails = () => {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
-
+   
     const handleAddToCart = (e, productData) => {
-
+        
         e.preventDefault();
-
+        
         if (!productData || !productData.product) {
             toast.error("Product data is missing");
             return;
@@ -218,13 +218,13 @@ const ProductDetails = () => {
 
         try {
             const totalQuantity = store.getState().cart.totalQuantity;
-
-
+            
+            
             dispatch(addToCart(productData.product));
-
+            
             const updatedState = store.getState().cart.itemList;
             const storeItem = updatedState.find(item => item._id === productData.product._id);
-
+            
             if (storeItem) {
                 const cartItem = {
                     productId: storeItem._id,
@@ -240,12 +240,12 @@ const ProductDetails = () => {
                     totalPrice: storeItem.totalPrice,
                     image: storeItem.image,
                     productQuantity: storeItem.productQuantity,
-                    quantity: storeItem.quantity,
+                    quantity: storeItem.quantity, 
                     totalQuantity: totalQuantity
                 };
-
+             
                 dispatch(cartAdd(cartItem));
-
+                
                 toast.success(`${storeItem.name} added to cart!`);
             } else {
                 toast.error("Failed to add product to cart");
@@ -312,9 +312,9 @@ const ProductDetails = () => {
     return (
         <>
             <Header />
-
-            <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: 'cc-toast' }} />
-
+            
+            <Toaster position="top-center" reverseOrder={false} />
+            
             <div className="amazon-container">
                 <div className="breadcrumb">
                     {product?.product.category} {'>'} {product?.product.brand}
@@ -335,7 +335,7 @@ const ProductDetails = () => {
                         <h1 className="product-name">{product?.product.name}</h1>
 
                         <div className="price-block">
-                            <h2>Quantity: {product?.product.quantity}</h2>
+                            <h2 className="text-black">Quantity: {product?.product.quantity}</h2>
                             <div className="price-section">
                                 <span className="rupee-symbol">&#8377; </span>
                                 <span className="current-price">{product?.product.newAmount}</span>
@@ -377,7 +377,7 @@ const ProductDetails = () => {
                     </div>
 
                     {messageModal && (
-                        <motion.div
+                        <motion.div 
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
@@ -388,9 +388,9 @@ const ProductDetails = () => {
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             zIndex: 1000,
-                            boxShadow: '0 24px 70px rgba(0,0,0,0.6), 0 0 60px rgba(124,92,255,0.3)',
-                            borderRadius: '20px',
-                            background: 'transparent',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                            borderRadius: '12px',
+                            background: 'white',
                             width: '400px',
                             maxWidth: '90vw',
                             cursor: 'grab'
@@ -400,28 +400,28 @@ const ProductDetails = () => {
                         dragElastic={0.1}
                         dragMomentum={false}
                         dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-                        whileDrag={{ scale: 1.02, boxShadow: '0 30px 80px rgba(0,0,0,0.7), 0 0 80px rgba(124,92,255,0.45)' }}
+                        whileDrag={{ scale: 1.02, boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}
                         whileTap={{ cursor: 'grabbing' }}
                         dragPropagation
                         >
-                            <div className="max-w-md mx-auto bg-zinc-900/85 backdrop-blur-2xl border border-white/15 shadow-md rounded-[20px] overflow-hidden">
+                            <div className="max-w-md mx-auto bg-white dark:bg-zinc-800 shadow-md rounded-lg overflow-hidden">
                                 <div className="flex flex-col h-[700px]">
-                                    <div className="px-4 py-3 border-b border-white/10 bg-white/[0.03]">
+                                    <div className="px-4 py-3 border-b dark:border-zinc-700">
                                         <div className="flex justify-between items-center">
                                             <div className="flex items-center space-x-7">
-                                                <img
-                                                    className="w-12 h-12 rounded-full border-violet-400/60 border-2 object-cover shadow-[0_0_18px_rgba(124,92,255,0.45)]"
+                                                <img 
+                                                    className="w-12 h-12 rounded-full border-gray-600 border-2 object-cover shadow-md" 
                                                     src={product?.product.userId.profileImage || "https://via.placeholder.com/40"}
                                                     alt="User Profile"
                                                 />
-                                                <h2 className="text-lg font-semibold text-zinc-100">
+                                                <h2 className="text-lg font-semibold text-zinc-800 dark:text-white">
                                                     {product?.product.userId.name || "Seller"}
                                                 </h2>
                                             </div>
                                             <div className="flex items-center">
-                                                <button
+                                                <button 
                                                     onClick={toggleMessageModal}
-                                                    className="w-10 h-9 grid place-items-center text-zinc-400 rounded-full transition-all duration-300 hover:bg-rose-500/15 hover:text-rose-300 hover:rotate-90"
+                                                    className="text-gray-500 w-10 hover:text-gray-700"
                                                 >
                                                     ✕
                                                 </button>
@@ -433,17 +433,17 @@ const ProductDetails = () => {
                                         id="chatDisplay"
                                     >
                                         {messages.length === 0 ? (
-                                            <div className="text-center p-4 text-zinc-500">
+                                            <div className="text-center p-4 text-gray-500">
                                                 <p>Start a conversation about this product</p>
                                             </div>
                                         ) : (
                                             messages.map((msg, index) => (
                                                 <div
                                                     key={index}
-                                                    className={`chat-message ${msg.sender === 'self' ? 'self-end bg-gradient-to-br from-violet-500 to-cyan-500 rounded-br-sm shadow-[0_4px_16px_rgba(124,92,255,0.35)]' : 'self-start bg-white/[0.08] border border-white/10 rounded-bl-sm'} text-white max-w-xs rounded-2xl px-3.5 py-2 text-sm flex flex-col`}
+                                                    className={`chat-message ${msg.sender === 'self' ? 'self-end bg-blue-500' : 'self-start bg-zinc-500'} text-white max-w-xs rounded-lg px-3 py-1.5 text-sm flex flex-col`}
                                                 >
                                                     <span className="text-sm">{msg.message}</span>
-                                                    <span className="text-[11px] text-white text-opacity-70 self-end mt-1">
+                                                    <span className="text-sm text-white text-opacity-75 self-end mt-1">
                                                         {formatTime(msg.timestamp)}
                                                     </span>
                                                 </div>
@@ -451,17 +451,17 @@ const ProductDetails = () => {
                                         )}
                                         <div ref={messagesEndRef} />
                                     </div>
-                                    <div className="px-3 py-2 border-t border-white/10 bg-white/[0.03]">
+                                    <div className="px-3 py-2 border-t dark:border-zinc-700">
                                         <div className="flex gap-2">
                                             <input
                                                 placeholder="Type your message..."
-                                                className="flex-1 p-2.5 rounded-full bg-white/5 border border-white/10 text-zinc-100 placeholder:text-zinc-500 outline-none transition-all duration-200 focus:border-violet-400/60 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/30 text-sm"
+                                                className="flex-1 p-2 border rounded-lg dark:bg-zinc-700 dark:text-white dark:border-zinc-600 text-sm"
                                                 value={inputMessage}
                                                 onChange={(e) => setInputMessage(e.target.value)}
                                                 onKeyPress={handleKeyPress}
                                             />
                                             <button
-                                                className="bg-gradient-to-r from-violet-500 to-cyan-400 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_8px_26px_rgba(124,92,255,0.45)] active:translate-y-px active:scale-95 disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none text-sm"
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1.5 px-3 rounded-lg transition duration-300 ease-in-out text-sm"
                                                 onClick={handleSendMessage}
                                                 disabled={!inputMessage.trim()}
                                             >
@@ -473,7 +473,7 @@ const ProductDetails = () => {
                             </div>
                         </motion.div>
                     )}
-
+                    
                     <div className="buy-box-column">
                         <div className="buy-box">
                             <div className="buy-box-price">
@@ -490,7 +490,7 @@ const ProductDetails = () => {
                             </div>
                                 Buy Now <Checkout product={product}/>
                         </div>
-
+                       
                         <button className="messageButton" onClick={toggleMessageModal}>
                             <span className="text">Message</span>
                         </button>

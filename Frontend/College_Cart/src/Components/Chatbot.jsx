@@ -6,7 +6,7 @@ const backend_url = import.meta.env.VITE_BACKEND_API_URL;
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
  const [messages, setMessages] = useState([
-  {
+  { 
     text: "Hi! I'm College Cart Agent 👋\n\nI can help you with product information and details. Try asking:\n• \"Is laptop available?\"\n• \"Show complete iPhone details\"\n• \"What is the price of headphones?\"",
     sender: 'bot',
     type: 'text'
@@ -50,7 +50,7 @@ const Chatbot = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        body: JSON.stringify({ 
           question: currentInput
         })
       });
@@ -74,18 +74,18 @@ const Chatbot = () => {
 
       if (data.success) {
         if (data.isStructured && data.response?.type === 'product_card') {
-          setMessages(prev => [...prev, {
+          setMessages(prev => [...prev, { 
             sender: 'bot',
             type: 'product_card',
             products: data.response.products || []
           }]);
         } else {
-          const responseText = typeof data.response === 'string'
-            ? data.response
+          const responseText = typeof data.response === 'string' 
+            ? data.response 
             : JSON.stringify(data.response);
-
-          setMessages(prev => [...prev, {
-            text: responseText,
+            
+          setMessages(prev => [...prev, { 
+            text: responseText, 
             sender: 'bot',
             type: 'text'
           }]);
@@ -95,7 +95,7 @@ const Chatbot = () => {
       }
     } catch (error) {
       console.error('Chat Error:', error);
-
+      
       let errorMessage = '⚠️ Something went wrong\n\n';
 
       if (error.message.includes('fetch')) {
@@ -106,10 +106,10 @@ const Chatbot = () => {
         errorMessage += error.message;
       }
 
-
-      setMessages(prev => [...prev,
-        {
-          text: errorMessage,
+      
+      setMessages(prev => [...prev, 
+        { 
+          text: errorMessage, 
           sender: 'bot',
           type: 'text',
           isError: true
@@ -125,7 +125,7 @@ const Chatbot = () => {
 
   const handleClearHistory = () => {
       setMessages([
-      {
+      { 
         text: "Hi! I'm College Cart Agent 👋\n\nI can help you with product information and details. Try asking:\n• \"Is laptop available?\"\n• \"Show complete iPhone details\"\n• \"What is the price of headphones?\"",
         sender: 'bot',
         type: 'text'
@@ -151,7 +151,7 @@ const Chatbot = () => {
         <button
           key={idx}
           onClick={() => setInput(action)}
-          className="text-xs px-3 py-1.5 bg-white/[0.07] hover:bg-white/[0.12] border border-white/10 hover:border-violet-400/40 text-zinc-300 hover:text-white rounded-full transition-all duration-200"
+          className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors duration-200"
         >
           {action}
         </button>
@@ -164,21 +164,21 @@ const Chatbot = () => {
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
 
-    const discountPercentage = product.prevAmount && product.newAmount
+    const discountPercentage = product.prevAmount && product.newAmount 
       ? Math.round(((product.prevAmount - product.newAmount) / product.prevAmount) * 100)
       : 0;
 
     return (
-      <div className="bg-white/[0.06] backdrop-blur-xl rounded-2xl shadow-lg overflow-hidden border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/40 hover:shadow-[0_12px_48px_rgba(124,92,255,0.3)] mb-3 max-w-[340px]">
-        <div className="relative h-52 bg-gradient-to-br from-white/[0.12] to-white/[0.04] overflow-hidden group">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 mb-3 max-w-[340px]">
+        <div className="relative h-52 bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden group">
           {product.image && !imageError ? (
             <>
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Loader2 className="w-8 h-8 text-violet-300 animate-spin" />
+                  <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
                 </div>
               )}
-              <img
+              <img 
                 src={product.image}
                 alt={product.name}
                 className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ${
@@ -190,19 +190,19 @@ const Chatbot = () => {
             </>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center">
-              <ShoppingCart className="w-16 h-16 text-white/15 mb-2" />
-              <span className="text-xs text-zinc-500">No Image</span>
+              <ShoppingCart className="w-16 h-16 text-gray-300 mb-2" />
+              <span className="text-xs text-gray-400">No Image</span>
             </div>
           )}
-
+          
           {product.newAmount && (
-            <div className="absolute top-3 right-3 bg-gradient-to-r from-violet-500 to-cyan-400 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-[0_6px_20px_rgba(124,92,255,0.5)]">
+            <div className="absolute top-3 right-3 bg-black text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg">
               ₹{product.newAmount.toLocaleString()}
             </div>
           )}
 
           {discountPercentage > 0 && (
-            <div className="absolute top-3 left-3 bg-gradient-to-r from-rose-400 to-rose-500 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-[0_4px_16px_rgba(244,63,94,0.5)]">
+            <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
               {discountPercentage}% OFF
             </div>
           )}
@@ -210,16 +210,16 @@ const Chatbot = () => {
 
         <div className="p-4">
           <div className="mb-3">
-            <h3 className="text-lg font-bold text-zinc-100 mb-1 line-clamp-2">{product.name}</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2">{product.name}</h3>
             <div className="flex items-center justify-between flex-wrap gap-2">
               {product.brand && (
-                <span className="text-sm text-zinc-400 font-medium flex items-center gap-1">
+                <span className="text-sm text-gray-600 font-medium flex items-center gap-1">
                   <Tag className="w-3 h-3" />
                   {product.brand}
                 </span>
               )}
               {product.category && (
-                <span className="text-xs bg-white/[0.07] border border-white/10 text-zinc-400 px-2.5 py-1 rounded-full">
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
                   {product.category}
                 </span>
               )}
@@ -228,31 +228,31 @@ const Chatbot = () => {
 
           {product.prevAmount && product.prevAmount !== product.newAmount && (
             <div className="mb-2 flex items-center gap-2">
-              <span className="text-sm text-zinc-500 line-through">
+              <span className="text-sm text-gray-400 line-through">
                 ₹{product.prevAmount.toLocaleString()}
               </span>
-              <span className="text-xs text-emerald-400 font-semibold">
+              <span className="text-xs text-green-600 font-semibold">
                 Save ₹{(product.prevAmount - product.newAmount).toLocaleString()}
               </span>
             </div>
           )}
 
           {product.description && (
-            <p className="text-sm text-zinc-400 mb-4 line-clamp-3">
+            <p className="text-sm text-gray-600 mb-4 line-clamp-3">
               {product.description}
             </p>
           )}
 
-          <div className="border-t border-white/10 pt-3 space-y-2">
+          <div className="border-t border-gray-200 pt-3 space-y-2">
             {product.hostleName && (
               <div className="flex items-start gap-2 text-sm">
-                <MapPin className="w-4 h-4 text-violet-300 flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <div className="font-medium text-zinc-200">
+                  <div className="font-medium text-gray-700">
                     {product.hostleName}
                   </div>
                   {product.roomNumber && (
-                    <div className="text-zinc-400 text-xs">
+                    <div className="text-gray-600 text-xs">
                       Room: {product.roomNumber}
                     </div>
                   )}
@@ -261,11 +261,11 @@ const Chatbot = () => {
             )}
 
             {product.dayScholarContectNumber && (
-              <div className="flex items-center gap-2 text-sm text-zinc-400">
-                <Phone className="w-4 h-4 text-violet-300 flex-shrink-0" />
-                <a
-                  href={`tel:${product.dayScholarContectNumber}`}
-                  className="hover:text-cyan-300 transition-colors"
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Phone className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                <a 
+                  href={`tel:${product.dayScholarContectNumber}`} 
+                  className="hover:text-blue-600 transition-colors"
                 >
                   {product.dayScholarContectNumber}
                 </a>
@@ -273,13 +273,13 @@ const Chatbot = () => {
             )}
           </div>
 
-          <button
+          <button 
             onClick={() => {
               if (product.dayScholarContectNumber) {
                 window.location.href = `tel:${product.dayScholarContectNumber}`;
               }
             }}
-            className="w-full mt-4 py-2.5 rounded-full font-semibold transition-all duration-200 transform hover:-translate-y-0.5 active:scale-[0.98] bg-gradient-to-r from-violet-500 to-cyan-400 text-white hover:brightness-110 hover:shadow-[0_10px_32px_rgba(124,92,255,0.45)]"
+            className="w-full mt-4 py-2.5 rounded-xl font-medium transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-gray-900 to-gray-800 text-white hover:shadow-lg"
           >
             Contact Seller
           </button>
@@ -293,7 +293,7 @@ const Chatbot = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 grid place-items-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 text-white shadow-[0_8px_32px_rgba(124,92,255,0.5)] ring-1 ring-white/20 transition-all duration-200 hover:scale-110 hover:shadow-[0_12px_44px_rgba(124,92,255,0.7)] active:scale-95"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 grid place-items-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-black text-white shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl active:scale-95"
           aria-label="Open chat"
         >
           <MessageSquare className="w-5 h-5 sm:w-7 sm:h-7" strokeWidth={2} />
@@ -301,29 +301,29 @@ const Chatbot = () => {
       )}
 
       {isOpen && (
-        <div className="fixed z-50 inset-x-3 bottom-3 h-[min(520px,calc(100dvh-6rem))] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[420px] sm:h-[min(650px,calc(100dvh-3rem))] bg-zinc-900/80 backdrop-blur-2xl rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-white/15 animate-slideUp">
-          <div className="bg-gradient-to-r from-violet-600 via-violet-500 to-cyan-500 text-white p-3.5 sm:p-5 flex justify-between items-center flex-shrink-0 border-b border-white/10">
+        <div className="fixed z-50 inset-x-3 bottom-3 h-[min(520px,calc(100dvh-6rem))] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[420px] sm:h-[min(650px,calc(100dvh-3rem))] bg-white rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-slideUp">
+          <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white p-3.5 sm:p-5 flex justify-between items-center flex-shrink-0">
             <div className="flex items-center gap-2.5 sm:gap-3">
               <div className="relative">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center text-violet-600 font-bold text-sm sm:text-lg flex-shrink-0 shadow-md">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center text-gray-900 font-bold text-sm sm:text-lg flex-shrink-0">
                   CC
                 </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-emerald-400 rounded-full border-2 border-violet-600 shadow-[0_0_10px_rgba(52,211,153,0.9)]"></span>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 rounded-full border-2 border-gray-900"></span>
               </div>
               <div>
                 <h3 className="font-semibold text-sm sm:text-base">College Cart Agent</h3>
-                <p className="text-[10px] sm:text-xs text-white/75">Online • AI Assistant</p>
+                <p className="text-[10px] sm:text-xs text-gray-300">Online • AI Assistant</p>
               </div>
             </div>
             <div className="flex gap-2 flex-shrink-0">
-              <button
+              <button 
                 onClick={handleClearHistory}
                 className="hover:bg-white/10 p-2 rounded-lg transition-colors w-8 h-8 flex items-center justify-center"
                 title="Clear chat"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
-              <button
+              <button 
                 onClick={() => setIsOpen(false)}
                 className="hover:bg-white/10 p-2 rounded-lg transition-colors w-8 h-8 flex items-center justify-center"
                 title="Close"
@@ -333,7 +333,7 @@ const Chatbot = () => {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto bg-gradient-to-b from-white/[0.03] to-transparent p-3 sm:p-4 space-y-3 sm:space-y-4">
+          <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white p-3 sm:p-4 space-y-3 sm:space-y-4">
             {messages.map((message, index) => (
               <div key={index}>
                 {message.type === 'product_card' ? (
@@ -345,16 +345,16 @@ const Chatbot = () => {
                     </div>
                   </div>
                 ) : (
-                  <div
+                  <div 
                     className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}
                   >
-                    <div
+                    <div 
                       className={`max-w-[85%] group ${
-                        message.sender === 'user'
-                          ? 'bg-gradient-to-br from-violet-500 to-cyan-500 text-white rounded-3xl rounded-br-md shadow-[0_4px_18px_rgba(124,92,255,0.35)]'
-                          : message.isError
-                            ? 'bg-rose-500/15 text-rose-200 border border-rose-400/30 rounded-3xl rounded-bl-md'
-                            : 'bg-white/[0.07] text-zinc-200 border border-white/10 rounded-3xl rounded-bl-md shadow-sm'
+                        message.sender === 'user' 
+                          ? 'bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-3xl rounded-br-md' 
+                          : message.isError 
+                            ? 'bg-red-50 text-red-800 border border-red-200 rounded-3xl rounded-bl-md'
+                            : 'bg-white text-gray-800 border border-gray-200 rounded-3xl rounded-bl-md shadow-sm'
                       } px-4 py-3`}
                     >
                       {message.isError && (
@@ -367,11 +367,11 @@ const Chatbot = () => {
                         {message.text}
                       </p>
                       <span className={`text-[10px] mt-1 block ${
-                        message.sender === 'user' ? 'text-white/70' : message.isError ? 'text-rose-300' : 'text-zinc-500'
+                        message.sender === 'user' ? 'text-gray-300' : message.isError ? 'text-red-600' : 'text-gray-400'
                       }`}>
-                        {new Date().toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit'
+                        {new Date().toLocaleTimeString('en-US', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
                         })}
                       </span>
                     </div>
@@ -379,25 +379,25 @@ const Chatbot = () => {
                 )}
               </div>
             ))}
-
+          
             {isLoading && (
               <div className="flex justify-start animate-fadeIn">
-                <div className="bg-white/[0.07] border border-white/10 px-5 py-3 rounded-3xl rounded-bl-md shadow-sm">
+                <div className="bg-white border border-gray-200 px-5 py-3 rounded-3xl rounded-bl-md shadow-sm">
                   <div className="flex space-x-2 items-center">
-                    <div className="w-2 h-2 bg-violet-300 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-violet-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                    <div className="w-2 h-2 bg-cyan-300 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
                   </div>
                 </div>
               </div>
             )}
-
+            
             <div ref={messagesEndRef} />
           </div>
 
           {messages.length <= 2 && !isLoading && <QuickActions />}
 
-          <div className="p-4 bg-white/[0.03] border-t border-white/10 flex-shrink-0">
+          <div className="p-4 bg-white border-t border-gray-200 flex-shrink-0">
             <div className="flex gap-2 items-end">
               <input
                 ref={inputRef}
@@ -407,12 +407,12 @@ const Chatbot = () => {
                 onKeyPress={handleKeyPress}
                 placeholder="Products ke bare mein puchiye..."
                 disabled={isLoading}
-                className="flex-1 min-w-0 px-4 py-3 bg-white/5 border border-white/10 text-zinc-100 placeholder:text-zinc-500 rounded-2xl focus:outline-none focus:border-violet-400/60 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/30 text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 min-w-0 px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-gray-900 text-sm transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={isLoading || !input.trim()}
-                className="flex-shrink-0 bg-gradient-to-br from-violet-500 to-cyan-400 text-white w-12 h-12 rounded-2xl hover:shadow-[0_8px_28px_rgba(124,92,255,0.5)] hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center"
+                className="flex-shrink-0 bg-gradient-to-br from-gray-900 to-gray-800 text-white w-12 h-12 rounded-2xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -421,7 +421,7 @@ const Chatbot = () => {
                 )}
               </button>
             </div>
-            <p className="text-[10px] text-zinc-500 mt-2 text-center">
+            <p className="text-[10px] text-gray-400 mt-2 text-center">
               Powered by Gemini AI • Press Enter to send
             </p>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import axios from 'axios';
+import axios from 'axios'; 
 import toast,{Toaster} from "react-hot-toast"
 import Portal from '../../util/Portal';
 
@@ -54,7 +54,7 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
 
         toast.success('Exchange order placed successfully!');
         onClose();
-
+     
     } catch (error) {
       console.error('Error submitting exchange order:', error);
       toast.error(error.response?.data?.message || 'Failed to submit exchange order');
@@ -67,13 +67,13 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
 
   return (
     <Portal>
-    <div className="fixed inset-0 bg-[rgba(4,4,10,0.68)] backdrop-blur-lg flex items-center justify-center z-50 p-4">
-      <div className="bg-zinc-900/85 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-6 w-full max-w-md">
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-violet-300 bg-clip-text text-transparent">Exchange Book: {bookData.name}</h2>
-          <button
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Exchange Book: {bookData.name}</h2>
+          <button 
             onClick={onClose}
-            className="p-1 w-8 h-8 grid place-items-center text-zinc-400 border border-white/10 rounded-full transition-all duration-300 hover:bg-rose-500/15 hover:text-rose-300 hover:rotate-90"
+            className="p-1 hover:bg-gray-200 rounded-full w-8"
           >
             <X size={20} />
           </button>
@@ -81,11 +81,11 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
 
         <form>
           <div className="mb-4">
-            <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
               Select Option*
             </label>
-            <select
-              className="w-full py-2.5 px-3.5 rounded-xl bg-white/5 border border-white/10 text-zinc-100 outline-none transition-all duration-200 focus:border-violet-400/60 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/30"
+            <select 
+              className="shadow border rounded w-full py-2 px-3 text-gray-700"
               value={selectOption}
               onChange={(e) => setSelectOption(e.target.value)}
             >
@@ -98,12 +98,12 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
           {selectOption === "Hostler" && (
             <>
               <div className="mb-4">
-                <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Hostel Name*
                 </label>
-                <select
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-white/5 border border-white/10 text-zinc-100 outline-none transition-all duration-200 focus:border-violet-400/60 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/30"
-                  name="hostleName"
+                <select 
+                  className="shadow border rounded w-full py-2 px-3 text-gray-700"
+                  name="hostleName" 
                   value={hostleName}
                   onChange={(e) => setHostleName(e.target.value)}
                 >
@@ -118,13 +118,13 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
                 </select>
               </div>
               <div className="mb-4">
-                <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Room Number*
                 </label>
-                <input
-                  type="text"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-white/5 border border-white/10 text-zinc-100 outline-none transition-all duration-200 focus:border-violet-400/60 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/30"
-                  placeholder="Enter your room number"
+                <input 
+                  type="text" 
+                  className="shadow border rounded w-full py-2 px-3 text-gray-700"
+                  placeholder="Enter your room number" 
                   value={roomNumber}
                   onChange={(e) => setRoomNumber(e.target.value)}
                 />
@@ -134,16 +134,16 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
 
           {selectOption === "Day_Scholar" && (
             <div className="mb-4">
-              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
                 Contact Number*
               </label>
-              <input
-                type="text"
-                className="w-full py-2.5 px-3.5 rounded-xl bg-white/5 border border-white/10 text-zinc-100 outline-none transition-all duration-200 focus:border-violet-400/60 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/30"
-                placeholder="Enter your contact number"
+              <input 
+                type="text" 
+                className="shadow border rounded w-full py-2 px-3 text-gray-700"
+                placeholder="Enter your contact number" 
                 value={dayScholarContactNumber}
                 onChange={(e) => setDayScholarContactNumber(e.target.value)}
-
+               
               />
             </div>
           )}
@@ -152,14 +152,14 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
             <button
               type="button"
               onClick={onClose}
-              className="bg-white/[0.07] border border-white/15 text-zinc-200 font-semibold px-5 py-2.5 rounded-full mr-2 transition-all duration-200 hover:bg-white/[0.12] hover:border-violet-400/40 hover:-translate-y-0.5 active:translate-y-px active:scale-95"
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400"
               disabled={isSubmitting}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-gradient-to-r from-amber-300 to-amber-500 text-[#1a1206] font-bold px-5 py-2.5 rounded-full transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_rgba(255,159,28,0.45)] active:translate-y-px active:scale-95"
+              className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-400"
               disabled={isSubmitting}
               onClick={handleSubmit}
             >
@@ -168,10 +168,10 @@ const ExchangeModal = ({ isOpen, onClose, bookData, userData }) => {
           </div>
         </form>
       </div>
-
-    </div><Toaster toastOptions={{ className: 'cc-toast' }} />
+      
+    </div><Toaster/>
     </Portal>
-
+    
   );
 };
 

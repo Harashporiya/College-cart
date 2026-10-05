@@ -3,63 +3,37 @@
   max-width: 820px;
   margin: 48px auto 64px;
   padding: 0 20px;
-  color: var(--cc-text);
+  color: #333;
 }
 
 .faq-container h1 {
   margin: 0 0 32px;
   text-align: center;
-  font-size: clamp(1.85rem, 5vw, 2.6rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #ffffff 0%, #c9c2ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 600;
+  color: var(--cc-heading);
   animation: cc-fade-in-down var(--cc-dur-slow) var(--cc-ease-entrance) both;
 }
 
 .faq-item {
-  position: relative;
   margin-bottom: 14px;
   overflow: hidden;
   background-color: var(--cc-surface);
-  backdrop-filter: blur(var(--cc-blur)) saturate(150%);
-  -webkit-backdrop-filter: blur(var(--cc-blur)) saturate(150%);
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius);
-  box-shadow: var(--cc-shadow-sm), var(--cc-inset-rim);
+  box-shadow: var(--cc-shadow-sm);
   transition: box-shadow var(--cc-dur) var(--cc-ease),
-              border-color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease-out-back);
-}
-
-.faq-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--cc-grad-primary);
-  opacity: 0;
-  transition: opacity var(--cc-dur) var(--cc-ease);
+              border-color var(--cc-dur) var(--cc-ease);
 }
 
 .faq-item:hover {
   border-color: var(--cc-border-strong);
-  transform: translateX(3px);
   box-shadow: var(--cc-shadow);
 }
 
 .faq-item.active {
-  border-color: var(--cc-border-glow);
-  box-shadow: var(--cc-shadow), var(--cc-glow);
-}
-
-.faq-item.active::before {
-  opacity: 1;
+  border-color: var(--cc-blue);
+  box-shadow: var(--cc-shadow);
 }
 
 .question {
@@ -79,11 +53,7 @@
 }
 
 .question:hover {
-  color: var(--cc-aqua);
-}
-
-.faq-item.active .question {
-  color: var(--cc-text-strong);
+  color: var(--cc-blue);
 }
 
 .icon {
@@ -96,7 +66,7 @@
 
 .faq-item.active .icon {
   transform: rotate(180deg);
-  color: var(--cc-violet-light);
+  color: var(--cc-blue);
 }
 
 .answer-wrap {
@@ -119,14 +89,8 @@
 
 .answer {
   padding: 0 20px 16px;
-  color: var(--cc-text-muted);
+  color: #555;
   line-height: 1.65;
-}
-
-@media (hover: none) {
-  .faq-item:hover {
-    transform: none;
-  }
 }
 
 @media (max-width: 480px) {

@@ -102,7 +102,7 @@ const DeleteProduct = ({ isOpen, onClose, productId, bookId, onDeleted }) => {
           )}
         </AnimatePresence>
       </dialog>
-      <Toaster toastOptions={{ className: 'cc-toast' }} />
+      <Toaster/>
     </>
   );
 };

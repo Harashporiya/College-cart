@@ -184,7 +184,7 @@ const CartProduct = () => {
 
 
       <div className={styles.cartFooter}><Footer /></div>
-      <Toaster toastOptions={{ className: 'cc-toast' }} />
+      <Toaster />
     </>
   );
 };

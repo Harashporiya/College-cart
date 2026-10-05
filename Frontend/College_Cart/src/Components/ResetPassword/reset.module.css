@@ -6,19 +6,17 @@
   place-items: center;
   padding: 24px 16px;
   background:
-    radial-gradient(900px 600px at 50% -10%, rgba(124, 92, 255, 0.3), transparent 62%),
-    radial-gradient(700px 520px at 12% 88%, rgba(34, 211, 238, 0.18), transparent 60%),
-    radial-gradient(700px 520px at 88% 92%, rgba(244, 114, 182, 0.16), transparent 60%),
-    var(--cc-bg);
+    radial-gradient(900px 560px at 50% -10%, rgba(252, 210, 0, 0.14), transparent 60%),
+    var(--cc-dark-bg);
 }
 
 .container {
   position: relative;
   width: 100%;
   max-width: 440px;
-  border-radius: var(--cc-radius-xl);
+  border-radius: var(--cc-radius-lg);
   overflow: hidden;
-  box-shadow: var(--cc-shadow-xl), 0 0 70px rgba(124, 92, 255, 0.28);
+  box-shadow: var(--cc-shadow-lg);
   animation: cardIn var(--cc-dur-slower) var(--cc-ease-entrance) both;
 }
 
@@ -33,12 +31,10 @@
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    var(--cc-violet) 50deg,
-    var(--cc-aqua) 95deg,
-    #ffffff 120deg,
-    var(--cc-magenta) 150deg,
-    var(--cc-violet) 190deg,
-    transparent 250deg,
+    var(--cc-yellow-deep) 70deg,
+    #fff3b0 110deg,
+    var(--cc-yellow-deep) 150deg,
+    transparent 220deg,
     transparent 360deg
   );
   animation: sweep 9s linear infinite;
@@ -50,8 +46,8 @@
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: perspective(1200px) translate3d(0, 24px, -80px) rotateX(7deg); }
-  to   { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.985); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 .formContainer {
@@ -67,30 +63,24 @@
   display: flex;
   flex-direction: column;
   padding: 40px 32px;
-  background:
-    linear-gradient(165deg, rgba(124, 92, 255, 0.1) 0%, transparent 42%),
-    #20203a;
-  border-radius: calc(var(--cc-radius-xl) - 4px);
+  background: var(--cc-dark-surface);
+  border-radius: calc(var(--cc-radius-lg) - 4px);
 }
 
 .signupText {
   margin: 0 0 8px;
-  font-size: 1.8rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-align: center;
-  background: var(--cc-grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--cc-yellow-deep);
 }
 
 .textInformation {
   margin: 0;
   font-size: 0.95rem;
   text-align: center;
-  color: var(--cc-text-soft);
+  color: #a9a9ad;
 }
 
 .emailContainer,
@@ -113,16 +103,10 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--cc-text-strong);
-  font-weight: 600;
+  color: var(--cc-dark-bg);
+  font-weight: 700;
   font-size: 1rem;
-  letter-spacing: 0.03em;
-}
-
-.inputBox input:focus {
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  letter-spacing: 0.04em;
 }
 
 .inputBox span {
@@ -131,7 +115,7 @@
   padding: 20px 0 10px;
   pointer-events: none;
   font-size: 1rem;
-  color: var(--cc-text-faint);
+  color: #8f8f8f;
   transition: transform var(--cc-dur) var(--cc-ease),
               font-size var(--cc-dur) var(--cc-ease),
               color var(--cc-dur) var(--cc-ease);
@@ -141,10 +125,7 @@
 .inputBox input:focus ~ span {
   transform: translateY(-32px);
   font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cc-violet-light);
+  color: var(--cc-yellow-deep);
 }
 
 .inputBox i {
@@ -154,28 +135,24 @@
   z-index: 9;
   width: 100%;
   height: 2px;
-  background: var(--cc-grad-primary);
-  border-radius: var(--cc-radius-sm);
+  background: var(--cc-yellow-deep);
+  border-radius: 4px;
   pointer-events: none;
-  transition: height var(--cc-dur) var(--cc-ease),
-              opacity var(--cc-dur) var(--cc-ease),
-              box-shadow var(--cc-dur) var(--cc-ease);
+  transition: height var(--cc-dur) var(--cc-ease);
 }
 
 .inputBox input:valid ~ i,
 .inputBox input:focus ~ i {
   height: 44px;
-  opacity: 0.22;
-  box-shadow: 0 0 0 1px rgba(124, 92, 255, 0.45);
 }
 
 .inputBox input:-webkit-autofill,
 .inputBox input:-webkit-autofill:hover,
 .inputBox input:-webkit-autofill:focus,
 .inputBox input:-webkit-autofill:active {
-  -webkit-text-fill-color: var(--cc-text-strong) !important;
-  caret-color: var(--cc-text-strong) !important;
-  box-shadow: 0 0 0 1000px #191928 inset !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: var(--cc-dark-bg) !important;
+  box-shadow: 0 0 0 1000px var(--cc-yellow-deep) inset !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
 
@@ -191,36 +168,33 @@
   gap: 10px;
   width: 100%;
   height: 48px;
-  border: 1px solid transparent;
-  border-radius: var(--cc-radius-pill);
-  background: var(--cc-grad-primary);
-  color: #fff;
-  font-weight: 700;
+  border: none;
+  border-radius: var(--cc-radius-sm);
+  background: var(--cc-yellow-deep);
+  color: var(--cc-text);
+  font-weight: 600;
   font-size: 1rem;
-  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
-  transition: filter var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur-fast) var(--cc-ease-out-back),
+  transition: background-color var(--cc-dur) var(--cc-ease),
+              transform var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease),
               opacity var(--cc-dur) var(--cc-ease);
 }
 
 .btnContainer button:hover:not(:disabled) {
-  filter: brightness(1.1);
+  background: #ffe14d;
   transform: translateY(-2px);
-  box-shadow: var(--cc-glow-strong);
+  box-shadow: 0 8px 20px rgba(252, 210, 0, 0.3);
 }
 
 .btnContainer button:active:not(:disabled) {
-  transform: translateY(1px) scale(0.98);
+  transform: translateY(0);
   transition-duration: var(--cc-dur-fast);
 }
 
 .btnContainer button:disabled {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--cc-border);
-  color: var(--cc-text-faint);
-  box-shadow: none;
-  filter: none;
+  opacity: 0.45;
+  background: #6f6a52;
+  color: #d8d8d8;
 }
 
 @media (max-width: 420px) {
@@ -240,6 +214,6 @@
 @media (prefers-reduced-motion: reduce) {
   .container::before {
     animation: none;
-    background: var(--cc-grad-primary);
+    background: var(--cc-yellow-deep);
   }
 }

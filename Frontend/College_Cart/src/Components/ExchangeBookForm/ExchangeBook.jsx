@@ -256,7 +256,7 @@ const ExchangeBook = () => {
         </div>
       </div>
 
-      <Toaster toastOptions={{ className: 'cc-toast' }} />
+      <Toaster />
     </>
   );
 };

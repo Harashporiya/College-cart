@@ -97,7 +97,7 @@ const Checkout = ({ cartItem }) => {
 
     return (
         <div className="checkout-container">
-            <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: 'cc-toast' }} />
+            <Toaster position="top-center" reverseOrder={false} />
             <button
                 className="pay-button-cart-Item"
                 onClick={handlePayment}

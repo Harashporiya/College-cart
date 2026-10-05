@@ -75,7 +75,7 @@ const Reset = () => {
       </div>
       </div>
       </div>
-      <Toaster position="top-center" toastOptions={{ className: 'cc-toast' }} />
+      <Toaster position="top-center" />
       <MessageHandler />
     </div>
   );

@@ -19,39 +19,22 @@
   align-items: stretch;
   gap: 4px;
   background-color: var(--cc-surface);
-  backdrop-filter: blur(var(--cc-blur)) saturate(160%);
-  -webkit-backdrop-filter: blur(var(--cc-blur)) saturate(160%);
   margin: 24px auto;
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
   max-width: 1000px;
   position: relative;
-  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
+  box-shadow: var(--cc-shadow-sm);
   overflow: visible;
-  transition: transform var(--cc-dur) var(--cc-ease-out-back),
+  transition: transform var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease),
               border-color var(--cc-dur) var(--cc-ease);
 }
 
-.productWrapper::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.14), transparent 44%);
-  opacity: 0;
-  transition: opacity var(--cc-dur) var(--cc-ease);
-}
-
-.productWrapper:hover::before {
-  opacity: 1;
-}
-
 .productWrapper:hover {
-  transform: translate3d(0, -5px, 0);
-  box-shadow: var(--cc-shadow-lg), var(--cc-glow);
-  border-color: var(--cc-border-glow);
+  transform: translate3d(0, -3px, 0);
+  box-shadow: var(--cc-shadow-md);
+  border-color: var(--cc-border-strong);
 }
 
 .productImageContainer {
@@ -75,30 +58,19 @@
   width: 300px;
   object-fit: contain;
   border-radius: var(--cc-radius);
-  background:
-    radial-gradient(75% 75% at 50% 18%, rgba(255, 255, 255, 0.15) 0%, transparent 72%),
-    rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--cc-border);
+  background-color: var(--cc-surface-2);
   aspect-ratio: 300 / 230;
-  transition: transform var(--cc-dur-slow) var(--cc-ease-out-back),
-              box-shadow var(--cc-dur-slow) var(--cc-ease);
-}
-
-.productWrapper:hover .productImageProfile {
-  transform: perspective(900px) translate3d(0, -3px, 24px);
-  box-shadow: var(--cc-glow);
 }
 
 .hrline {
   width: 1px;
   align-self: stretch;
-  background: linear-gradient(180deg, transparent, rgba(124, 92, 255, 0.45) 30%, rgba(34, 211, 238, 0.35) 70%, transparent);
+  background-color: var(--cc-border);
   margin: 20px 0;
   flex: 0 0 1px;
 }
 
 .allProductContainer {
-  position: relative;
   padding: 20px 24px;
   flex: 1 1 auto;
   min-width: 0;
@@ -111,9 +83,9 @@
   font-family: var(--cc-font-sans);
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--cc-text-faint);
+  color: var(--cc-text-muted);
 }
 
 .allProductContainer p {
@@ -161,14 +133,9 @@
 }
 
 .productNewAmount {
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--cc-success);
-}
-
-.productNewAmount .item {
-  color: var(--cc-text-faint);
 }
 
 .productDescription {
@@ -194,28 +161,20 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--cc-glass);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--cc-text-muted);
+  background-color: var(--cc-surface-2);
+  color: var(--cc-text);
   padding: 5px 10px;
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-pill);
   cursor: pointer;
   z-index: 5;
   transition: background-color var(--cc-dur-fast) var(--cc-ease),
-              color var(--cc-dur-fast) var(--cc-ease),
-              border-color var(--cc-dur-fast) var(--cc-ease),
-              box-shadow var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur-fast) var(--cc-ease-out-back);
+              transform var(--cc-dur-fast) var(--cc-ease);
 }
 
 .saleBadge:hover {
-  background-color: var(--cc-glass-hover);
-  border-color: var(--cc-border-glow);
-  color: var(--cc-text-strong);
-  box-shadow: var(--cc-glow);
-  transform: scale(1.08);
+  background-color: var(--cc-surface-3);
+  transform: scale(1.05);
 }
 
 .saleBadge:active {
@@ -226,11 +185,9 @@
   position: absolute;
   top: 48px;
   right: 12px;
-  background-color: var(--cc-surface-raised);
-  backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--cc-blur-lg)) saturate(180%);
-  box-shadow: var(--cc-shadow-xl), var(--cc-inset-rim);
-  border: 1px solid var(--cc-border-strong);
+  background-color: var(--cc-surface);
+  box-shadow: var(--cc-shadow-lg);
+  border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius);
   display: flex;
   flex-direction: column;
@@ -243,49 +200,42 @@
 
 .menuItem,
 .menuItemDeleteBtn {
-  padding: 10px 14px;
+  padding: 9px 14px;
   border: none;
   background: none;
   text-align: left;
   font-size: 0.9rem;
-  font-weight: 500;
   cursor: pointer;
   width: 100%;
   color: var(--cc-text);
-  transition: background-color var(--cc-dur-fast) var(--cc-ease),
-              color var(--cc-dur-fast) var(--cc-ease),
-              padding-left var(--cc-dur-fast) var(--cc-ease);
+  transition: background-color var(--cc-dur-fast) var(--cc-ease);
 }
 
 .menuItem:hover,
 .menuItem:focus-visible {
-  background-image: var(--cc-grad-primary-soft);
-  color: var(--cc-text-strong);
-  padding-left: 18px;
+  background-color: var(--cc-surface-2);
 }
 
 .menuItemDeleteBtn {
-  background: var(--cc-grad-danger);
+  background-color: var(--cc-danger);
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .menuItemDeleteBtn:hover,
 .menuItemDeleteBtn:focus-visible {
-  filter: brightness(1.1);
+  filter: brightness(0.92);
 }
 
 .skeletonWrapper {
   display: flex;
   background-color: var(--cc-surface);
-  backdrop-filter: blur(var(--cc-blur)) saturate(160%);
-  -webkit-backdrop-filter: blur(var(--cc-blur)) saturate(160%);
   margin: 24px auto;
   border: 1px solid var(--cc-border);
   border-radius: var(--cc-radius-lg);
   max-width: 1000px;
   position: relative;
-  box-shadow: var(--cc-shadow), var(--cc-inset-rim);
+  box-shadow: var(--cc-shadow-sm);
 }
 
 .skeletonImageContainer {
@@ -368,12 +318,7 @@
 
   .productWrapper:hover {
     transform: none;
-    box-shadow: var(--cc-shadow), var(--cc-inset-rim);
-  }
-
-  .productWrapper:hover .productImageProfile {
-    transform: none;
-    box-shadow: none;
+    box-shadow: var(--cc-shadow-sm);
   }
 
   .productName {

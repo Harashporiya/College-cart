@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertCircle, CheckCircle, Clock, XCircle } from 'lucide-react';
-import styles from "./profile.module.css";
+import styles from "./profile.module.css"; 
 import axios from 'axios';
 import toast, { Toaster } from "react-hot-toast";
 import usePagination from '../../util/usePagination';
@@ -17,7 +17,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [allRequests, setAllRequests] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -58,7 +58,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
         setSelectedRequest(null);
         setActionType('');
     };
-
+    
     const handleRequestApproved = async() => {
         try {
             const payload = {
@@ -77,7 +77,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                 }
             };
             const response = await axios.post(`${backend_url}/${selectedRequest._id}/request-handle`, payload);
-
+            
             toast.success("Request is approved");
             closeConfirmationModal();
         } catch (error) {
@@ -135,27 +135,27 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
        console.log("found",foundRequest)
         return foundRequest?.approvedStatus || "Pending";
     };
-
+    
     const renderStatusBadge = (requestId,buyUserId) => {
         const status = getRequestStatus(requestId,buyUserId);
         switch (status) {
             case "Approve":
                 return (
-                    <div className="flex items-center bg-emerald-400/15 text-emerald-300 ring-1 ring-emerald-400/30 px-3 py-1 rounded-full text-sm font-semibold">
+                    <div className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
                         <CheckCircle size={16} className="mr-1" />
                         Approved
                     </div>
                 );
             case "Cancel":
                 return (
-                    <div className="flex items-center bg-rose-400/15 text-rose-300 ring-1 ring-rose-400/30 px-3 py-1 rounded-full text-sm font-semibold">
+                    <div className="flex items-center bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
                         <XCircle size={16} className="mr-1" />
                         Cancelled
                     </div>
                 );
             default:
                 return (
-                    <div className="flex items-center bg-amber-400/15 text-amber-300 ring-1 ring-amber-400/30 px-3 py-1 rounded-full text-sm font-semibold">
+                    <div className="flex items-center bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
                         <Clock size={16} className="mr-1" />
                         Pending
                     </div>
@@ -167,14 +167,14 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
         <Portal>
             <AnimatePresence>
                 {confirmationModal && (
-                    <motion.div
+                    <motion.div 
                         className={styles.imageModalContainer}
                         onClick={closeConfirmationModal}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        style={{
+                        style={{ 
                             zIndex: 1100,
                             position: 'fixed',
                             top: 0,
@@ -184,13 +184,11 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'rgba(4, 4, 10, 0.68)',
-                            backdropFilter: 'blur(10px)',
-                            WebkitBackdropFilter: 'blur(10px)'
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)'
                         }}
                     >
-                        <motion.div
-                            className="bg-zinc-900/85 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl"
+                        <motion.div 
+                            className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl"
                             onClick={(e) => e.stopPropagation()}
                             initial={{ scale: 0.8, y: -20 }}
                             animate={{ scale: 1, y: 0 }}
@@ -199,26 +197,26 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                             style={{ position: 'relative' }}
                         >
                             <div className="flex items-center justify-center mb-4 text-center">
-                                <AlertCircle className="text-amber-400 mr-2" size={24} />
-                                <h3 className="text-xl font-bold text-zinc-100">
+                                <AlertCircle className="text-yellow-500 mr-2" size={24} />
+                                <h3 className="text-xl font-semibold">
                                     {actionType === 'approve' ? 'Approve Request' : 'Cancel Request'}
                                 </h3>
                             </div>
-
-                            <p className="mb-6 text-center text-zinc-400">
+                            
+                            <p className="mb-6 text-center">
                                 Are you sure you want to {actionType === 'approve' ? 'approve' : 'cancel'} this request?
                             </p>
-
+                            
                             <div className="flex justify-center space-x-4">
                                 <button
                                     onClick={closeConfirmationModal}
-                                    className="bg-white/[0.07] border border-white/15 text-zinc-200 font-semibold px-5 py-2.5 rounded-full transition-all duration-200 hover:bg-white/[0.12] hover:border-violet-400/40 hover:-translate-y-0.5 active:translate-y-px active:scale-95"
+                                    className="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded transition-colors"
                                 >
                                     No, Go Back
                                 </button>
                                 <button
                                     onClick={handleConfirmAction}
-                                    className={`${actionType === 'approve' ? 'bg-gradient-to-r from-emerald-400 to-teal-500 hover:shadow-[0_10px_32px_rgba(52,211,153,0.4)]' : 'bg-gradient-to-r from-rose-400 to-rose-600 hover:shadow-[0_10px_32px_rgba(244,63,94,0.4)]'} text-white font-bold px-5 py-2.5 rounded-full transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 active:translate-y-px active:scale-95`}
+                                    className={`${actionType === 'approve' ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} text-white px-5 py-2 rounded transition-colors`}
                                 >
                                     Yes, {actionType === 'approve' ? 'Approve' : 'Cancel'}
                                 </button>
@@ -227,10 +225,10 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
+            
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <motion.div 
                         className={styles.imageModalContainer}
                         onClick={onClose}
                         initial={{ opacity: 0 }}
@@ -239,8 +237,8 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                         transition={{ duration: 0.3 }}
                         style={{ zIndex: 1000 }}
                     >
-                        <motion.div
-                            className="bg-zinc-900/85 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+                        <motion.div 
+                            className="bg-white rounded-lg p-6 max-w-3xl w-full max-h-[80vh] overflow-y-auto"
                             onClick={(e) => e.stopPropagation()}
                             initial={{ scale: 0.8 }}
                             animate={{ scale: 1 }}
@@ -248,9 +246,9 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                             transition={{ duration: 0.3 }}
                         >
                             <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white to-violet-300 bg-clip-text text-transparent">Exchange Book Requests</h2>
-                                <button
-                                    className="p-2 w-10 h-10 grid place-items-center text-zinc-400 border border-white/10 rounded-full transition-all duration-300 hover:bg-rose-500/15 hover:text-rose-300 hover:rotate-90"
+                                <h2 className="text-2xl font-bold">Exchange Book Requests</h2>
+                                <button 
+                                    className="p-2 rounded-full hover:bg-gray-200 w-10"
                                     onClick={onClose}
                                 >
                                     <X />
@@ -258,24 +256,24 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                             </div>
                             {loading ? (
                                 <div className="flex justify-center items-center py-8">
-                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-400"></div>
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                                 </div>
                             ) : (
                                 <div className="space-y-4" ref={listRef}>
                                     {
                                         orderData.length === 0 && (
-                                            <p className='font-bold text-2xl text-center text-zinc-500'>Order Not Found</p>
+                                            <p className='font-bold text-2xl text-center'>Order Not Found</p>
                                         )
                                     }
                                     {pageItems.map((request) => (
-                                        <div key={request._id} className="border border-white/10 rounded-xl p-4 bg-white/[0.04] text-zinc-300 transition-colors duration-200 hover:bg-white/[0.07] hover:border-violet-400/30">
+                                        <div key={request._id} className="border rounded-lg p-4 bg-gray-50">
                                             <div className="flex justify-between mb-2">
-                                                <h3 className="font-semibold text-zinc-100">
+                                                <h3 className="font-semibold">
                                                     Request from: {request.buyUser.userName}
                                                 </h3>
                                                 {renderStatusBadge(request.bookId, request.buyUser.userId)}
                                             </div>
-
+                                            
                                             <div className="mb-2">
                                                 <p><span className="font-medium">Book Title:</span> {request.bookName}</p>
                                                 <p><span className="font-medium">Request Date:</span> {new Date(request.createdAt).toLocaleDateString()}</p>
@@ -290,19 +288,19 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                                                     <p><span className="font-medium">Room Number:</span> {request.roomNumber}</p>
                                                 )}
                                             </div>
-
+                                        
                                             {getRequestStatus(request.bookId, request.buyUser.userId) !== "Approve" && getRequestStatus(request.bookId, request.buyUser.userId) !== "Cancel" && (
-                                                <div className="flex space-x-2 mt-3">
-                                                    <button
+                                                <div className="flex space-x-2 mt-3">          
+                                                    <button  
                                                         onClick={() => openConfirmationModal(request, 'approve')}
-                                                        className='bg-gradient-to-r from-emerald-400 to-teal-500 text-white font-bold px-4 py-2 rounded-full transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_8px_26px_rgba(52,211,153,0.4)] active:translate-y-px active:scale-95'
+                                                        className='bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors'
                                                     >
                                                         Approve Request
                                                     </button>
-
-                                                    <button
+                                                    
+                                                    <button 
                                                         onClick={() =>openConfirmationModal(request, 'cancel')}
-                                                        className='bg-gradient-to-r from-rose-400 to-rose-600 text-white font-bold px-4 py-2 rounded-full transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_8px_26px_rgba(244,63,94,0.4)] active:translate-y-px active:scale-95'
+                                                        className='bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors'
                                                     >
                                                         Cancel Request
                                                     </button>
@@ -328,7 +326,7 @@ const RequestModal = ({ isOpen, onClose, orderData }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
-            <Toaster toastOptions={{ className: 'cc-toast' }} />
+            <Toaster/>
         </Portal>
     );
 };

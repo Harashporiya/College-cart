@@ -8,19 +8,16 @@
   gap: 8px;
   padding: 8px 16px;
   overflow: hidden;
-  background: var(--cc-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--cc-border);
+  background: var(--cc-surface-2);
+  border: 2px solid var(--cc-border);
   border-radius: var(--cc-radius-pill);
-  color: var(--cc-text-muted);
+  color: var(--cc-text);
   font-size: 0.8125rem;
   font-weight: 600;
   white-space: nowrap;
   transition: border-color var(--cc-dur) var(--cc-ease),
               box-shadow var(--cc-dur) var(--cc-ease),
-              color var(--cc-dur) var(--cc-ease),
-              transform var(--cc-dur) var(--cc-ease-out-back);
+              transform var(--cc-dur) var(--cc-ease);
 }
 
 .explore-btn::before {
@@ -28,16 +25,15 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--cc-grad-primary);
+  background: var(--cc-yellow);
   transform: translateX(-100%);
-  transition: transform var(--cc-dur-slow) var(--cc-ease-entrance);
+  transition: transform var(--cc-dur-slow) var(--cc-ease);
 }
 
 .explore-btn:hover {
-  border-color: transparent;
-  color: #fff;
-  box-shadow: var(--cc-glow-strong);
-  transform: translateY(-2px);
+  border-color: var(--cc-yellow-deep);
+  box-shadow: 0 4px 14px rgba(252, 210, 0, 0.35);
+  transform: translateY(-1px);
 }
 
 .explore-btn:hover::before {
@@ -45,7 +41,7 @@
 }
 
 .explore-btn:active {
-  transform: translateY(1px) scale(0.97);
+  transform: translateY(0);
   transition-duration: var(--cc-dur-fast);
 }
 
@@ -58,19 +54,17 @@
   height: 22px;
   padding: 5px;
   flex: none;
-  border: 1px solid var(--cc-border-strong);
+  border: 1px solid #4b5563;
   border-radius: 50%;
-  fill: var(--cc-text-muted);
+  fill: #1f2937;
   transform: rotate(45deg);
-  transition: transform var(--cc-dur-slow) var(--cc-ease-spring),
+  transition: transform var(--cc-dur-slow) var(--cc-ease),
               background-color var(--cc-dur) var(--cc-ease),
-              fill var(--cc-dur) var(--cc-ease),
               border-color var(--cc-dur) var(--cc-ease);
 }
 
 .explore-btn:hover .explore-btn__arrow {
   transform: rotate(90deg);
-  background-color: #fff;
-  fill: var(--cc-violet-deep);
+  background-color: var(--cc-surface);
   border-color: transparent;
 }
