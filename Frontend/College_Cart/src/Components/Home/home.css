@@ -42,8 +42,8 @@
   z-index: -1;
   background-color: #15152a;
   background-image:
-    linear-gradient(135deg, rgba(124, 92, 255, 0.22) 0%, rgba(21, 21, 42, 0.06) 45%, rgba(34, 211, 238, 0.16) 100%),
-    linear-gradient(rgba(21, 21, 42, 0.2), rgba(21, 21, 42, 0.38)),
+    linear-gradient(135deg, rgba(124, 92, 255, 0.13) 0%, rgba(21, 21, 42, 0.02) 45%, rgba(34, 211, 238, 0.1) 100%),
+    linear-gradient(rgba(21, 21, 42, 0.08), rgba(21, 21, 42, 0.22)),
     image-set(
       url('../../assets/chitkara1.webp') type('image/webp'),
       url('../../assets/chitkara1.jpg') type('image/jpeg')
@@ -95,11 +95,12 @@
   pointer-events: none;
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(21, 21, 42, 0.58) 0%,
-    rgba(124, 92, 255, 0.32) 46%,
-    transparent 72%
+    rgba(21, 21, 42, 0.72) 0%,
+    rgba(21, 21, 42, 0.45) 38%,
+    rgba(124, 92, 255, 0.26) 58%,
+    transparent 76%
   );
-  filter: blur(14px);
+  filter: blur(18px);
 }
 
 .hero p {
