@@ -10,7 +10,7 @@ import useScrollReveal from '../../util/useScrollReveal';
 const teamMembers = [
   {
     name: "Harash Poriya",
-    role: "Backend Developer",
+    role: "Full Stack Developer",
     bio: "Harash manages the server, APIs, and database to ensure secure and efficient data flow.",
     image: harashImg,
     tasks: [
@@ -22,7 +22,7 @@ const teamMembers = [
   },
   {
     name: "Jatin Pathania",
-    role: "Frontend Developer",
+    role: "Full Stack Developer",
     bio: "Jatin builds responsive interfaces for a smooth and intuitive user experience on College Cart.",
     image: jatinImg,
     tasks: [
